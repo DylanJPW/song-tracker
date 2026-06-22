@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Something in the Orange",
+    "singer": "Zach Bryan",
+    "dateAdded": "2026-06-22",
+		"notes": "",
+		"links": ["", ""]
+  },
+	{
+    "name": "Maine",
+    "singer": "Noah Kahan",
+    "dateAdded": "2026-06-22",
+		"notes": "",
+		"links": ["", ""]
+  },
+	{
+		"name": "Lonely Island",
+		"singer": "Amble",
+		"dateAdded": "2026-06-22",
+		"notes": "",
+		"links": ["", ""]
+	}
+]
