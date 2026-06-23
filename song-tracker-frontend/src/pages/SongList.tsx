@@ -1,14 +1,13 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getSongs } from "@/api/songs";
 import { Head } from "@/components/Head";
+import { Song } from "@/components/Song";
 
 export function SongList() {
   const { data } = useSuspenseQuery({
     queryFn: getSongs,
     queryKey: ["songs"],
   });
-
-
 
   return (
     <>
@@ -25,15 +24,14 @@ export function SongList() {
             </tr>
           </thead>
           {data.map(({ name, singer, dateAdded, links, notes }) => (
-            <tr className="font-medium" key={`${name}By${singer}`}>
-              <td className="border border-gray-300 px-4 py-2">{name}</td>
-              <td className="border border-gray-300 px-4 py-2">{singer}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {dateAdded.toDateString()}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">{links}</td>
-              <td className="border border-gray-300 px-4 py-2">{notes}</td>
-            </tr>
+            <Song
+              dateAdded={dateAdded}
+              key={`${name}By${singer}`}
+              links={links}
+              name={name}
+              notes={notes}
+              singer={singer}
+            />
           ))}
         </table>
       </div>
