@@ -12,7 +12,11 @@ export function Song({ name, singer, dateAdded, links, notes }: SongProps) {
       <td className="border border-gray-300 px-4 py-2">{name}</td>
       <td className="border border-gray-300 px-4 py-2">{singer}</td>
       <td className="border border-gray-300 px-4 py-2">
-        {dateAdded.toDateString()}
+        {dateAdded.toLocaleDateString("en-IE", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}
       </td>
       <td className="border border-gray-300 px-4 py-2">
         {links.map((link) => (
