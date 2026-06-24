@@ -12,7 +12,7 @@ export function SongList() {
   return (
     <>
       <Head title="SongTracker" />
-      <div>
+      <div className="flex place-content-center">
         <table>
           <thead>
             <tr>

@@ -4,9 +4,9 @@ const Song = v.object({
   name: v.string(),
   singer: v.string(),
   dateAdded: v.pipe(
-    v.union([v.string(), v.date()]),
-    v.transform((input) =>
-      typeof input === "string" ? new Date(input) : input,
+    v.union([v.string(), v.date()]), // Accept dateAdded as string or date
+    v.transform(
+      (input) => (typeof input === "string" ? new Date(input) : input), // If string, convert to date
     ),
   ),
   notes: v.string(),
