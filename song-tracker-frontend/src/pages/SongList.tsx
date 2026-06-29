@@ -17,20 +17,20 @@ export function SongList() {
           <thead>
             <tr>
               <th className="px-4 py-2">Song</th>
-              <th className="px-4 py-2">Singer</th>
+              <th className="px-4 py-2">Artist</th>
               <th className="px-4 py-2">Date Added</th>
               <th className="px-4 py-2">Links</th>
               <th className="px-4 py-2">Notes</th>
             </tr>
           </thead>
-          {data.map(({ name, singer, dateAdded, links, notes }) => (
+          {data.map(({ name, artist, dateAdded, links, notes }) => (
             <Song
+              artist={artist}
               dateAdded={dateAdded}
-              key={`${name}By${singer}`}
+              key={`${name}By${artist}`}
               links={links}
               name={name}
               notes={notes}
-              singer={singer}
             />
           ))}
         </table>

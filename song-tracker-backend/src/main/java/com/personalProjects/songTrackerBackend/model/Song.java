@@ -2,7 +2,7 @@ package com.personalProjects.songTrackerBackend.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -19,9 +19,11 @@ public class Song {
     private String artist;
 
     @Column(nullable = false)
-    private Date dateAdded;
+    private LocalDate dateAdded;
 
-    @Column
+    @ElementCollection
+    @CollectionTable(name = "song_links", joinColumns = @JoinColumn(name = "song_id"))
+    @Column(name = "link")
     private List<String> links;
 
     @Lob
@@ -33,7 +35,7 @@ public class Song {
     public Song(String name, String artist, List<String> links, String notes) {
         this.name = name;
         this.artist = artist;
-        this.dateAdded = new Date();
+        this.dateAdded = LocalDate.now();
         this.links = links;
         this.notes = notes;
     }
@@ -62,11 +64,11 @@ public class Song {
         this.artist = artist;
     }
 
-    public Date getDateAdded() {
+    public LocalDate getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(Date dateAdded) {
+    public void setDateAdded(LocalDate dateAdded) {
         this.dateAdded = dateAdded;
     }
 
