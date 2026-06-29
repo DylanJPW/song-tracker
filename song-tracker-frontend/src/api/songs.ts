@@ -2,7 +2,7 @@ import * as v from "valibot";
 
 const Song = v.object({
   name: v.string(),
-  singer: v.string(),
+  artist: v.string(),
   dateAdded: v.pipe(
     v.union([v.string(), v.date()]), // Accept dateAdded as string or date
     v.transform(
@@ -17,7 +17,7 @@ export type Song = v.InferOutput<typeof Song>;
 const Songs = v.array(Song);
 
 export async function getSongs() {
-  const response = await fetch("/songs");
+  const response = await fetch("/api/songs");
   if (!response.ok) {
     throw new Error("Failed to fetch");
   }

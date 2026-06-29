@@ -8,11 +8,11 @@ describe("Song", () => {
       <table>
         <tbody>
           <Song
+            artist="Artist"
             dateAdded={new Date("2026-06-22")}
             links={["spotify.com", "youtube.com"]}
             name="Song Name"
             notes="Difficult"
-            singer="Artist"
           />
         </tbody>
       </table>,
