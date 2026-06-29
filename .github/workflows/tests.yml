@@ -2,7 +2,6 @@ name: Run Tests
 
 on:
   pull_request:
-    branches: [main]
 
 jobs:
   backend-tests:
@@ -10,7 +9,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: songTrackerBackend
+        working-directory: song-tracker-backend
 
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +27,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: songTrackerFrontend
+        working-directory: song-tracker-frontend
 
     steps:
       - uses: actions/checkout@v4
