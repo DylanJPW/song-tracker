@@ -55,7 +55,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --dir song-tracker-frontend
 
       - name: Test
-        run: pnpm test:ci
+        run: pnpm test:ci --dir song-tracker-frontend
