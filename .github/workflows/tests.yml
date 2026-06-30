@@ -38,10 +38,6 @@ jobs:
   frontend-tests:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: song-tracker-frontend
-
     steps:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
