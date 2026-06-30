@@ -38,6 +38,10 @@ jobs:
   frontend-tests:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: song-tracker-frontend
+
     steps:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -47,11 +51,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: pnpm
+          node-version: 22
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --dir song-tracker-frontend
+        run: pnpm install --frozen-lockfile
 
       - name: Test
-        run: pnpm test:ci --dir song-tracker-frontend
+        run: pnpm test:ci
