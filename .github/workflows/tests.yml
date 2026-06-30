@@ -23,18 +23,15 @@ jobs:
       - name: Make Maven Wrapper executable
         run: chmod +x mvnw
 
-      - name: Build
-        run: ./mvnw --batch-mode -DskipTests package
-
       - name: Test
-        run: ./mvnw --batch-mode test
+        run: ./mvnw --batch-mode clean test
 
       - name: Report
         uses: dorny/test-reporter@v1
         if: always()
         with:
           name: Maven Tests
-          path: target/surefire-reports/*.xml
+          path: song-tracker-backend/target/surefire-reports/*.xml
           reporter: java-junit
           fail-on-error: true
 
