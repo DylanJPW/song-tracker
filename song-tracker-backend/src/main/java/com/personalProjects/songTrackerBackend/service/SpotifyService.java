@@ -1,8 +1,10 @@
 package com.personalProjects.songTrackerBackend.service;
 
+import com.personalProjects.songTrackerBackend.client.SpotifyClient;
 import com.personalProjects.songTrackerBackend.model.SongSearchResult;
+
 import org.springframework.stereotype.Service;
-import se.michaelthelin.spotify.SpotifyApi;
+
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 
@@ -12,25 +14,26 @@ import java.util.List;
 @Service
 public class SpotifyService {
 
-    private final SpotifyTokenService tokenService;
+    private final SpotifyClient spotifyClient;
 
-    public SpotifyService(SpotifyTokenService tokenService) {
-        this.tokenService = tokenService;
+
+    public SpotifyService(SpotifyClient spotifyClient) {
+        this.spotifyClient = spotifyClient;
     }
 
-    public List<SongSearchResult> searchTracks(String query) throws Exception {
 
-        SpotifyApi spotifyApi = tokenService.getSpotifyApi();
+    public List<SongSearchResult> searchTracks(String query)
+            throws Exception {
 
-        Paging<Track> paging = spotifyApi.searchTracks(query)
-                .limit(10)
-                .build()
-                .execute();
+        Paging<Track> paging =
+                spotifyClient.searchTracks(query);
+
 
         return Arrays.stream(paging.getItems())
                 .map(this::mapTrack)
                 .toList();
     }
+
 
     private SongSearchResult mapTrack(Track track) {
 

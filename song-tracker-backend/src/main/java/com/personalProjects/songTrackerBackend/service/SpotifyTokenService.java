@@ -1,5 +1,6 @@
 package com.personalProjects.songTrackerBackend.service;
 
+import com.personalProjects.songTrackerBackend.client.SpotifyClient;
 import org.springframework.stereotype.Service;
 
 import se.michaelthelin.spotify.SpotifyApi;
@@ -10,22 +11,22 @@ import java.time.Instant;
 @Service
 public class SpotifyTokenService {
 
-    private final SpotifyApi spotifyApi;
+    private final SpotifyClient spotifyClient;
 
     private Instant expiresAt;
 
-    public SpotifyTokenService(SpotifyApi spotifyApi) {
-        this.spotifyApi = spotifyApi;
+    public SpotifyTokenService(SpotifyClient spotifyClient) {
+        this.spotifyClient = spotifyClient;
     }
 
     public SpotifyApi getSpotifyApi() throws Exception {
 
+        SpotifyApi spotifyApi = spotifyClient.getSpotifyApi();
+
         if (expiresAt == null || Instant.now().isAfter(expiresAt)) {
 
             ClientCredentials credentials =
-                    spotifyApi.clientCredentials()
-                            .build()
-                            .execute();
+                    spotifyClient.getClientCredentials();
 
             spotifyApi.setAccessToken(credentials.getAccessToken());
 
