@@ -115,6 +115,7 @@
 								</rule>
 							</rules>
 							<excludes>
+								<exclude>**/client/**</exclude>
 								<exclude>**/config/**</exclude>
 								<exclude>**/model/**</exclude>
 								<exclude>**/SongTrackerApplication.*</exclude>
