@@ -23,3 +23,11 @@ export async function getSongs() {
   }
   return v.parse(Songs, await response.json());
 }
+
+export async function getSearchResults(query: string) {
+  const response = await fetch(`/api/spotify/search?query=${query}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch");
+  }
+  return v.parse(Songs, await response.json());
+}
