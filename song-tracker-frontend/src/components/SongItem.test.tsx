@@ -1,18 +1,17 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Song } from "./Song";
+import { SongItem } from "./SongItem";
 
-describe("Song", () => {
+describe("SongItem", () => {
   it("renders song information", () => {
     render(
       <table>
         <tbody>
-          <Song
+          <SongItem
+            album="Song Album"
             artist="Artist"
-            dateAdded={new Date("2026-06-22")}
-            links={["spotify.com", "youtube.com"]}
-            name="Song Name"
-            notes="Difficult"
+            imageUrl="https//test.image"
+            title="Song Name"
           />
         </tbody>
       </table>,

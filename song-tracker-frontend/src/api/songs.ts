@@ -1,16 +1,24 @@
 import * as v from "valibot";
 
 const Song = v.object({
-  name: v.string(),
-  artist: v.string(),
-  dateAdded: v.pipe(
-    v.union([v.string(), v.date()]), // Accept dateAdded as string or date
+  id: v.pipe(
+    v.union([v.string(), v.number()]), // Accept id as string or number
     v.transform(
-      (input) => (typeof input === "string" ? new Date(input) : input), // If string, convert to date
+      (input) => (typeof input === "number" ? input.toString() : input), // If number, convert to string
     ),
   ),
-  notes: v.string(),
-  links: v.array(v.string()),
+  title: v.string(),
+  artist: v.string(),
+  album: v.string(),
+  imageUrl: v.string(),
+  dateAdded: v.optional(
+    v.pipe(
+      v.union([v.string(), v.date()]), // Accept dateAdded as string or date
+      v.transform(
+        (input) => (typeof input === "string" ? new Date(input) : input), // If string, convert to date
+      ),
+    ),
+  ),
 });
 export type Song = v.InferOutput<typeof Song>;
 

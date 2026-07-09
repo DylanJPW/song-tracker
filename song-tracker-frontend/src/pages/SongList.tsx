@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { getSongs } from "@/api/songs";
 import { Head } from "@/components/Head";
 import { SearchBar } from "@/components/SearchBar";
-import { Song } from "@/components/Song";
+import { SongItem } from "@/components/SongItem";
 
 export function SongList() {
   const { data } = useSuspenseQuery({
@@ -14,27 +14,24 @@ export function SongList() {
   return (
     <>
       <Head title="SongTracker" />
-      <div className="flex flex-col place-content-center">
+      <div className="flex flex-col items-center">
         <SearchBar />
         <div className="flex place-content-center">
           <table>
             <thead>
               <tr>
-                <th className="px-4 py-2">Song</th>
+                <th className="px-4 py-2">Album Cover</th>
+                <th className="px-4 py-2">Title</th>
                 <th className="px-4 py-2">Artist</th>
-                <th className="px-4 py-2">Date Added</th>
-                <th className="px-4 py-2">Links</th>
-                <th className="px-4 py-2">Notes</th>
               </tr>
             </thead>
-            {data.map(({ name, artist, dateAdded, links, notes }) => (
-              <Song
+            {data.map(({ id, title, artist, album, imageUrl }) => (
+              <SongItem
+                album={album}
                 artist={artist}
-                dateAdded={dateAdded}
-                key={`${name}By${artist}`}
-                links={links}
-                name={name}
-                notes={notes}
+                imageUrl={imageUrl}
+                key={id}
+                title={title}
               />
             ))}
           </table>

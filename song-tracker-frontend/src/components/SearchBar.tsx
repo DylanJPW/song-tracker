@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { getSearchResults } from "../api/songs";
+import { SongItem } from "./SongItem";
 
 export function SearchBar() {
   const [input, setInput] = useState("");
@@ -39,7 +40,7 @@ export function SearchBar() {
       {error && <p>{error.message}</p>}
 
       {data?.map((song) => (
-        <div key={`${song.name}By${song.artist}`}>{song.name}</div>
+        <SongItem key={song.id} {...song} />
       ))}
     </>
   );
