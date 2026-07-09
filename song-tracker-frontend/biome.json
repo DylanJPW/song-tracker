@@ -60,7 +60,9 @@
           },
           "nursery": {
             "useExplicitType": "off",
-            "noTernary": "off"
+            "noTernary": "off",
+            "noJsxPropsBind": "off",
+            "noLeakedRender": "off"
           },
           "suspicious": {
             "noReactSpecificProps": "off",

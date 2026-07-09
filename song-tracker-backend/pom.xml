@@ -58,6 +58,11 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>se.michaelthelin.spotify</groupId>
+			<artifactId>spotify-web-api-java</artifactId>
+			<version>9.4.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -110,6 +115,8 @@
 								</rule>
 							</rules>
 							<excludes>
+								<exclude>**/client/**</exclude>
+								<exclude>**/config/**</exclude>
 								<exclude>**/model/**</exclude>
 								<exclude>**/SongTrackerApplication.*</exclude>
 							</excludes>

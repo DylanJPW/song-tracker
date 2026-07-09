@@ -44,21 +44,22 @@ class SongControllerTest {
     @Test
     void getAllSongs_returnsAllSongs() throws Exception {
         Song song = new Song(
-                "Numb",
-                "Linkin Park",
-                List.of("https://spotify.com"),
-                "Great song"
+                "Test Song",
+                "Test Artist",
+                "Test Album",
+                "https://test.image"
         );
         song.setId(1);
-        song.setDateAdded(LocalDate.now());
 
         when(songService.getAllSongs()).thenReturn(List.of(song));
 
         mockMvc.perform(get("/api/songs"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Numb"))
-                .andExpect(jsonPath("$[0].artist").value("Linkin Park"));
+                .andExpect(jsonPath("$[0].title").value("Test Song"))
+                .andExpect(jsonPath("$[0].artist").value("Test Artist"))
+                .andExpect(jsonPath("$[0].album").value("Test Album"))
+                .andExpect(jsonPath("$[0].imageUrl").value("https://test.image"));
 
         verify(songService).getAllSongs();
     }
@@ -66,10 +67,10 @@ class SongControllerTest {
     @Test
     void getSong_existingSong_returnsSong() throws Exception {
         Song song = new Song(
-                "Numb",
-                "Linkin Park",
-                List.of(),
-                ""
+                "Test Song",
+                "Test Artist",
+                "Test Album",
+                "https://test.image"
         );
         song.setId(1);
 
@@ -78,7 +79,10 @@ class SongControllerTest {
         mockMvc.perform(get("/api/songs/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Numb"));
+                .andExpect(jsonPath("$.title").value("Test Song"))
+                .andExpect(jsonPath("$.artist").value("Test Artist"))
+                .andExpect(jsonPath("$.album").value("Test Album"))
+                .andExpect(jsonPath("$.imageUrl").value("https://test.image"));
 
         verify(songService).getSong(1);
     }
@@ -116,17 +120,17 @@ class SongControllerTest {
     @Test
     void createSong_returnsCreatedSong() throws Exception {
         SongDTO dto = new SongDTO(
-                "Numb",
-                "Linkin Park",
-                List.of("https://spotify.com"),
-                "Great song"
+                "Test Song",
+                "Test Artist",
+                "Test Album",
+                "https://test.image"
         );
 
         Song created = new Song(
-                dto.getName(),
+                dto.getTitle(),
                 dto.getArtist(),
-                dto.getLinks(),
-                dto.getNotes()
+                dto.getAlbum(),
+                dto.getImageUrl()
         );
         created.setId(5);
 
@@ -138,7 +142,10 @@ class SongControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "http://localhost/api/songs/5"))
                 .andExpect(jsonPath("$.id").value(5))
-                .andExpect(jsonPath("$.name").value("Numb"));
+                .andExpect(jsonPath("$.title").value("Test Song"))
+                .andExpect(jsonPath("$.artist").value("Test Artist"))
+                .andExpect(jsonPath("$.album").value("Test Album"))
+                .andExpect(jsonPath("$.imageUrl").value("https://test.image"));
 
         verify(songService).createSong(any(Song.class));
     }
@@ -146,17 +153,17 @@ class SongControllerTest {
     @Test
     void updateSong_existingSong_returnsUpdatedSong() throws Exception {
         SongDTO dto = new SongDTO(
-                "Updated",
-                "Artist",
-                List.of(),
-                "Notes"
+                "Test Updated Song",
+                "Test Artist",
+                "Test Album",
+                "https://test.image"
         );
 
         Song updated = new Song(
-                dto.getName(),
+                dto.getTitle(),
                 dto.getArtist(),
-                dto.getLinks(),
-                dto.getNotes()
+                dto.getAlbum(),
+                dto.getImageUrl()
         );
         updated.setId(1);
 
@@ -176,10 +183,10 @@ class SongControllerTest {
     @Test
     void updateSong_missingSong_returns404() throws Exception {
         SongDTO dto = new SongDTO(
-                "Updated",
-                "Artist",
-                List.of(),
-                "Notes"
+                "Test Updated Song",
+                "Test Artist",
+                "Test Album",
+                "https://test.image"
         );
 
         when(songService.updateSong(

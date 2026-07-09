@@ -13,31 +13,26 @@ public class Song {
     private int id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     @Column(nullable = false)
     private String artist;
 
     @Column(nullable = false)
-    private LocalDate dateAdded;
+    private String album;
 
-    @ElementCollection
-    @CollectionTable(name = "song_links", joinColumns = @JoinColumn(name = "song_id"))
-    @Column(name = "link")
-    private List<String> links;
+    @Column()
+    private String imageUrl;
 
-    @Lob
-    private String notes;
 
     public Song() {
     }
 
-    public Song(String name, String artist, List<String> links, String notes) {
-        this.name = name;
+    public Song(String title, String artist, String album, String imageUrl) {
+        this.title = title;
         this.artist = artist;
-        this.dateAdded = LocalDate.now();
-        this.links = links;
-        this.notes = notes;
+        this.album = album;
+        this.imageUrl = imageUrl;
     }
 
     public int getId() {
@@ -48,12 +43,12 @@ public class Song {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getArtist() {
@@ -64,27 +59,19 @@ public class Song {
         this.artist = artist;
     }
 
-    public LocalDate getDateAdded() {
-        return dateAdded;
+    public String getAlbum() {
+        return album;
     }
 
-    public void setDateAdded(LocalDate dateAdded) {
-        this.dateAdded = dateAdded;
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
-    public List<String> getLinks() {
-        return links;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setLinks(List<String> links) {
-        this.links = links;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

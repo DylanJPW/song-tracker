@@ -50,12 +50,10 @@ class SongServiceTest {
         Song song = new Song(
                 "Test Song",
                 "Test Artist",
-                List.of("test", "link"),
-                "Test note"
+                "Test Album",
+                "https://test.image"
         );
         song.setId(0);
-        LocalDate fixedDate = LocalDate.of(2026, 1, 1);
-        song.setDateAdded(fixedDate);
 
         when(songRepository.findById(0)).thenReturn(Optional.of(song));
 
@@ -63,11 +61,10 @@ class SongServiceTest {
 
         assertTrue(result.isPresent());
         assertEquals(0, result.get().getId());
-        assertEquals("Test Song", result.get().getName());
+        assertEquals("Test Song", result.get().getTitle());
         assertEquals("Test Artist", result.get().getArtist());
-        assertEquals(fixedDate, result.get().getDateAdded());
-        assertEquals(List.of("test", "link"), result.get().getLinks());
-        assertEquals("Test note", result.get().getNotes());
+        assertEquals("Test Album", result.get().getAlbum());
+        assertEquals("https://test.image", result.get().getImageUrl());
         verify(songRepository).findById(0);
     }
 
@@ -136,18 +133,16 @@ class SongServiceTest {
         Song song = new Song(
                 "Test Song",
                 "Test Artist",
-                List.of("test", "link"),
-                "Test note"
+                "Test Album",
+                "https://test.image"
         );
         song.setId(0);
-        LocalDate fixedDate = LocalDate.of(2026, 1, 1);
-        song.setDateAdded(fixedDate);
 
         SongDTO dto = new SongDTO();
-        dto.setName("New Song");
+        dto.setTitle("New Song");
         dto.setArtist("New Artist");
-        dto.setLinks(List.of("new", "link"));
-        dto.setNotes("New note");
+        dto.setAlbum("New Album");
+        dto.setImageUrl("https://new.image");
 
         when(songRepository.findById(0)).thenReturn(Optional.of(song));
         when(songRepository.save(any(Song.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -155,10 +150,10 @@ class SongServiceTest {
         Optional<Song> result = songService.updateSong(0, dto);
 
         assertTrue(result.isPresent());
-        assertEquals("New Song", result.get().getName());
+        assertEquals("New Song", result.get().getTitle());
         assertEquals("New Artist", result.get().getArtist());
-        assertEquals(List.of("new", "link"), result.get().getLinks());
-        assertEquals("New note", result.get().getNotes());
+        assertEquals("New Album", result.get().getAlbum());
+        assertEquals("https://new.image", result.get().getImageUrl());
 
         verify(songRepository).save(song);
     }
@@ -166,7 +161,7 @@ class SongServiceTest {
     @Test
     void shouldReturnEmptyWhenUpdatingMissingSong() {
         SongDTO dto = new SongDTO();
-        dto.setName("Test");
+        dto.setTitle("Test Song");
 
         when(songRepository.findById(0)).thenReturn(Optional.empty());
 
