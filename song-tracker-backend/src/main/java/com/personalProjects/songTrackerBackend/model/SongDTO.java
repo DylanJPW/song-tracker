@@ -4,27 +4,27 @@ import java.util.List;
 
 public class SongDTO {
 
-    private String name;
+    private String title;
     private String artist;
-    private List<String> links;
-    private String notes;
+    private String album;
+    private String imageUrl;
 
     public SongDTO() {
     }
 
-    public SongDTO(String name, String artist, List<String> links, String notes) {
-        this.name = name;
+    public SongDTO(String title, String artist, String album, String imageUrl) {
+        this.title = title;
         this.artist = artist;
-        this.links = links;
-        this.notes = notes;
+        this.album = album;
+        this.imageUrl = imageUrl;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getArtist() {
@@ -35,19 +35,19 @@ public class SongDTO {
         this.artist = artist;
     }
 
-    public List<String> getLinks() {
-        return links;
+    public String getAlbum() {
+        return album;
     }
 
-    public void setLinks(List<String> links) {
-        this.links = links;
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

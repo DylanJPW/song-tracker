@@ -34,10 +34,10 @@ public class SongService {
     public Optional<Song> updateSong(int id, SongDTO songDTO) {
         return songRepository.findById(id)
                 .map(song -> {
-                    song.setName(songDTO.getName());
+                    song.setTitle(songDTO.getTitle());
                     song.setArtist(songDTO.getArtist());
-                    song.setLinks(songDTO.getLinks());
-                    song.setNotes(songDTO.getNotes());
+                    song.setAlbum(songDTO.getAlbum());
+                    song.setImageUrl(songDTO.getImageUrl());
 
                     return songRepository.save(song);
                 });

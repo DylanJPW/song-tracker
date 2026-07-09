@@ -79,7 +79,7 @@ class SpotifyServiceTest {
 
         SongSearchResult song = result.getFirst();
 
-        assertEquals("spotify-id", song.spotifyId());
+        assertEquals("spotify-id", song.id());
         assertEquals("Stick Season", song.title());
         assertEquals("Noah Kahan", song.artist());
         assertEquals("Stick Season", song.album());

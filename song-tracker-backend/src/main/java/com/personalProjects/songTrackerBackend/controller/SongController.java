@@ -41,10 +41,10 @@ public class SongController {
     public ResponseEntity<Song> createSong(@RequestBody SongDTO songDTO) {
         Song newSong = songService.createSong(
                 new Song(
-                        songDTO.getName(),
+                        songDTO.getTitle(),
                         songDTO.getArtist(),
-                        songDTO.getLinks(),
-                        songDTO.getNotes()
+                        songDTO.getAlbum(),
+                        songDTO.getImageUrl()
                 )
         );
 
