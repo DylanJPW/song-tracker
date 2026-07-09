@@ -17,11 +17,7 @@ describe("SongItem", () => {
       </table>,
     );
 
-    expect(screen.getByText("Song Name")).toBeTruthy();
+    expect(screen.getByText("Song Name - Song Album")).toBeTruthy();
     expect(screen.getByText("Artist")).toBeTruthy();
-    expect(screen.getByText("spotify.com")).toBeTruthy();
-    expect(screen.getByText("youtube.com")).toBeTruthy();
-    expect(screen.getByText("22 Jun 2026")).toBeTruthy();
-    expect(screen.getByText("Difficult")).toBeTruthy();
   });
 });

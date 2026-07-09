@@ -1,6 +1,9 @@
+/** biome-ignore-all lint/style/useNamingConvention: <explanation> */
+
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
-import { SongList } from "./SongList";
 import { vi } from "vitest";
+import { SongList } from "./SongList";
 
 vi.mock("@/api/songs", () => ({
   getSongs: vi.fn(),
@@ -22,7 +25,9 @@ vi.mock("@/components/Song", () => ({
   ),
 }));
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+vi.mock("@/components/SearchBar", () => ({
+  SearchBar: () => <input placeholder="Search for songs..." />,
+}));
 
 describe("SongList", () => {
   it("renders page title via Head", () => {
@@ -42,37 +47,37 @@ describe("SongList", () => {
 
     render(<SongList />);
 
-    expect(screen.getByText("Song")).toBeInTheDocument();
+    expect(screen.getByText("Album Cover")).toBeInTheDocument();
+    expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Artist")).toBeInTheDocument();
-    expect(screen.getByText("Date Added")).toBeInTheDocument();
-    expect(screen.getByText("Links")).toBeInTheDocument();
-    expect(screen.getByText("Notes")).toBeInTheDocument();
   });
 
   it("renders songs from API data", () => {
     (useSuspenseQuery as any).mockReturnValue({
       data: [
         {
-          name: "Song A",
+          id: 0,
+          title: "Song A",
           artist: "Artist A",
-          dateAdded: "2024-01-01",
-          links: [],
-          notes: "Note A",
+          album: "Album A",
+          imageUrl: "https://test.image",
         },
         {
-          name: "Song B",
+          id: 1,
+          title: "Song B",
           artist: "Artist B",
-          dateAdded: "2024-01-02",
-          links: [],
-          notes: "Note B",
+          album: "Album B",
+          imageUrl: "https://test.image",
         },
       ],
     });
 
     render(<SongList />);
 
-    const rows = screen.getAllByTestId("song-row");
-    expect(rows).toHaveLength(2);
+    expect(screen.getByText("Song A - Album A")).toBeInTheDocument();
+    expect(screen.getByText("Artist A")).toBeInTheDocument();
+    expect(screen.getByText("Song B - Album B")).toBeInTheDocument();
+    expect(screen.getByText("Artist B")).toBeInTheDocument();
   });
 
   it("calls useSuspenseQuery with correct config", () => {
@@ -85,6 +90,7 @@ describe("SongList", () => {
     expect(useSuspenseQuery).toHaveBeenCalledWith({
       queryFn: expect.any(Function),
       queryKey: ["songs"],
+      staleTime: Number.POSITIVE_INFINITY,
     });
   });
 });
