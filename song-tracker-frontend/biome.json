@@ -56,7 +56,8 @@
         "rules": {
           "correctness": {
             "useImportExtensions": "off",
-            "noUnresolvedImports": "off"
+            "noUnresolvedImports": "off",
+            "useUniqueElementIds": "off"
           },
           "nursery": {
             "useExplicitType": "off",

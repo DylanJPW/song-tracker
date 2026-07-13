@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getSongs } from "@/api/songs";
-import { SearchBar } from "@/components/SearchBar";
 import { SongList } from "@/components/SongList";
 
 export function HomePage() {
@@ -12,7 +11,6 @@ export function HomePage() {
 
   return (
     <div className="flex flex-col items-center">
-      <SearchBar />
       <SongList songs={data} />
     </div>
   );

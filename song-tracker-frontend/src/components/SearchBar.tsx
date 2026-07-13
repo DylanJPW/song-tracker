@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { getSearchResults, type Song } from "../api/songs";
-import { SongItem } from "./SongItem";
 import { useNavigate } from "react-router";
+import { getSearchResults, type Song } from "../api/songs";
 
 interface SearchBarProps {
   setSearchResults?: (results: Song[]) => void;
@@ -38,8 +37,9 @@ export function SearchBar({ setSearchResults }: SearchBarProps) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form className="flex w-full" onSubmit={handleSubmit}>
         <input
+          className="m-2 flex grow rounded-md border p-1 dark:border-gray-400"
           onChange={handleChange}
           placeholder="Search for songs..."
           type="text"

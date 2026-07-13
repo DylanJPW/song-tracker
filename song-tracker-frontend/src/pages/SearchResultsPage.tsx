@@ -8,7 +8,11 @@ export function SearchResultsList() {
   return (
     <div className="flex flex-col items-center">
       <SearchBar setSearchResults={setSearchResults} />
-      <SongList songs={searchResults} />
+      {searchResults.length > 0 ? (
+        <SongList songs={searchResults} />
+      ) : (
+        <p>Search for songs</p>
+      )}
     </div>
   );
 }
