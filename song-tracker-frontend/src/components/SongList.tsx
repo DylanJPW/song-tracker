@@ -16,15 +16,17 @@ export function SongList({ songs }: SongListProps) {
             <th className="px-4 py-2">Artist</th>
           </tr>
         </thead>
-        {songs.map(({ id, title, artist, album, imageUrl }) => (
-          <SongItem
-            album={album}
-            artist={artist}
-            imageUrl={imageUrl}
-            key={id}
-            title={title}
-          />
-        ))}
+        <tbody>
+          {songs.map(({ id, title, artist, album, imageUrl }) => (
+            <SongItem
+              album={album}
+              artist={artist}
+              imageUrl={imageUrl}
+              key={id}
+              title={title}
+            />
+          ))}
+        </tbody>
       </table>
     </div>
   );
