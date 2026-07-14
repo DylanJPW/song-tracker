@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { getSearchResults } from "../api/songs";
-import { SongItem } from "./SongItem";
+import { useEffect, useState } from "react";
+import { getSearchResults, type Song } from "../api/songs";
 
-export function SearchBar() {
+interface SearchBarProps {
+  setSearchResults: (results: Song[]) => void;
+}
+
+export function SearchBar({ setSearchResults }: SearchBarProps) {
   const [input, setInput] = useState("");
   const [query, setQuery] = useState("");
 
@@ -14,6 +17,10 @@ export function SearchBar() {
     staleTime: Number.POSITIVE_INFINITY,
     retry: false,
   });
+
+  useEffect(() => {
+    if (data && setSearchResults) setSearchResults(data);
+  }, [data]);
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,8 +33,9 @@ export function SearchBar() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form className="flex w-full" onSubmit={handleSubmit}>
         <input
+          className="m-2 flex grow rounded-md border p-1 dark:border-gray-400"
           onChange={handleChange}
           placeholder="Search for songs..."
           type="text"
@@ -38,10 +46,6 @@ export function SearchBar() {
       {isLoading && <p>Searching...</p>}
 
       {error && <p>{error.message}</p>}
-
-      {data?.map((song) => (
-        <SongItem key={song.id} {...song} />
-      ))}
     </>
   );
 }
