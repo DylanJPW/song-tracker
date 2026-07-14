@@ -1,15 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import { getSearchResults, type Song } from "../api/songs";
 
 interface SearchBarProps {
-  setSearchResults?: (results: Song[]) => void;
+  setSearchResults: (results: Song[]) => void;
 }
 
 export function SearchBar({ setSearchResults }: SearchBarProps) {
-  const navigate = useNavigate();
-
   const [input, setInput] = useState("");
   const [query, setQuery] = useState("");
 
@@ -28,7 +25,6 @@ export function SearchBar({ setSearchResults }: SearchBarProps) {
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setQuery(input);
-    if (!setSearchResults) navigate("/search");
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

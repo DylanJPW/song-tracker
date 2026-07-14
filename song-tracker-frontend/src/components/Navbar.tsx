@@ -28,6 +28,9 @@ export function Navbar() {
       <div className="flex w-full flex-row justify-between text-lg">
         <a href="/">SongTracker</a>
         <button
+          aria-label={
+            isMenuOpen ? "Close navigation menu" : "Open navigation menu"
+          }
           className="md:hidden"
           id="navbar-hamburger-button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}

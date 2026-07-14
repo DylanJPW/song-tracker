@@ -35,7 +35,7 @@ describe("SongList", () => {
       data: [],
     });
 
-    render(<SongList />);
+    render(<SongList songs={[]} />);
 
     expect(screen.getByTestId("head")).toHaveTextContent("SongTracker");
   });
@@ -45,7 +45,7 @@ describe("SongList", () => {
       data: [],
     });
 
-    render(<SongList />);
+    render(<SongList songs={[]} />);
 
     expect(screen.getByText("Album Cover")).toBeInTheDocument();
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -72,7 +72,7 @@ describe("SongList", () => {
       ],
     });
 
-    render(<SongList />);
+    render(<SongList songs={[]} />);
 
     expect(screen.getByText("Song A - Album A")).toBeInTheDocument();
     expect(screen.getByText("Artist A")).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe("SongList", () => {
       data: [],
     });
 
-    render(<SongList />);
+    render(<SongList songs={[]} />);
 
     expect(useSuspenseQuery).toHaveBeenCalledWith({
       queryFn: expect.any(Function),
