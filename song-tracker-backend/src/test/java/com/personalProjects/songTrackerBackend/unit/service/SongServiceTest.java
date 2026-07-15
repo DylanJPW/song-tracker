@@ -89,7 +89,7 @@ class SongServiceTest {
     }
 
     @Test
-    void shouldNotDeleteSongWhenNotExists() {
+    void shouldNotDeleteSongWhenDoesNotExists() {
         when(songRepository.existsById(1)).thenReturn(false);
 
         boolean result = songService.deleteSong(1);

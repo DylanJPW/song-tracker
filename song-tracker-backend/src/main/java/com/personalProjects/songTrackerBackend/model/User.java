@@ -26,8 +26,8 @@ public class User {
     @OneToMany
     private List<Song> addedSongs;
 
-    public User(String password, String username) {
-        this.password = password;
+    public User(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 }
