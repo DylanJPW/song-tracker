@@ -44,6 +44,7 @@ export function Navbar() {
       >
         <NavItem link="/" name="HOME" />
         <NavItem link="/search" name="SEARCH" />
+        <NavItem link="/signup" name="SIGN UP" />
       </div>
     </div>
   );

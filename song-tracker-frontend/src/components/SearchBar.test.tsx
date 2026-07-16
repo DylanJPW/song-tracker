@@ -1,7 +1,9 @@
+/** biome-ignore-all lint/complexity/noExcessiveLinesPerFunction: <explanation> */
+
+import { useQuery } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import { SearchBar } from "./SearchBar";
-import { useQuery } from "@tanstack/react-query";
 
 vi.mock("@tanstack/react-query");
 

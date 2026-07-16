@@ -43,7 +43,7 @@ describe("Navbar", () => {
     renderNavbar();
 
     const button = screen.getByRole("button", {
-      name: /open navigation menu/i,
+      name: /open navigation menu/iu,
     });
 
     const menu = screen.getByRole("button").parentElement?.nextElementSibling;
