@@ -1,9 +1,9 @@
-import { SignUpForm } from "@/components/SignUpForm";
+import { LoginForm } from "@/components/LoginForm";
 
-export function SignUpPage() {
+export function LoginPage() {
   return (
     <div className="flex w-full grow justify-center self-center bg-slate-900 md:w-lg">
-      <SignUpForm />
+      <LoginForm />
     </div>
   );
 }

@@ -5,8 +5,8 @@ import { LoadingOrError } from "@/components/LoadingOrError";
 import { Head } from "./components/Head";
 import { Navbar } from "./components/Navbar";
 import { HomePage } from "./pages/HomePage";
+import { LoginPage } from "./pages/LoginPage";
 import { SearchResultsList } from "./pages/SearchResultsPage";
-import { SignUpPage } from "./pages/SignUpPage";
 
 function renderError({ error }: FallbackProps) {
   return <LoadingOrError error={error} />;
@@ -22,7 +22,7 @@ export function App() {
           <Routes>
             <Route element={<HomePage />} index={true} />
             <Route element={<SearchResultsList />} path="/search" />
-            <Route element={<SignUpPage />} path="/signup" />
+            <Route element={<LoginPage />} path="/login" />
           </Routes>
         </div>
       </Suspense>
