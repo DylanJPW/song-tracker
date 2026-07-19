@@ -1,5 +1,6 @@
 package com.personalProjects.songTrackerBackend.service;
 
+import com.personalProjects.songTrackerBackend.exceptions.UsernameAlreadyExistsException;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) return null;
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new UsernameAlreadyExistsException(user.getUsername());
+        }
         return userRepository.save(user);
     }
 

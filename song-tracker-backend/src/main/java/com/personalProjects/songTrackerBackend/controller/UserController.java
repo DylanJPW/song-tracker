@@ -41,8 +41,8 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
         User newUser = userService.createUser(
                 new User(
-                        userDTO.getPassword(),
-                        userDTO.getUsername()
+                        userDTO.getUsername(),
+                        userDTO.getPassword()
                 )
         );
 
