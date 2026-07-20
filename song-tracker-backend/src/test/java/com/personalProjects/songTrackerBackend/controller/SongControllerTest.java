@@ -1,12 +1,15 @@
 package com.personalProjects.songTrackerBackend.controller;
 
-import com.personalProjects.songTrackerBackend.controller.SongController;
+import com.personalProjects.songTrackerBackend.auth.JWTRequestFilter;
 import com.personalProjects.songTrackerBackend.model.Song;
 import com.personalProjects.songTrackerBackend.model.SongDTO;
 import com.personalProjects.songTrackerBackend.service.SongService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -27,7 +30,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(SongController.class)
+@WebMvcTest(
+        controllers = SongController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(
+                        type = FilterType.ASSIGNABLE_TYPE,
+                        classes = JWTRequestFilter.class
+                )
+        }
+)
 @ActiveProfiles("test")
 class SongControllerTest {
 
