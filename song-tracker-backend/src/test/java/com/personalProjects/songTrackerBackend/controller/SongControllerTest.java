@@ -1,4 +1,4 @@
-package com.personalProjects.songTrackerBackend.unit.controller;
+package com.personalProjects.songTrackerBackend.controller;
 
 import com.personalProjects.songTrackerBackend.controller.SongController;
 import com.personalProjects.songTrackerBackend.model.Song;

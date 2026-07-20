@@ -1,5 +1,6 @@
-package com.personalProjects.songTrackerBackend.unit.service;
+package com.personalProjects.songTrackerBackend.service;
 
+import com.personalProjects.songTrackerBackend.exceptions.UsernameAlreadyExistsException;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.repository.UserRepository;
 import com.personalProjects.songTrackerBackend.service.UserService;
@@ -107,16 +108,30 @@ public class UserServiceTest {
     }
 
     @Test
-    void shouldNotCreateUserWhenUsernameExists() {
+    void shouldThrowWhenUsernameExists() {
         User user = new User();
         user.setUsername("Test User");
 
         when(userRepository.existsByUsername("Test User")).thenReturn(true);
 
+        assertThrows(UsernameAlreadyExistsException.class, () -> userService.createUser(user));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldEncodePasswordWhenCreatingUser() {
+        User user = new User();
+        user.setUsername("Test User");
+        user.setPassword("plainPassword");
+
+        when(userRepository.existsByUsername("Test User")).thenReturn(false);
+        when(userRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
         User result = userService.createUser(user);
 
-        assertNull(result);
-        verify(userRepository, never()).save(any());
+        assertNotEquals("plainPassword", result.getPassword());
+        assertTrue(result.getPassword().startsWith("$2"));
+        verify(userRepository).save(any());
     }
 
     // updateUser

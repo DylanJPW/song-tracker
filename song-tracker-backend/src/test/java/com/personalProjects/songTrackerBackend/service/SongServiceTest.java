@@ -1,4 +1,4 @@
-package com.personalProjects.songTrackerBackend.unit.service;
+package com.personalProjects.songTrackerBackend.service;
 
 import com.personalProjects.songTrackerBackend.model.Song;
 import com.personalProjects.songTrackerBackend.model.SongDTO;

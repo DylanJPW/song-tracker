@@ -1,9 +1,9 @@
-package com.personalProjects.songTrackerBackend.unit.controller;
+package com.personalProjects.songTrackerBackend.controller;
 
 import com.personalProjects.songTrackerBackend.controller.UserController;
-import com.personalProjects.songTrackerBackend.model.Song;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.model.UserDTO;
+import com.personalProjects.songTrackerBackend.model.auth.UserDetailsRequest;
 import com.personalProjects.songTrackerBackend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +13,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @ActiveProfiles("test")
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,6 +40,12 @@ public class UserControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @MockitoBean
+    private org.springframework.security.authentication.AuthenticationManager authenticationManager;
+
+    @MockitoBean
+    private com.personalProjects.songTrackerBackend.auth.JWTUtil jwtUtil;
 
     @Test
     void getAllUsersReturnsAllUsers() throws Exception {
@@ -139,6 +145,45 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.password").value("test123"));
 
         verify(userService).createUser(any(User.class));
+    }
+
+    @Test
+    void createUserWhenUsernameExistsReturnsServerError() throws Exception {
+        UserDTO dto = new UserDTO(
+                "Test User",
+                "test123"
+        );
+
+        when(userService.createUser(any(User.class))).thenThrow(new com.personalProjects.songTrackerBackend.exceptions.UsernameAlreadyExistsException("Test User"));
+
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().is4xxClientError());
+
+        verify(userService).createUser(any(User.class));
+    }
+
+    @Test
+    void loginReturnsTokenWhenCredentialsValid() throws Exception {
+        String username = "testuser";
+        String password = "pass123";
+        String token = "jwt-token";
+
+        when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
+        when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
+        when(jwtUtil.generateToken(username)).thenReturn(token);
+
+        String body = objectMapper.writeValueAsString(new UserDetailsRequest(username, password));
+
+        mockMvc.perform(post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").value(token));
+
+        verify(authenticationManager).authenticate(any());
+        verify(jwtUtil).generateToken(username);
     }
 
     @Test
