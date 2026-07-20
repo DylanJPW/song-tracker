@@ -1,4 +1,4 @@
-package com.personalProjects.songTrackerBackend.unit.service;
+package com.personalProjects.songTrackerBackend.service;
 
 import com.personalProjects.songTrackerBackend.model.Song;
 import com.personalProjects.songTrackerBackend.model.SongDTO;
@@ -89,7 +89,7 @@ class SongServiceTest {
     }
 
     @Test
-    void shouldNotDeleteSongWhenNotExists() {
+    void shouldNotDeleteSongWhenDoesNotExists() {
         when(songRepository.existsById(1)).thenReturn(false);
 
         boolean result = songService.deleteSong(1);

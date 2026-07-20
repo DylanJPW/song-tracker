@@ -1,4 +1,4 @@
-package com.personalProjects.songTrackerBackend.unit.service;
+package com.personalProjects.songTrackerBackend.service;
 
 import com.personalProjects.songTrackerBackend.client.SpotifyClient;
 import com.personalProjects.songTrackerBackend.model.SongSearchResult;

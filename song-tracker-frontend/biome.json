@@ -54,6 +54,9 @@
       "includes": ["**/*"],
       "linter": {
         "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
+          },
           "correctness": {
             "useImportExtensions": "off",
             "noUnresolvedImports": "off",
