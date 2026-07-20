@@ -1,11 +1,16 @@
 package com.personalProjects.songTrackerBackend.controller;
 
+import com.personalProjects.songTrackerBackend.auth.JWTUtil;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.model.UserDTO;
+import com.personalProjects.songTrackerBackend.model.auth.UserDetailsRequest;
+import com.personalProjects.songTrackerBackend.model.auth.UserDetailsResponse;
 import com.personalProjects.songTrackerBackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,6 +23,12 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @GetMapping()
     public List<User> getAllUsers() {
@@ -60,5 +71,18 @@ public class UserController {
         return userService.updateUser(id, user)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserDetailsRequest userDetailsRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        userDetailsRequest.getUsername(),
+                        userDetailsRequest.getPassword()
+                )
+        );
+
+        String token = jwtUtil.generateToken(userDetailsRequest.getUsername());
+        return ResponseEntity.ok(new UserDetailsResponse(token));
     }
 }
