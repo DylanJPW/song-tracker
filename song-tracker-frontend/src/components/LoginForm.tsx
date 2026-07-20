@@ -1,24 +1,53 @@
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { createUser, type User } from "@/api/authentication";
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { createUser, loginRequest } from "@/api/authentication";
+import { useAuth } from "@/context/AuthContext";
 
 export function LoginForm() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [account, setAccount] = useState<User>({ username, password });
 
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
 
-  useQuery({
-    queryKey: ["account", account],
-    queryFn: () => createUser(account),
-    staleTime: Number.POSITIVE_INFINITY,
-    retry: false,
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const createUserMutation = useMutation({
+    mutationFn: createUser,
   });
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  const loginMutation = useMutation({
+    mutationFn: loginRequest,
+    onSuccess: (data) => {
+      login(data.token);
+      navigate("/");
+      toast(`Successfully logged in as ${username}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+    },
+  });
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setAccount({ username, password });
+    if (isSignUp) {
+      createUserMutation.mutate({
+        username,
+        password,
+      });
+    } else {
+      loginMutation.mutate({
+        username,
+        password,
+      });
+    }
   }
 
   return (
@@ -28,9 +57,9 @@ export function LoginForm() {
           Username
         </label>
         <input
-          aria-label="username"
           className="rounded-2xl border-2 border-white p-2"
           defaultValue={username}
+          id="username"
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Enter username"
           type="text"
@@ -41,9 +70,9 @@ export function LoginForm() {
           Password
         </label>
         <input
-          aria-label="password"
           className="rounded-2xl border-2 border-white p-2"
           defaultValue={password}
+          id="password"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter password"
           type="password"
@@ -55,8 +84,8 @@ export function LoginForm() {
             Confirm Password
           </label>
           <input
-            aria-label="confirm-password"
             className="rounded-2xl border-2 border-white p-2"
+            id="confirm-password"
             placeholder="Confirm password"
             type="password"
           />

@@ -18,3 +18,16 @@ export async function createUser(user: User) {
   }
   return v.parse(User, response.json());
 }
+
+export async function loginRequest(user: User) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(user),
+  };
+  const response = await fetch("/api/users/login", requestOptions);
+  if (!response.ok) {
+    throw new Error("Failed to create account");
+  }
+  return response.json();
+}
