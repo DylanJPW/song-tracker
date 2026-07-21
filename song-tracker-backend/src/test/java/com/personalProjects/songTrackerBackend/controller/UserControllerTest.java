@@ -1,9 +1,7 @@
 package com.personalProjects.songTrackerBackend.controller;
 
-import com.personalProjects.songTrackerBackend.controller.UserController;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.model.UserDTO;
-import com.personalProjects.songTrackerBackend.model.auth.UserDetailsRequest;
 import com.personalProjects.songTrackerBackend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,7 +172,7 @@ class UserControllerTest {
         when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
         when(jwtUtil.generateToken(username)).thenReturn(token);
 
-        String body = objectMapper.writeValueAsString(new UserDetailsRequest(username, password));
+        String body = objectMapper.writeValueAsString(new UserDTO(username, password));
 
         mockMvc.perform(post("/api/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
