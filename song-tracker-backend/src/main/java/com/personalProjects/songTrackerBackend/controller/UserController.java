@@ -55,7 +55,7 @@ public class UserController {
         );
 
         String token = jwtUtil.generateToken(newUser.getUsername());
-        return ResponseEntity.ok(new UserDetailsResponse(token));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserDetailsResponse(token));
     }
 
     @PutMapping("/{id}")

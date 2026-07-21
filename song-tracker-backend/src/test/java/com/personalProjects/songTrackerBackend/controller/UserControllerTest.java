@@ -133,14 +133,13 @@ class UserControllerTest {
         created.setId(1L);
 
         when(userService.createUser(any(User.class))).thenReturn(created);
+        when(jwtUtil.generateToken("Test User")).thenReturn("jwt-token-test");  // Mock the token generati
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.username").value("Test User"))
-                .andExpect(jsonPath("$.password").value("test123"));
+                .andExpect(jsonPath("$.token").value("jwt-token-test"));
 
         verify(userService).createUser(any(User.class));
     }
