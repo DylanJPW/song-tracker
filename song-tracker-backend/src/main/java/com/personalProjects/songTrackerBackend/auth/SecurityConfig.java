@@ -1,5 +1,6 @@
 package com.personalProjects.songTrackerBackend.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,14 @@ public class SecurityConfig {
                     ).permitAll()
                     .anyRequest()
                     .authenticated()
+            )
+            .exceptionHandling(exception -> exception
+                    .authenticationEntryPoint((request, response, authException) -> {
+                        response.sendError(
+                                HttpServletResponse.SC_UNAUTHORIZED,
+                                "Invalid username or password"
+                        );
+                    })
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,9 +1,7 @@
 package com.personalProjects.songTrackerBackend.controller;
 
-import com.personalProjects.songTrackerBackend.controller.UserController;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.model.UserDTO;
-import com.personalProjects.songTrackerBackend.model.auth.UserDetailsRequest;
 import com.personalProjects.songTrackerBackend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,14 +133,13 @@ class UserControllerTest {
         created.setId(1L);
 
         when(userService.createUser(any(User.class))).thenReturn(created);
+        when(jwtUtil.generateToken("Test User")).thenReturn("jwt-token-test");  // Mock the token generati
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.username").value("Test User"))
-                .andExpect(jsonPath("$.password").value("test123"));
+                .andExpect(jsonPath("$.token").value("jwt-token-test"));
 
         verify(userService).createUser(any(User.class));
     }
@@ -174,7 +171,7 @@ class UserControllerTest {
         when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
         when(jwtUtil.generateToken(username)).thenReturn(token);
 
-        String body = objectMapper.writeValueAsString(new UserDetailsRequest(username, password));
+        String body = objectMapper.writeValueAsString(new UserDTO(username, password));
 
         mockMvc.perform(post("/api/users/login")
                 .contentType(MediaType.APPLICATION_JSON)

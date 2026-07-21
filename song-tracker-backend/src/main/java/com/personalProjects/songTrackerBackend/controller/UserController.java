@@ -3,7 +3,6 @@ package com.personalProjects.songTrackerBackend.controller;
 import com.personalProjects.songTrackerBackend.auth.JWTUtil;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.model.UserDTO;
-import com.personalProjects.songTrackerBackend.model.auth.UserDetailsRequest;
 import com.personalProjects.songTrackerBackend.model.auth.UserDetailsResponse;
 import com.personalProjects.songTrackerBackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -49,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDetailsResponse> createUser(@RequestBody UserDTO userDTO) {
         User newUser = userService.createUser(
                 new User(
                         userDTO.getUsername(),
@@ -57,13 +54,8 @@ public class UserController {
                 )
         );
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newUser.getId())
-                .toUri();
-
-        return ResponseEntity.created(location).body(newUser);
+        String token = jwtUtil.generateToken(newUser.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserDetailsResponse(token));
     }
 
     @PutMapping("/{id}")
@@ -74,15 +66,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDetailsRequest userDetailsRequest) {
+    public ResponseEntity<UserDetailsResponse> login(@RequestBody UserDTO UserDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userDetailsRequest.getUsername(),
-                        userDetailsRequest.getPassword()
+                        UserDTO.getUsername(),
+                        UserDTO.getPassword()
                 )
         );
 
-        String token = jwtUtil.generateToken(userDetailsRequest.getUsername());
+        String token = jwtUtil.generateToken(UserDTO.getUsername());
         return ResponseEntity.ok(new UserDetailsResponse(token));
     }
 }

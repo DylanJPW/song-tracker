@@ -6,28 +6,40 @@ const User = v.object({
 });
 export type User = v.InferOutput<typeof User>;
 
-export async function createUser(user: User) {
-  const requestOptions = {
+const LoginResponse = v.object({
+  token: v.string(),
+});
+export type LoginResponse = v.InferOutput<typeof LoginResponse>;
+
+function getCommonRequestOptions(user: User) {
+  return {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify(user),
   };
-  const response = await fetch("/api/users", requestOptions);
+}
+
+export async function createUser(user: User) {
+  const response = await fetch("/api/users", getCommonRequestOptions(user));
+  if (response.status === 409) {
+    throw new Error(`Username '${user.username}' already in use`)
+  }
   if (!response.ok) {
     throw new Error("Failed to create account");
   }
-  return v.parse(User, response.json());
+  return v.parse(LoginResponse, await response.json());
 }
 
 export async function loginRequest(user: User) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user),
-  };
-  const response = await fetch("/api/users/login", requestOptions);
-  if (!response.ok) {
-    throw new Error("Failed to create account");
+  const response = await fetch(
+    "/api/users/login",
+    getCommonRequestOptions(user),
+  );
+  if (response.status === 401) {
+    throw new Error('Username or password is incorrect')
   }
-  return response.json();
+  if (!response.ok) {
+    throw new Error("Failed to log in");
+  }
+  return v.parse(LoginResponse, await response.json());
 }

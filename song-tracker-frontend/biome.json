@@ -1,6 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": { "clientKind": "git", "enabled": true, "useIgnoreFile": true },
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  },
   "assist": {
     "actions": {
       "source": {
@@ -51,7 +55,9 @@
   },
   "overrides": [
     {
-      "includes": ["**/*"],
+      "includes": [
+        "**/*"
+      ],
       "linter": {
         "rules": {
           "complexity": {
@@ -60,7 +66,8 @@
           "correctness": {
             "useImportExtensions": "off",
             "noUnresolvedImports": "off",
-            "useUniqueElementIds": "off"
+            "useUniqueElementIds": "off",
+            "useQwikValidLexicalScope": "off"
           },
           "nursery": {
             "useExplicitType": "off",
@@ -93,7 +100,11 @@
               "options": {
                 "strictCase": false,
                 "requireAscii": true,
-                "filenameCases": ["camelCase", "kebab-case", "PascalCase"]
+                "filenameCases": [
+                  "camelCase",
+                  "kebab-case",
+                  "PascalCase"
+                ]
               }
             },
             "noJsxLiterals": "off"
@@ -110,7 +121,10 @@
       }
     },
     {
-      "includes": ["vite.config.ts", "playwright.config.ts"],
+      "includes": [
+        "vite.config.ts",
+        "playwright.config.ts"
+      ],
       "linter": {
         "rules": {
           "correctness": {
@@ -123,7 +137,9 @@
       }
     },
     {
-      "includes": ["src/**/*.test.tsx"],
+      "includes": [
+        "src/**/*.test.tsx"
+      ],
       "linter": {
         "rules": {
           "performance": {
@@ -133,7 +149,9 @@
       }
     },
     {
-      "includes": ["public/**"],
+      "includes": [
+        "public/**"
+      ],
       "formatter": {
         "enabled": false
       },
