@@ -6,11 +6,12 @@ import {toast} from 'react-toastify'
 import {loginRequest} from '@/api/authentication'
 import {FormItem} from '@/components/forms/shared/FormItem'
 import {useAuth} from '@/context/AuthContext'
-import type {LoginSignUpProps} from '../types'
+import type {LoginSignUpProps} from '../../types'
 import {type LoginFormData, loginSchema} from './LoginSchema'
 
 export function LoginForm({setIsSignUp}: LoginSignUpProps) {
   const {
+    setError,
     register,
     handleSubmit,
     formState: {errors, isValid}
@@ -40,6 +41,14 @@ export function LoginForm({setIsSignUp}: LoginSignUpProps) {
         draggable: true,
         theme: 'light'
       })
+    },
+    onError: ({message}) => {
+      setError(
+        'password', {
+          type: "server",
+          message
+        }
+      )
     }
   })
 

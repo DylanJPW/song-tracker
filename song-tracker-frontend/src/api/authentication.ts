@@ -27,7 +27,7 @@ export async function createUser(user: User) {
   if (!response.ok) {
     throw new Error("Failed to create account");
   }
-  return v.parse(LoginResponse, response.json());
+  return v.parse(LoginResponse, await response.json());
 }
 
 export async function loginRequest(user: User) {
@@ -35,8 +35,11 @@ export async function loginRequest(user: User) {
     "/api/users/login",
     getCommonRequestOptions(user),
   );
+  if (response.status === 401) {
+    throw new Error('Username or password is incorrect')
+  }
   if (!response.ok) {
     throw new Error("Failed to log in");
   }
-  return v.parse(LoginResponse, response.json());
+  return v.parse(LoginResponse, await response.json());
 }

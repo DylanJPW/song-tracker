@@ -6,7 +6,7 @@ import {toast} from 'react-toastify'
 import {createUser} from '@/api/authentication'
 import {FormItem} from '@/components/forms/shared/FormItem'
 import {useAuth} from '@/context/AuthContext'
-import type {LoginSignUpProps} from '../types'
+import type {LoginSignUpProps} from '../../types'
 import {type SignUpFormData, signUpSchema} from './SignUpSchema'
 
 export function SignUpForm({setIsSignUp}: LoginSignUpProps) {
