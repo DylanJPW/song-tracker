@@ -3,7 +3,7 @@ import { CgClose } from "react-icons/cg";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link, NavLink } from "react-router";
 import { useAuth } from "@/context/AuthContext";
-import { LogoutButton } from "./LogoutButton";
+import { LogoutButton } from "./forms/LogoutButton";
 
 interface NavItemProps {
   name: string;
