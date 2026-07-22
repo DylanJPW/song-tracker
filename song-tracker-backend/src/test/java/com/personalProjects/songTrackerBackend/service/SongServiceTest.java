@@ -53,26 +53,26 @@ class SongServiceTest {
                 "Test Album",
                 "https://test.image"
         );
-        song.setId(0);
+        song.setId(1L);
 
-        when(songRepository.findById(0)).thenReturn(Optional.of(song));
+        when(songRepository.findById(1L)).thenReturn(Optional.of(song));
 
-        Optional<Song> result = songService.getSong(0);
+        Optional<Song> result = songService.getSong(1L);
 
         assertTrue(result.isPresent());
-        assertEquals(0, result.get().getId());
+        assertEquals(1L, result.get().getId());
         assertEquals("Test Song", result.get().getTitle());
         assertEquals("Test Artist", result.get().getArtist());
         assertEquals("Test Album", result.get().getAlbum());
         assertEquals("https://test.image", result.get().getImageUrl());
-        verify(songRepository).findById(0);
+        verify(songRepository).findById(1L);
     }
 
     @Test
     void shouldReturnEmptyWhenSongNotFound() {
-        when(songRepository.findById(1)).thenReturn(Optional.empty());
+        when(songRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Optional<Song> result = songService.getSong(1);
+        Optional<Song> result = songService.getSong(1L);
 
         assertTrue(result.isEmpty());
     }
@@ -80,31 +80,31 @@ class SongServiceTest {
     // deleteSong
     @Test
     void shouldDeleteSongWhenExists() {
-        when(songRepository.existsById(1)).thenReturn(true);
+        when(songRepository.existsById(1L)).thenReturn(true);
 
-        boolean result = songService.deleteSong(1);
+        boolean result = songService.deleteSong(1L);
 
         assertTrue(result);
-        verify(songRepository).deleteById(1);
+        verify(songRepository).deleteById(1L);
     }
 
     @Test
     void shouldNotDeleteSongWhenDoesNotExists() {
-        when(songRepository.existsById(1)).thenReturn(false);
+        when(songRepository.existsById(1L)).thenReturn(false);
 
-        boolean result = songService.deleteSong(1);
+        boolean result = songService.deleteSong(1L);
 
         assertFalse(result);
-        verify(songRepository, never()).deleteById(anyInt());
+        verify(songRepository, never()).deleteById(anyLong());
     }
 
     // createSong
     @Test
     void shouldReturnNullWhenSongAlreadyExists() {
         Song song = new Song();
-        song.setId(1);
+        song.setId(1L);
 
-        when(songRepository.existsById(1)).thenReturn(true);
+        when(songRepository.existsById(1L)).thenReturn(true);
 
         Song result = songService.createSong(song);
 
@@ -115,15 +115,15 @@ class SongServiceTest {
     @Test
     void shouldCreateSongWhenIdDoesNotExist() {
         Song song = new Song();
-        song.setId(1);
+        song.setId(1L);
 
-        when(songRepository.existsById(1)).thenReturn(false);
+        when(songRepository.existsById(1L)).thenReturn(false);
         when(songRepository.save(song)).thenReturn(song);
 
         Song result = songService.createSong(song);
 
         assertNotNull(result);
-        assertEquals(1, result.getId());
+        assertEquals(1L, result.getId());
         verify(songRepository).save(song);
     }
 
@@ -136,7 +136,7 @@ class SongServiceTest {
                 "Test Album",
                 "https://test.image"
         );
-        song.setId(0);
+        song.setId(1L);
 
         SongDTO dto = new SongDTO();
         dto.setTitle("New Song");
@@ -144,10 +144,10 @@ class SongServiceTest {
         dto.setAlbum("New Album");
         dto.setImageUrl("https://new.image");
 
-        when(songRepository.findById(0)).thenReturn(Optional.of(song));
+        when(songRepository.findById(1L)).thenReturn(Optional.of(song));
         when(songRepository.save(any(Song.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Optional<Song> result = songService.updateSong(0, dto);
+        Optional<Song> result = songService.updateSong(1L, dto);
 
         assertTrue(result.isPresent());
         assertEquals("New Song", result.get().getTitle());
@@ -163,9 +163,9 @@ class SongServiceTest {
         SongDTO dto = new SongDTO();
         dto.setTitle("Test Song");
 
-        when(songRepository.findById(0)).thenReturn(Optional.empty());
+        when(songRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Optional<Song> result = songService.updateSong(0, dto);
+        Optional<Song> result = songService.updateSong(1L, dto);
 
         assertTrue(result.isEmpty());
         verify(songRepository, never()).save(any());

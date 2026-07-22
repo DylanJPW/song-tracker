@@ -25,12 +25,12 @@ public class SongController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Song> getSong(@PathVariable int id) {
+    public ResponseEntity<Song> getSong(@PathVariable Long id) {
         return ResponseEntity.of(songService.getSong(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSong(@PathVariable int id) {
+    public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
         if (songService.deleteSong(id)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
@@ -58,7 +58,7 @@ public class SongController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Song> updateSong(@PathVariable int id, @RequestBody SongDTO newSong) {
+    public ResponseEntity<Song> updateSong(@PathVariable Long id, @RequestBody SongDTO newSong) {
         return songService.updateSong(id, newSong)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

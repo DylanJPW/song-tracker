@@ -23,8 +23,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany
-    private List<Song> addedSongs;
+    @OneToMany(mappedBy = "user")
+    private List<UserSong> addedSongs;
 
     public User(String username, String password) {
         this.username = username;

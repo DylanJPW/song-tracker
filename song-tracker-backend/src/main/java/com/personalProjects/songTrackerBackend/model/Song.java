@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "songs")
 @Getter
@@ -13,7 +15,10 @@ import lombok.Setter;
 public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
+    @Column(unique = true)
+    private String spotifyId;
 
     @Column(nullable = false)
     private String title;
@@ -24,8 +29,11 @@ public class Song {
     @Column(nullable = false)
     private String album;
 
-    @Column()
+    @Column
     private String imageUrl;
+
+    @OneToMany(mappedBy = "song")
+    List<UserSong> userSongs;
 
     public Song(String title, String artist, String album, String imageUrl) {
         this.title = title;

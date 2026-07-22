@@ -18,9 +18,9 @@ public class SongService {
         return songRepository.findAll();
     }
 
-    public Optional<Song> getSong(int id) { return songRepository.findById(id); }
+    public Optional<Song> getSong(Long id) { return songRepository.findById(id); }
 
-    public boolean deleteSong(int id) {
+    public boolean deleteSong(Long id) {
         if (!songRepository.existsById(id)) return false;
         songRepository.deleteById(id);
         return true;
@@ -31,7 +31,7 @@ public class SongService {
         return songRepository.save(song);
     }
 
-    public Optional<Song> updateSong(int id, SongDTO songDTO) {
+    public Optional<Song> updateSong(Long id, SongDTO songDTO) {
         return songRepository.findById(id)
                 .map(song -> {
                     song.setTitle(songDTO.getTitle());
