@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.security.Key;
@@ -15,9 +16,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestPropertySource(properties = {
-        "security.jwt.secret-key=+UsmAq3XRPudPKF4Td+jcwryTp5+qIhZ3fE+0vO6rfBmjF831uIzRN9xGinkqvjTO8RANe7rq/TiTWNyp/j1Ew=="
-})
+@ActiveProfiles("test")
 public class JWTUtilTest {
 
     @Autowired
