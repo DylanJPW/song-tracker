@@ -30,8 +30,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(
                             "/api",
-                            "/api/users/**",
-                            "/api/songs/**"
+                            "/api/users/register",
+                            "/api/users/login",
+                            "/api/songs"
                     ).permitAll()
                     .anyRequest()
                     .authenticated()

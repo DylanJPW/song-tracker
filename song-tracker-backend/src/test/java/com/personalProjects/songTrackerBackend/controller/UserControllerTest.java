@@ -135,7 +135,7 @@ class UserControllerTest {
         when(userService.createUser(any(User.class))).thenReturn(created);
         when(jwtUtil.generateToken("Test User")).thenReturn("jwt-token-test");  // Mock the token generati
 
-        mockMvc.perform(post("/api/users")
+        mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
@@ -153,7 +153,7 @@ class UserControllerTest {
 
         when(userService.createUser(any(User.class))).thenThrow(new com.personalProjects.songTrackerBackend.exceptions.UsernameAlreadyExistsException("Test User"));
 
-        mockMvc.perform(post("/api/users")
+        mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().is4xxClientError());

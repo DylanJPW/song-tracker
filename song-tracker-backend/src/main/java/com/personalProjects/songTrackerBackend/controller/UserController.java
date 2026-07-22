@@ -45,7 +45,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<UserDetailsResponse> createUser(@RequestBody UserDTO userDTO) {
         User newUser = userService.createUser(
                 new User(
