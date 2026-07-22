@@ -1,4 +1,5 @@
 import * as v from "valibot";
+import {apiClient} from "@/api/client";
 
 const Song = v.object({
   id: v.pipe(
@@ -25,7 +26,7 @@ export type Song = v.InferOutput<typeof Song>;
 const Songs = v.array(Song);
 
 export async function getSongs() {
-  const response = await fetch("/api/songs");
+  const response = await apiClient("/songs");
   if (!response.ok) {
     throw new Error("Failed to fetch");
   }
@@ -33,7 +34,7 @@ export async function getSongs() {
 }
 
 export async function getSearchResults(query: string) {
-  const response = await fetch(`/api/spotify/search?query=${query}`);
+  const response = await apiClient(`/spotify/search?query=${query}`);
   if (!response.ok) {
     throw new Error("Failed to fetch");
   }
