@@ -1,3 +1,4 @@
 data/
 target/
 secrets.properties
+.env

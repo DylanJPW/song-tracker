@@ -5,15 +5,22 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.security.Key;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@ActiveProfiles("test")
 public class JWTUtilTest {
 
-    private final JWTUtil jwtUtil = new JWTUtil();
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @Test
     void generateAndExtractUsername() {
@@ -33,7 +40,6 @@ public class JWTUtilTest {
 
     @Test
     void expiredTokenIsInvalid() throws Exception {
-        // create a token with a past expiration using the same secret as JWTUtil
         final String secret = "+UsmAq3XRPudPKF4Td+jcwryTp5+qIhZ3fE+0vO6rfBmjF831uIzRN9xGinkqvjTO8RANe7rq/TiTWNyp/j1Ew==";
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         Key key = Keys.hmacShaKeyFor(keyBytes);
@@ -45,9 +51,7 @@ public class JWTUtilTest {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        // JWTUtil currently throws ExpiredJwtException when extracting username from an expired token
         org.junit.jupiter.api.function.Executable call = () -> jwtUtil.isTokenValid(token, "expiredUser");
         org.junit.jupiter.api.Assertions.assertThrows(io.jsonwebtoken.ExpiredJwtException.class, call);
     }
 }
-
