@@ -1,4 +1,5 @@
 import * as v from "valibot";
+import {apiClient} from "@/api/client";
 
 const User = v.object({
   username: v.string(),
@@ -20,7 +21,7 @@ function getCommonRequestOptions(user: User) {
 }
 
 export async function createUser(user: User) {
-  const response = await fetch("/api/users", getCommonRequestOptions(user));
+  const response = await apiClient("/users", getCommonRequestOptions(user));
   if (response.status === 409) {
     throw new Error(`Username '${user.username}' already in use`)
   }
@@ -31,8 +32,8 @@ export async function createUser(user: User) {
 }
 
 export async function loginRequest(user: User) {
-  const response = await fetch(
-    "/api/users/login",
+  const response = await apiClient(
+    "/users/login",
     getCommonRequestOptions(user),
   );
   if (response.status === 401) {
