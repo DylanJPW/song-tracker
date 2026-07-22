@@ -1,4 +1,3 @@
-import {zodResolver} from '@hookform/resolvers/zod'
 import {useMutation} from '@tanstack/react-query'
 import {useForm} from 'react-hook-form'
 import {useNavigate} from 'react-router'
@@ -8,6 +7,7 @@ import {FormItem} from '@/components/forms/shared/FormItem'
 import {useAuth} from '@/context/AuthContext'
 import type {LoginSignUpProps} from '../../types'
 import {type LoginFormData, loginSchema} from './LoginSchema'
+import {valibotResolver} from "@hookform/resolvers/valibot";
 
 export function LoginForm({setIsSignUp}: LoginSignUpProps) {
   const {
@@ -16,7 +16,7 @@ export function LoginForm({setIsSignUp}: LoginSignUpProps) {
     handleSubmit,
     formState: {errors, isValid}
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: valibotResolver(loginSchema),
     mode: 'onTouched',
     defaultValues: {
       username: '',
