@@ -7,10 +7,9 @@ import com.personalProjects.songTrackerBackend.service.UserSongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user-songs")
@@ -24,6 +23,12 @@ public class UserSongController {
 
     @Autowired
     UserSongService userSongService;
+
+    @GetMapping
+    public ResponseEntity<List<UserSongDTO>> getAllSongs(Authentication authentication) {
+        List<UserSongDTO> songs = userSongService.getUserSongs(authentication.getName());
+        return ResponseEntity.ok(songs);
+    }
 
     @PostMapping
     public ResponseEntity<UserSongDTO> saveSong(
