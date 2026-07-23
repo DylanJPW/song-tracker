@@ -1,5 +1,6 @@
 package com.personalProjects.songTrackerBackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public class Song {
     private String imageUrl;
 
     @OneToMany(mappedBy = "song")
+    @JsonIgnore
     List<UserSong> userSongs;
 
     public Song(String title, String artist, String album, String imageUrl) {
