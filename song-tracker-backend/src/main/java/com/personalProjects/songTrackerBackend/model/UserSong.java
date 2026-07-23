@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-class UserSong {
+public class UserSong {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,5 +37,9 @@ class UserSong {
         this.user = user;
         this.song = song;
         this.status = status;
+    }
+
+    public UserSongDTO toDTO() {
+        return new UserSongDTO(this.song.toDTO(), this.status, this.capo, this.difficultyRating);
     }
 }

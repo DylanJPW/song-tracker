@@ -137,10 +137,10 @@ class SongControllerTest {
         );
 
         Song created = new Song(
-                dto.getTitle(),
-                dto.getArtist(),
-                dto.getAlbum(),
-                dto.getImageUrl()
+                dto.title(),
+                dto.artist(),
+                dto.album(),
+                dto.imageUrl()
         );
         created.setId(5L);
 
@@ -170,10 +170,10 @@ class SongControllerTest {
         );
 
         Song updated = new Song(
-                dto.getTitle(),
-                dto.getArtist(),
-                dto.getAlbum(),
-                dto.getImageUrl()
+                dto.title(),
+                dto.artist(),
+                dto.album(),
+                dto.imageUrl()
         );
         updated.setId(1L);
 

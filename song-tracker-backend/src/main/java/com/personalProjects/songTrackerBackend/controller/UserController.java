@@ -19,7 +19,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -49,8 +49,8 @@ public class UserController {
     public ResponseEntity<UserDetailsResponse> createUser(@RequestBody UserDTO userDTO) {
         User newUser = userService.createUser(
                 new User(
-                        userDTO.getUsername(),
-                        userDTO.getPassword()
+                        userDTO.username(),
+                        userDTO.password()
                 )
         );
 
@@ -69,12 +69,12 @@ public class UserController {
     public ResponseEntity<UserDetailsResponse> login(@RequestBody UserDTO UserDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        UserDTO.getUsername(),
-                        UserDTO.getPassword()
+                        UserDTO.username(),
+                        UserDTO.password()
                 )
         );
 
-        String token = jwtUtil.generateToken(UserDTO.getUsername());
+        String token = jwtUtil.generateToken(UserDTO.username());
         return ResponseEntity.ok(new UserDetailsResponse(token));
     }
 }

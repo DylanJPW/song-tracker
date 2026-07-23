@@ -41,4 +41,21 @@ public class Song {
         this.album = album;
         this.imageUrl = imageUrl;
     }
+
+    public Song(String spotifyId, String title, String artist, String album, String imageUrl) {
+        this.spotifyId = spotifyId;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.imageUrl = imageUrl;
+    }
+
+    public SongDTO toDTO() {
+        return new SongDTO(
+                this.title,
+                this.artist,
+                this.album,
+                this.imageUrl
+        );
+    }
 }
