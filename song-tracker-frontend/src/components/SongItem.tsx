@@ -1,11 +1,6 @@
-interface SongProps {
-  title: string;
-  artist: string;
-  album: string;
-  imageUrl: string;
-}
+import type {SongDTO} from "@/api/schemas/SongSchema";
 
-export function SongItem({ title, artist, album, imageUrl }: SongProps) {
+export function SongItem({ title, artist, album, imageUrl }: SongDTO) {
   return (
     <tr className="font-medium">
       <td className="border border-gray-300 px-4 py-2">

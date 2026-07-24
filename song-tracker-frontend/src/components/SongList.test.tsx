@@ -24,18 +24,20 @@ describe("SongList", () => {
       <SongList
         songs={[
           {
-            id: "0",
+            id: 0,
             title: "Song A",
             artist: "Artist A",
             album: "Album A",
             imageUrl: "https://test.image",
+            spotifyId: null
           },
           {
-            id: "1",
+            id: 1,
             title: "Song B",
             artist: "Artist B",
             album: "Album B",
             imageUrl: "https://test.image",
+            spotifyId: null
           },
         ]}
       />,

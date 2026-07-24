@@ -6,11 +6,12 @@ export const SongDTO = v.object({
   album: v.string(),
   imageUrl: v.string(),
 })
+export type SongDTO = v.InferOutput<typeof SongDTO>
 
 export const Song = v.object({
   ...v.entriesFromObjects([SongDTO]),
-  id: v.bigint(),
-  spotifyId: v.string(),
+  id: v.number(),
+  spotifyId: v.union([v.string(), v.null()]),
   dateAdded: v.optional(
     v.pipe(
       v.union([v.string(), v.date()]), // Accept dateAdded as string or date
