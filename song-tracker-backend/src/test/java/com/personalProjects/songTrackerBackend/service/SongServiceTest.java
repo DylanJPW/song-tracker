@@ -149,7 +149,7 @@ class SongServiceTest {
         assertEquals("New Song", result.get().getTitle());
         assertEquals("New Artist", result.get().getArtist());
         assertEquals("New Album", result.get().getAlbum());
-        assertEquals("https://new.image", result.get().getImageUrl());
+        assertEquals("https://test.image", result.get().getImageUrl());
 
         verify(songRepository).save(song);
     }
