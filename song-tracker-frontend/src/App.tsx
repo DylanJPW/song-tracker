@@ -10,6 +10,7 @@ import {AuthProvider} from "./context/AuthContext";
 import {HomePage} from "./pages/HomePage";
 import {LoginPage} from "./pages/LoginPage";
 import {SearchResultsList} from "./pages/SearchResultsPage";
+import {ProtectedRoute} from "@/components/ProtectedRoute";
 
 function renderError({error}: FallbackProps) {
   return <LoadingOrError error={error}/>;
@@ -26,8 +27,10 @@ export function App() {
             <Routes>
               <Route element={<HomePage/>} index={true}/>
               <Route element={<SearchResultsList/>} path="/search"/>
-              <Route element={<MySongsPage/>} path="/songs"/>
               <Route element={<LoginPage/>} path="/login"/>
+              <Route element={<ProtectedRoute/>}>
+                <Route element={<MySongsPage/>} path="/songs"/>
+              </Route>
             </Routes>
             <ToastContainer/>
           </div>
