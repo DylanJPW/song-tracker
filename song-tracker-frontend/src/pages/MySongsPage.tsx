@@ -9,6 +9,10 @@ export function MySongsPage() {
     staleTime: Number.POSITIVE_INFINITY,
   });
 
+  if (userData.length === 0) {
+    return <p className="mt-50 flex flex-col items-center text-2xl">No songs added</p>
+  }
+
   return (
     <div className="flex flex-col items-center">
       <UserSongList songs={userData}/>
