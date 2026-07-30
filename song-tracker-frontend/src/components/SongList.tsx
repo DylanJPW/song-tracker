@@ -1,5 +1,5 @@
-import {SongItem} from "./SongItem";
 import type {Song} from "@/api/schemas/SongSchema";
+import {SongItem} from "@/components/SongItem";
 
 interface SongListProps {
   songs: Song[];

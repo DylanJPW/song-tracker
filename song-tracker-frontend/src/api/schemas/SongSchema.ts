@@ -8,6 +8,12 @@ export const SongDTO = v.object({
 })
 export type SongDTO = v.InferOutput<typeof SongDTO>
 
+export const SpotifySong = v.object({
+  ...v.entriesFromObjects([SongDTO]),
+  spotifyId: v.union([v.string(), v.null()]),
+})
+export type SpotifySong = v.InferOutput<typeof SpotifySong>
+
 export const Song = v.object({
   ...v.entriesFromObjects([SongDTO]),
   id: v.number(),
