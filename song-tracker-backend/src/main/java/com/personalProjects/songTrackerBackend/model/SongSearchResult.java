@@ -1,7 +1,7 @@
 package com.personalProjects.songTrackerBackend.model;
 
 public record SongSearchResult(
-        String id,
+        String spotifyId,
         String title,
         String artist,
         String album,

@@ -62,7 +62,7 @@ public class SongService {
                     }
 
                     Song song = new Song(
-                            track.id(),
+                            track.spotifyId(),
                             track.title(),
                             track.artist(),
                             track.album(),
