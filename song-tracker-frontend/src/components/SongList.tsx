@@ -17,12 +17,14 @@ export function SongList({songs}: SongListProps) {
         </tr>
         </thead>
         <tbody>
-        {songs.map(({id, title, artist, album, imageUrl}) => (
+        {songs.map(({id, title, artist, album, imageUrl, spotifyId}) => (
           <SongItem
             album={album}
             artist={artist}
+            id={id}
             imageUrl={imageUrl}
             key={id}
+            spotifyId={spotifyId}
             title={title}
           />
         ))}

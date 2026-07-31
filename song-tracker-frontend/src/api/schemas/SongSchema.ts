@@ -14,6 +14,8 @@ export const SpotifySong = v.object({
 })
 export type SpotifySong = v.InferOutput<typeof SpotifySong>
 
+export const SpotifySongs = v.array(SpotifySong)
+
 export const Song = v.object({
   ...v.entriesFromObjects([SongDTO]),
   id: v.number(),
