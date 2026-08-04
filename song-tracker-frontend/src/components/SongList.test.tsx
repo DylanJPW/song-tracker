@@ -1,18 +1,20 @@
-import { render, screen } from "@testing-library/react";
-import { vi } from "vitest";
-import { SongList } from "./SongList";
+import {render, screen} from "@testing-library/react";
+import {vi} from "vitest";
+import {SongList} from "./SongList";
+import type {Song} from "@/api/schemas/SongSchema";
 
-vi.mock("@/components/Song", () => ({
-  Song: ({ name }: { name: string }) => (
+vi.mock("@/components/SongItem", () => ({
+  SongItem: (song: Song) => (
     <tr data-testid="song-row">
-      <td>{name}</td>
+      <td><p>{song.title} - {song.album}</p></td>
+      <td>{song.artist}</td>
     </tr>
   ),
 }));
 
 describe("SongList", () => {
   it("renders table headers", () => {
-    render(<SongList songs={[]} />);
+    render(<SongList songs={[]}/>);
 
     expect(screen.getByText("Album Cover")).toBeInTheDocument();
     expect(screen.getByText("Title")).toBeInTheDocument();
