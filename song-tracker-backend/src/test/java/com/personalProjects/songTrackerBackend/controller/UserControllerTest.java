@@ -127,8 +127,8 @@ class UserControllerTest {
         );
 
         User created = new User(
-                dto.getUsername(),
-                dto.getPassword()
+                dto.username(),
+                dto.password()
         );
         created.setId(1L);
 
@@ -191,8 +191,8 @@ class UserControllerTest {
         );
 
         User user = new User(
-                dto.getUsername(),
-                dto.getPassword()
+                dto.username(),
+                dto.password()
         );
         user.setId(1L);
 

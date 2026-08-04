@@ -1,9 +1,12 @@
 package com.personalProjects.songTrackerBackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "songs")
@@ -13,7 +16,10 @@ import lombok.Setter;
 public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
+    @Column(unique = true)
+    private String spotifyId;
 
     @Column(nullable = false)
     private String title;
@@ -24,13 +30,34 @@ public class Song {
     @Column(nullable = false)
     private String album;
 
-    @Column()
+    @Column
     private String imageUrl;
+
+    @OneToMany(mappedBy = "song")
+    @JsonIgnore
+    List<UserSong> userSongs;
 
     public Song(String title, String artist, String album, String imageUrl) {
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.imageUrl = imageUrl;
+    }
+
+    public Song(String spotifyId, String title, String artist, String album, String imageUrl) {
+        this.spotifyId = spotifyId;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.imageUrl = imageUrl;
+    }
+
+    public SongDTO toDTO() {
+        return new SongDTO(
+                this.title,
+                this.artist,
+                this.album,
+                this.imageUrl
+        );
     }
 }

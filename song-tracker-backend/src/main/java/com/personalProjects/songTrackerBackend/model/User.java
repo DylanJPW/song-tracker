@@ -1,5 +1,6 @@
 package com.personalProjects.songTrackerBackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,16 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany
-    private List<Song> addedSongs;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<UserSong> addedSongs;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public UserDTO toDTO() {
+        return new UserDTO(this.username, this.password);
     }
 }

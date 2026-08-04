@@ -60,7 +60,7 @@ class SpotifyControllerTest {
                         .param("query", "stick season")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value("spotify-id"))
+                .andExpect(jsonPath("$[0].spotifyId").value("spotify-id"))
                 .andExpect(jsonPath("$[0].title").value("Stick Season"))
                 .andExpect(jsonPath("$[0].artist").value("Noah Kahan"));
 

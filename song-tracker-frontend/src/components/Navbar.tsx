@@ -51,7 +51,10 @@ export function Navbar() {
         <NavItem link="/" name="HOME"/>
         <NavItem link="/search" name="SEARCH"/>
         {isLoggedIn ? (
-          <LogoutButton logout={logout}/>
+          <>
+            <NavItem link="/songs" name="MY SONGS"/>
+            <LogoutButton logout={logout}/>
+          </>
         ) : (
           <NavItem link="/login" name="LOG IN"/>
         )}
