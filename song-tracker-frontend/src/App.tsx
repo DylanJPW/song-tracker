@@ -11,6 +11,7 @@ import {HomePage} from "./pages/HomePage";
 import {LoginPage} from "./pages/LoginPage";
 import {SearchResultsList} from "./pages/SearchResultsPage";
 import {ProtectedRoute} from "@/components/ProtectedRoute";
+import {SongDetails} from "@/components/songDisplay/SongDetails";
 
 function renderError({error}: FallbackProps) {
   return <LoadingOrError error={error}/>;
@@ -28,6 +29,7 @@ export function App() {
               <Route element={<HomePage/>} index={true}/>
               <Route element={<SearchResultsList/>} path="/search"/>
               <Route element={<LoginPage/>} path="/login"/>
+              <Route element={<SongDetails/>} path="/song"/>
               <Route element={<ProtectedRoute/>}>
                 <Route element={<MySongsPage/>} path="/songs"/>
               </Route>

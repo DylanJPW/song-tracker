@@ -2,11 +2,8 @@ import type {Song} from "@/api/schemas/SongSchema";
 import {useMutation} from "@tanstack/react-query";
 import {saveUserSong} from "@/api/userSongs";
 import {toast} from "react-toastify";
-import {useLocation} from "react-router";
 
-export function SongDetails() {
-  const location = useLocation();
-  const {title, artist, album, imageUrl, spotifyId} = location.state?.song;
+export function SongPage({title, artist, album, imageUrl, spotifyId}: Song) {
   const saveSongMutation = useMutation({
     mutationFn: saveUserSong,
     onSuccess: data => {
@@ -27,16 +24,9 @@ export function SongDetails() {
   }
 
   return (
-    <div className='flex flex-col items-center'>
-      <div className='w-full flex justify-center'>
-        <img alt={title} src={imageUrl}/>
-      </div>
-      <div className='flex flex-col items-center'>
-        <div>
-          <p>{title}</p>
-          <p>{album}</p>
-          <p>{artist}</p>
-        </div>
+    <div className=''>
+      <div></div>
+      <div className='flex items-center'>
         <button
           className='cursor-pointer rounded-sm bg-blue-500 p-2 text-center hover:bg-blue-400'
           onClick={onClick}
