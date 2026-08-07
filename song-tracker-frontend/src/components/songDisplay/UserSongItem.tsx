@@ -1,7 +1,7 @@
 import type {UserSong} from "@/api/schemas/UserSongSchema";
 import {useNavigate} from "react-router";
 
-export function UserSongItem({song}: UserSong) {
+export function UserSongItem({song, status}: UserSong) {
   const {title, artist, album, imageUrl} = song;
 
   const navigate = useNavigate();
@@ -9,7 +9,8 @@ export function UserSongItem({song}: UserSong) {
   function onClick() {
     navigate("/song", {
       state: {
-        song
+        song,
+        status
       }
     });
   }
