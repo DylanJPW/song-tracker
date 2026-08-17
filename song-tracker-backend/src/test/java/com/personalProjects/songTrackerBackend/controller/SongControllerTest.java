@@ -129,6 +129,8 @@ class SongControllerTest {
     @Test
     void createSong_returnsCreatedSong() throws Exception {
         SongDTO dto = new SongDTO(
+                1L,
+                "spotifyId",
                 "Test Song",
                 "Test Artist",
                 "Test Album",
@@ -162,6 +164,8 @@ class SongControllerTest {
     @Test
     void updateSong_existingSong_returnsUpdatedSong() throws Exception {
         SongDTO dto = new SongDTO(
+                1L,
+                "spotifyId",
                 "Test Updated Song",
                 "Test Artist",
                 "Test Album",
@@ -192,6 +196,8 @@ class SongControllerTest {
     @Test
     void updateSong_missingSong_returns404() throws Exception {
         SongDTO dto = new SongDTO(
+                1L,
+                "spotifyId",
                 "Test Updated Song",
                 "Test Artist",
                 "Test Album",

@@ -138,7 +138,7 @@ class SongServiceTest {
         );
         song.setId(1L);
 
-        SongDTO dto = new SongDTO("New Song", "New Artist",  "New Album", "https://test.image");
+        SongDTO dto = new SongDTO(1L, "spotifyId", "New Song", "New Artist",  "New Album", "https://test.image");
 
         when(songRepository.findById(1L)).thenReturn(Optional.of(song));
         when(songRepository.save(any(Song.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -156,7 +156,7 @@ class SongServiceTest {
 
     @Test
     void shouldReturnEmptyWhenUpdatingMissingSong() {
-        SongDTO dto = new SongDTO("Test Song", "Test Artist", "Test Album", "https://test.image");
+        SongDTO dto = new SongDTO(1L, "spotifyId", "Test Song", "Test Artist", "Test Album", "https://test.image");
 
         when(songRepository.findById(1L)).thenReturn(Optional.empty());
 

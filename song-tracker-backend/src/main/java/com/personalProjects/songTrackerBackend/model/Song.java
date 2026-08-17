@@ -54,6 +54,8 @@ public class Song {
 
     public SongDTO toDTO() {
         return new SongDTO(
+                this.id,
+                this.spotifyId,
                 this.title,
                 this.artist,
                 this.album,

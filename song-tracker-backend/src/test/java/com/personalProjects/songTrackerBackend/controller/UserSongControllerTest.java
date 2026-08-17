@@ -44,13 +44,16 @@ class UserSongControllerTest {
     void getAllSongs_returnsUserSongs() {
 
         SongDTO songDTO = new SongDTO(
+                1L,
+                "spotifyId",
                 "Test Song",
                 "Test Artist",
                 "Test Album",
                 "https://test.image"
         );
 
-        UserSongDTO dto = new UserSongDTO(
+        UserSongDTO userSongDTO = new UserSongDTO(
+                1L,
                 songDTO,
                 SongStatus.WANT_TO_LEARN,
                 null,
@@ -59,7 +62,7 @@ class UserSongControllerTest {
 
         when(authentication.getName()).thenReturn("test");
         when(userSongService.getUserSongs("test"))
-                .thenReturn(List.of(dto));
+                .thenReturn(List.of(userSongDTO));
 
         ResponseEntity<List<UserSongDTO>> response =
                 controller.getAllSongs(authentication);

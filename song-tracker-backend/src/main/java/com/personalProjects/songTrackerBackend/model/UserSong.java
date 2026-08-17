@@ -22,6 +22,7 @@ public class UserSong {
     private Song song;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private SongStatus status;
 
     @Column
@@ -40,6 +41,6 @@ public class UserSong {
     }
 
     public UserSongDTO toDTO() {
-        return new UserSongDTO(this.song.toDTO(), this.status, this.capo, this.difficultyRating);
+        return new UserSongDTO(this.id, this.song.toDTO(), this.status, this.capo, this.difficultyRating);
     }
 }
