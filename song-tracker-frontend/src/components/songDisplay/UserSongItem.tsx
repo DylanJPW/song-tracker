@@ -1,30 +1,32 @@
-import type {UserSong} from "@/api/schemas/UserSongSchema";
-import {useNavigate} from "react-router";
+import type {UserSong} from '@/api/schemas/UserSongSchema'
+import {SongCard} from '@/components/songDisplay/SongCard'
+import {SongRowLink} from '@/components/songDisplay/SongRowLink'
+import {StatusBadge} from '@/components/songDisplay/StatusBadge'
 
-export function UserSongItem({song, status}: UserSong) {
-  const {title, artist, album, imageUrl} = song;
+interface UserSongItemProps {
+  userSong: UserSong
+}
 
-  const navigate = useNavigate();
-
-  function onClick() {
-    navigate("/song", {
-      state: {
-        song,
-        status
-      }
-    });
-  }
+export function UserSongItem({userSong}: UserSongItemProps) {
+  const {capo, difficultyRating, song, status} = userSong
 
   return (
-    <div className='flex grow flex-row gap-x-2 border-slate-400 border-b bg-slate-900 p-2' onClick={onClick}>
-      <img alt={title} height={100} src={imageUrl} width={100}/>
-      <div className='flex grow flex-col justify-between'>
-        <div>
-          <p className='line-clamp-1' title={title}>{title}</p>
-          <p className='line-clamp-1' title={album}>{album}</p>
+    <SongRowLink spotifyId={song.spotifyId} state={{song, status}}>
+      <SongCard album={song.album} artist={song.artist} imageUrl={song.imageUrl} title={song.title}>
+        <div className='flex shrink-0 flex-col items-end gap-y-2 pl-2 text-sm'>
+          <StatusBadge status={status}/>
+          <dl className='flex gap-x-3 text-slate-400'>
+            <div className='flex gap-x-1'>
+              <dt>Capo</dt>
+              <dd>{capo === null ? '—' : capo}</dd>
+            </div>
+            <div className='flex gap-x-1'>
+              <dt>Difficulty</dt>
+              <dd>{difficultyRating === null ? '—' : `${difficultyRating}/5`}</dd>
+            </div>
+          </dl>
         </div>
-        <p className=''>{artist}</p>
-      </div>
-    </div>
-  );
+      </SongCard>
+    </SongRowLink>
+  )
 }

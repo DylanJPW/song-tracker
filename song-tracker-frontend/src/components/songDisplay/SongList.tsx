@@ -1,24 +1,18 @@
-import type {Song} from "@/api/schemas/SongSchema";
-import {SongItem} from "@/components/songDisplay/SongItem";
+import type {Song} from '@/api/schemas/SongSchema'
+import {SongItem} from '@/components/songDisplay/SongItem'
 
 interface SongListProps {
-  songs: Song[];
+  songs: Song[]
 }
 
 export function SongList({songs}: SongListProps) {
   return (
-    <div className="flex flex-col place-content-center">
-      {songs.map(({id, title, artist, album, imageUrl, spotifyId}) => (
-        <SongItem
-          album={album}
-          artist={artist}
-          id={id}
-          imageUrl={imageUrl}
-          key={id}
-          spotifyId={spotifyId}
-          title={title}
-        />
+    <ul className='flex w-full max-w-2xl flex-col'>
+      {songs.map(song => (
+        <li key={song.spotifyId ?? song.id}>
+          <SongItem song={song}/>
+        </li>
       ))}
-    </div>
-  );
+    </ul>
+  )
 }

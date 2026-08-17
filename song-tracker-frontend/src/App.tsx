@@ -29,12 +29,12 @@ export function App() {
               <Route element={<HomePage/>} index={true}/>
               <Route element={<SearchResultsList/>} path="/search"/>
               <Route element={<LoginPage/>} path="/login"/>
-              <Route element={<SongDetails/>} path="/song"/>
               <Route element={<ProtectedRoute/>}>
                 <Route element={<MySongsPage/>} path="/songs"/>
+                <Route element={<SongDetails/>} path='/songs/:spotifyId'/>
               </Route>
             </Routes>
-            <ToastContainer/>
+            <ToastContainer autoClose={5000} hideProgressBar={true} position='top-right' theme='light'/>
           </div>
         </AuthProvider>
       </Suspense>

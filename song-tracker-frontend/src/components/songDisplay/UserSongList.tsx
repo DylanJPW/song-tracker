@@ -1,22 +1,18 @@
 import type {UserSong} from '@/api/schemas/UserSongSchema'
-import {UserSongItem} from './UserSongItem'
+import {UserSongItem} from '@/components/songDisplay/UserSongItem'
 
 interface UserSongListProps {
-  songs: UserSong[]
+  userSongs: UserSong[]
 }
 
-export function UserSongList({songs}: UserSongListProps) {
+export function UserSongList({userSongs}: UserSongListProps) {
   return (
-    <div className="flex flex-col place-content-center">
-      {songs.map(({song, capo, difficultyRating, status}) => (
-        <UserSongItem
-          capo={capo}
-          difficultyRating={difficultyRating}
-          key={`${song.title}-${song.artist}`}
-          song={song}
-          status={status}
-        />
+    <ul className='flex w-full flex-col'>
+      {userSongs.map(userSong => (
+        <li key={userSong.id}>
+          <UserSongItem userSong={userSong}/>
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }

@@ -1,25 +1,19 @@
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {saveUserSong} from "@/api/userSongs";
 import {toast} from "react-toastify";
 import {useLocation} from "react-router";
 
-
 export function SongDetails() {
-  const location = useLocation();
-  const {title, artist, album, imageUrl, spotifyId} = location.state?.song;
-  const status = location.state?.status;
+  const location = useLocation()
+  const queryClient = useQueryClient()
+  const {title, artist, album, imageUrl, spotifyId} = location.state?.song
+  const status = location.state?.status
   const saveSongMutation = useMutation({
     mutationFn: saveUserSong,
-    onSuccess: data => {
-      toast(`Saved ${data.song.title}`, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        theme: 'light'
-      })
+    onError: () => toast.error('Could not save that song. Try again.'),
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({queryKey: ['userSongs']})
+      toast.success(`Saved ${data.song.title}`)
     }
   })
 
