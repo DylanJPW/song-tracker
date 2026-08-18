@@ -2,7 +2,7 @@ package com.personalProjects.songTrackerBackend.controller;
 
 import com.personalProjects.songTrackerBackend.auth.JWTRequestFilter;
 import com.personalProjects.songTrackerBackend.model.Song;
-import com.personalProjects.songTrackerBackend.model.SongDTO;
+import com.personalProjects.songTrackerBackend.model.SongRequest;
 import com.personalProjects.songTrackerBackend.service.SongService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,20 +128,13 @@ class SongControllerTest {
 
     @Test
     void createSong_returnsCreatedSong() throws Exception {
-        SongDTO dto = new SongDTO(
-                1L,
-                "spotifyId",
-                "Test Song",
-                "Test Artist",
-                "Test Album",
-                "https://test.image"
-        );
+        SongRequest request = new SongRequest("Test Song", "Test Artist", "Test Album", "https://test.image");
 
         Song created = new Song(
-                dto.title(),
-                dto.artist(),
-                dto.album(),
-                dto.imageUrl()
+                request.title(),
+                request.artist(),
+                request.album(),
+                request.imageUrl()
         );
         created.setId(5L);
 
@@ -149,7 +142,7 @@ class SongControllerTest {
 
         mockMvc.perform(post("/api/songs")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "http://localhost/api/songs/5"))
                 .andExpect(jsonPath("$.id").value(5L))
@@ -163,59 +156,50 @@ class SongControllerTest {
 
     @Test
     void updateSong_existingSong_returnsUpdatedSong() throws Exception {
-        SongDTO dto = new SongDTO(
-                1L,
-                "spotifyId",
-                "Test Updated Song",
-                "Test Artist",
-                "Test Album",
-                "https://test.image"
-        );
+        SongRequest request = new SongRequest("Test Updated Song", "Test Artist", "Test Album", "https://test.image");
 
         Song updated = new Song(
-                dto.title(),
-                dto.artist(),
-                dto.album(),
-                dto.imageUrl()
+                request.title(),
+                request.artist(),
+                request.album(),
+                request.imageUrl()
         );
         updated.setId(1L);
 
         when(songService.updateSong(
                 eq(1L),
-                any(SongDTO.class)))
-                .thenReturn(Optional.empty());
+                any(SongRequest.class)))
+                .thenReturn(Optional.of(updated));
 
         mockMvc.perform(put("/api/songs/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isNotFound());
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("Test Updated Song"))
+                .andExpect(jsonPath("$.artist").value("Test Artist"))
+                .andExpect(jsonPath("$.album").value("Test Album"))
+                .andExpect(jsonPath("$.imageUrl").value("https://test.image"));
 
-        verify(songService).updateSong(eq(1L), any(SongDTO.class));
+        verify(songService).updateSong(eq(1L), any(SongRequest.class));
     }
 
     @Test
     void updateSong_missingSong_returns404() throws Exception {
-        SongDTO dto = new SongDTO(
-                1L,
-                "spotifyId",
-                "Test Updated Song",
-                "Test Artist",
-                "Test Album",
-                "https://test.image"
-        );
+        SongRequest request = new SongRequest("Test Updated Song", "Test Artist", "Test Album", "https://test.image");
 
         when(songService.updateSong(
                 eq(1L),
-                any(SongDTO.class)))
+                any(SongRequest.class)))
                 .thenReturn(Optional.empty());
 
         mockMvc.perform(put("/api/songs/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
 
         verify(songService).updateSong(
                 eq(1L),
-                any(SongDTO.class));
+                any(SongRequest.class));
     }
 }

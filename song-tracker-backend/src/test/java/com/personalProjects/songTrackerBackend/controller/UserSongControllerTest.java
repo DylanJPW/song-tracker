@@ -40,26 +40,25 @@ class UserSongControllerTest {
     @InjectMocks
     private UserSongController controller;
 
+    SongDTO songDTO = new SongDTO(
+            1L,
+            "spotifyId",
+            "Test Song",
+            "Test Artist",
+            "Test Album",
+            "https://test.image"
+    );
+
+    UserSongDTO userSongDTO = new UserSongDTO(
+            1L,
+            songDTO,
+            SongStatus.WANT_TO_LEARN,
+            null,
+            null
+    );
+
     @Test
     void getAllSongs_returnsUserSongs() {
-
-        SongDTO songDTO = new SongDTO(
-                1L,
-                "spotifyId",
-                "Test Song",
-                "Test Artist",
-                "Test Album",
-                "https://test.image"
-        );
-
-        UserSongDTO userSongDTO = new UserSongDTO(
-                1L,
-                songDTO,
-                SongStatus.WANT_TO_LEARN,
-                null,
-                null
-        );
-
         when(authentication.getName()).thenReturn("test");
         when(userSongService.getUserSongs("test"))
                 .thenReturn(List.of(userSongDTO));
@@ -131,5 +130,24 @@ class UserSongControllerTest {
         verify(userService).getUserByUsername("test");
         verify(songService).getOrCreateFromSpotify("spotify123");
         verify(userSongService).saveSong(user, song);
+    }
+
+    @Test
+    void updateSong_returnsUpdatedSong() {
+        UserSongDTO dto = new UserSongDTO(
+                1L, songDTO, SongStatus.LEARNING, null, null);
+
+        UpdateUserSongRequest request =
+                new UpdateUserSongRequest(SongStatus.LEARNING, null, null);
+
+        when(authentication.getName()).thenReturn("test");
+        when(userSongService.updateUserSong(1L, request, "test")).thenReturn(dto);
+
+        ResponseEntity<UserSongDTO> response =
+                controller.updateSong(1L, request, authentication);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(SongStatus.LEARNING, response.getBody().status());
     }
 }

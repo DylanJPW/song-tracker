@@ -2,10 +2,7 @@ package com.personalProjects.songTrackerBackend.controller;
 
 import com.personalProjects.songTrackerBackend.model.SongSearchResult;
 import com.personalProjects.songTrackerBackend.service.SpotifyService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +21,12 @@ public class SpotifyController {
             @RequestParam String query) throws Exception {
 
         return spotifyService.searchTracks(query);
+    }
+
+    @GetMapping("/tracks/{spotifyId}")
+    public SongSearchResult getTrack(
+            @PathVariable String spotifyId) throws Exception {
+
+        return spotifyService.getTrack(spotifyId);
     }
 }

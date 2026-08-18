@@ -2,6 +2,7 @@ package com.personalProjects.songTrackerBackend.service;
 
 import com.personalProjects.songTrackerBackend.model.Song;
 import com.personalProjects.songTrackerBackend.model.SongDTO;
+import com.personalProjects.songTrackerBackend.model.SongRequest;
 import com.personalProjects.songTrackerBackend.model.SongSearchResult;
 import com.personalProjects.songTrackerBackend.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,13 @@ public class SongService {
         return songRepository.save(song);
     }
 
-    public Optional<Song> updateSong(Long id, SongDTO songDTO) {
+    public Optional<Song> updateSong(Long id, SongRequest songRequest) {
         return songRepository.findById(id)
                 .map(song -> {
-                    song.setTitle(songDTO.title());
-                    song.setArtist(songDTO.artist());
-                    song.setAlbum(songDTO.album());
-                    song.setImageUrl(songDTO.imageUrl());
+                    song.setTitle(songRequest.title());
+                    song.setArtist(songRequest.artist());
+                    song.setAlbum(songRequest.album());
+                    song.setImageUrl(songRequest.imageUrl());
 
                     return songRepository.save(song);
                 });

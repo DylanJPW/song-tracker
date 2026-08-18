@@ -1,9 +1,8 @@
 package com.personalProjects.songTrackerBackend.service;
 
 import com.personalProjects.songTrackerBackend.model.Song;
-import com.personalProjects.songTrackerBackend.model.SongDTO;
+import com.personalProjects.songTrackerBackend.model.SongRequest;
 import com.personalProjects.songTrackerBackend.repository.SongRepository;
-import com.personalProjects.songTrackerBackend.service.SongService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,12 +136,12 @@ class SongServiceTest {
         );
         song.setId(1L);
 
-        SongDTO dto = new SongDTO(1L, "spotifyId", "New Song", "New Artist",  "New Album", "https://test.image");
+        SongRequest request = new SongRequest("New Song", "New Artist", "New Album", "https://test.image");
 
         when(songRepository.findById(1L)).thenReturn(Optional.of(song));
         when(songRepository.save(any(Song.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Optional<Song> result = songService.updateSong(1L, dto);
+        Optional<Song> result = songService.updateSong(1L, request);
 
         assertTrue(result.isPresent());
         assertEquals("New Song", result.get().getTitle());
@@ -156,11 +154,11 @@ class SongServiceTest {
 
     @Test
     void shouldReturnEmptyWhenUpdatingMissingSong() {
-        SongDTO dto = new SongDTO(1L, "spotifyId", "Test Song", "Test Artist", "Test Album", "https://test.image");
+        SongRequest request = new SongRequest("New Song", "New Artist", "New Album", "https://test.image");
 
         when(songRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Optional<Song> result = songService.updateSong(1L, dto);
+        Optional<Song> result = songService.updateSong(1L, request);
 
         assertTrue(result.isEmpty());
         verify(songRepository, never()).save(any());

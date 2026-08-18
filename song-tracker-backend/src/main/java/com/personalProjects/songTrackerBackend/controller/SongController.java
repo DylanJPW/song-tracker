@@ -1,7 +1,7 @@
 package com.personalProjects.songTrackerBackend.controller;
 
 import com.personalProjects.songTrackerBackend.model.Song;
-import com.personalProjects.songTrackerBackend.model.SongDTO;
+import com.personalProjects.songTrackerBackend.model.SongRequest;
 import com.personalProjects.songTrackerBackend.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,13 +38,13 @@ public class SongController {
     }
 
     @PostMapping()
-    public ResponseEntity<Song> createSong(@RequestBody SongDTO songDTO) {
+    public ResponseEntity<Song> createSong(@RequestBody SongRequest songRequest) {
         Song newSong = songService.createSong(
                 new Song(
-                        songDTO.title(),
-                        songDTO.artist(),
-                        songDTO.album(),
-                        songDTO.imageUrl()
+                        songRequest.title(),
+                        songRequest.artist(),
+                        songRequest.album(),
+                        songRequest.imageUrl()
                 )
         );
 
@@ -58,7 +58,7 @@ public class SongController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Song> updateSong(@PathVariable Long id, @RequestBody SongDTO newSong) {
+    public ResponseEntity<Song> updateSong(@PathVariable Long id, @RequestBody SongRequest newSong) {
         return songService.updateSong(id, newSong)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
