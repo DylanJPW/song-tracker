@@ -1,76 +1,40 @@
-import {render, screen, fireEvent} from '@testing-library/react'
-import {describe, expect, it, vi, beforeEach} from 'vitest'
-import {useMutation} from '@tanstack/react-query'
+import {render, screen} from '@testing-library/react'
+import {MemoryRouter} from 'react-router'
+import {describe, expect, it} from 'vitest'
+import {buildSong} from '@/test-fixtures'
 import {SongItem} from './SongItem'
 
-vi.mock('@tanstack/react-query', () => ({
-  useMutation: vi.fn(),
-}))
-
-vi.mock('react-toastify', () => ({
-  toast: vi.fn(),
-}))
-
-vi.mock('@/api/userSongs', () => ({
-  saveUserSong: vi.fn(),
-}))
+function renderSongItem(song = buildSong()) {
+  return render(
+    <MemoryRouter>
+      <SongItem song={song}/>
+    </MemoryRouter>
+  )
+}
 
 describe('SongItem', () => {
-  const mutate = vi.fn()
+  it('renders the song information', () => {
+    renderSongItem()
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-
-    vi.mocked(useMutation).mockReturnValue({
-      mutate,
-    } as any)
+    expect(screen.getByText('Song A')).toBeInTheDocument()
+    expect(screen.getByText('Album A')).toBeInTheDocument()
+    expect(screen.getByText('Artist A')).toBeInTheDocument()
+    expect(screen.getByRole('img', {name: 'Album art for Album A'})).toHaveAttribute(
+      'src',
+      'https://test.image/a.jpg'
+    )
   })
 
-  it('renders song information', () => {
-    render(
-      <table>
-        <tbody>
-        <SongItem
-          album="Song Album"
-          artist="Artist"
-          id={0}
-          imageUrl="https://test.image"
-          spotifyId="spotify-id"
-          title="Song Name"
-        />
-        </tbody>
-      </table>
-    )
+  it('links to the song details page', () => {
+    renderSongItem()
 
-    expect(screen.getByText('Song Name - Song Album')).toBeInTheDocument()
-    expect(screen.getByText('Artist')).toBeInTheDocument()
-    expect(
-      screen.getByRole('img', {name: 'Song Name'})
-    ).toHaveAttribute('src', 'https://test.image')
-    expect(
-      screen.getByRole('button', {name: 'Want to learn'})
-    ).toBeInTheDocument()
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/songs/spotify-a')
   })
 
-  it('calls mutate with the spotify id when button is clicked', () => {
-    render(
-      <table>
-        <tbody>
-        <SongItem
-          album="Song Album"
-          artist="Artist"
-          id={0}
-          imageUrl="https://test.image"
-          spotifyId="spotify-id"
-          title="Song Name"
-        />
-        </tbody>
-      </table>
-    )
+  it('is not a link when the song has no spotify id', () => {
+    renderSongItem(buildSong({spotifyId: null}))
 
-    fireEvent.click(screen.getByRole('button', {name: 'Want to learn'}))
-
-    expect(mutate).toHaveBeenCalledTimes(1)
-    expect(mutate).toHaveBeenCalledWith('spotify-id')
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(screen.getByText('Song A')).toBeInTheDocument()
   })
 })

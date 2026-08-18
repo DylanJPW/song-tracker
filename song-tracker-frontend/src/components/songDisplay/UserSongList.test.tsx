@@ -1,85 +1,57 @@
-import {render, screen} from "@testing-library/react";
-import {vi} from "vitest";
-import {UserSongList} from "./UserSongList";
+import {render, screen} from '@testing-library/react'
+import {MemoryRouter} from 'react-router'
+import {afterEach, describe, expect, it, vi} from 'vitest'
+import {buildSong, buildUserSong} from '@/test-fixtures'
+import {UserSongList} from './UserSongList'
 
-vi.mock("./UserSongItem", () => ({
-  UserSongItem: ({
-                   song,
-                   capo,
-                   difficultyRating,
-                   status,
-                 }: {
-    song: {
-      title: string;
-      artist: string;
-      album: string;
-    };
-    capo: number | null;
-    difficultyRating: number | null;
-    status: string;
-  }) => (
-    <tr data-testid="user-song-row">
-      <td>{`${song.title} - ${song.album}`}</td>
-      <td>{song.artist}</td>
-      <td>{capo}</td>
-      <td>{difficultyRating}</td>
-      <td>{status}</td>
-    </tr>
-  ),
-}));
+function renderUserSongList(userSongs = [buildUserSong()]) {
+  return render(
+    <MemoryRouter>
+      <UserSongList userSongs={userSongs}/>
+    </MemoryRouter>
+  )
+}
 
-describe("UserSongList", () => {
-  it("renders table headers", () => {
-    render(<UserSongList songs={[]}/>);
+function keyWarnings(calls: unknown[][]) {
+  return calls
+    .map(call => call.map(String).join(' '))
+    .filter(message => message.includes('same key'))
+}
 
-    expect(screen.getByText("Album Cover")).toBeInTheDocument();
-    expect(screen.getByText("Title")).toBeInTheDocument();
-    expect(screen.getByText("Artist")).toBeInTheDocument();
-    expect(screen.getByText("Capo")).toBeInTheDocument();
-    expect(screen.getByText("Difficulty")).toBeInTheDocument();
-    expect(screen.getByText("Status")).toBeInTheDocument();
-  });
+describe('UserSongList', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
 
-  it("renders user songs from API data", () => {
-    render(
-      <UserSongList
-        songs={[
-          {
-            song: {
-              title: "Song A",
-              artist: "Artist A",
-              album: "Album A",
-              imageUrl: "https://test.image",
-            },
-            capo: 2,
-            difficultyRating: 3,
-            status: "Learning",
-          },
-          {
-            song: {
-              title: "Song B",
-              artist: "Artist B",
-              album: "Album B",
-              imageUrl: "https://test.image",
-            },
-            capo: null,
-            difficultyRating: null,
-            status: "WantToLearn",
-          },
-        ]}
-      />,
-    );
+  it('renders one list item per saved song', () => {
+    renderUserSongList([
+      buildUserSong({id: 10, song: buildSong({title: 'Song A'})}),
+      buildUserSong({id: 11, song: buildSong({spotifyId: 'spotify-b', title: 'Song B'})})
+    ])
 
-    expect(screen.getByText("Song A - Album A")).toBeInTheDocument();
-    expect(screen.getByText("Artist A")).toBeInTheDocument();
-    expect(screen.getByText("2")).toBeInTheDocument();
-    expect(screen.getByText("3")).toBeInTheDocument();
-    expect(screen.getByText("Learning")).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem')).toHaveLength(2)
+    expect(screen.getByText('Song A')).toBeInTheDocument()
+    expect(screen.getByText('Song B')).toBeInTheDocument()
+  })
 
-    expect(screen.getByText("Song B - Album B")).toBeInTheDocument();
-    expect(screen.getByText("Artist B")).toBeInTheDocument();
-    expect(screen.getByText("WantToLearn")).toBeInTheDocument();
+  it('renders an empty list rather than failing when there are no songs', () => {
+    renderUserSongList([])
 
-    expect(screen.getAllByTestId("user-song-row")).toHaveLength(2);
-  });
-});
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0)
+  })
+
+  it('keys rows by id, so the same song on two albums does not collide', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+
+    renderUserSongList([
+      buildUserSong({id: 10, song: buildSong({album: 'Album A', title: 'Song A'})}),
+      buildUserSong({
+        id: 11,
+        song: buildSong({album: 'Album B', spotifyId: 'spotify-b', title: 'Song A'})
+      })
+    ])
+
+    expect(keyWarnings(consoleError.mock.calls)).toHaveLength(0)
+    expect(screen.getAllByRole('listitem')).toHaveLength(2)
+  })
+})
