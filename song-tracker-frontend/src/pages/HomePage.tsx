@@ -1,6 +1,6 @@
 import {useSuspenseQuery} from "@tanstack/react-query";
 import {getSongs} from "@/api/songs";
-import {SongList} from "@/components/SongList";
+import {SongList} from "@/components/songDisplay/SongList";
 
 export function HomePage() {
   const {data} = useSuspenseQuery({

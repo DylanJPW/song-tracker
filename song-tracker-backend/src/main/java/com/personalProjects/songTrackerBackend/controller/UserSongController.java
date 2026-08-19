@@ -45,4 +45,14 @@ public class UserSongController {
 
         return ResponseEntity.ok(userSong.toDTO());
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserSongDTO> updateSong(
+            @PathVariable Long id,
+            @RequestBody UpdateUserSongRequest request,
+            Authentication authentication) {
+
+        return ResponseEntity.ok(
+                userSongService.updateUserSong(id, request, authentication.getName()));
+    }
 }

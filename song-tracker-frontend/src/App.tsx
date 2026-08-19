@@ -11,6 +11,7 @@ import {HomePage} from "./pages/HomePage";
 import {LoginPage} from "./pages/LoginPage";
 import {SearchResultsList} from "./pages/SearchResultsPage";
 import {ProtectedRoute} from "@/components/ProtectedRoute";
+import {SongDetailsPage} from '@/pages/SongDetailsPage'
 
 function renderError({error}: FallbackProps) {
   return <LoadingOrError error={error}/>;
@@ -30,9 +31,10 @@ export function App() {
               <Route element={<LoginPage/>} path="/login"/>
               <Route element={<ProtectedRoute/>}>
                 <Route element={<MySongsPage/>} path="/songs"/>
+                <Route element={<SongDetailsPage/>} path='/songs/:spotifyId'/>
               </Route>
             </Routes>
-            <ToastContainer/>
+            <ToastContainer autoClose={5000} hideProgressBar={true} position='top-right' theme='light'/>
           </div>
         </AuthProvider>
       </Suspense>

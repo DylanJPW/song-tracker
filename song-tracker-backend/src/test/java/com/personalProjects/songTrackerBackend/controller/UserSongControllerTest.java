@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,26 +41,31 @@ class UserSongControllerTest {
     @InjectMocks
     private UserSongController controller;
 
+    SongDTO songDTO = new SongDTO(
+            1L,
+            "spotifyId",
+            "Test Song",
+            "Test Artist",
+            "Test Album",
+            "https://test.image"
+    );
+
+    Instant dateAdded = Instant.parse("2000-01-01T00:00:00Z");
+    UserSongDTO userSongDTO = new UserSongDTO(
+            1L,
+            songDTO,
+            SongStatus.WANT_TO_LEARN,
+            null,
+            null,
+            dateAdded
+    );
+
     @Test
     void getAllSongs_returnsUserSongs() {
 
-        SongDTO songDTO = new SongDTO(
-                "Test Song",
-                "Test Artist",
-                "Test Album",
-                "https://test.image"
-        );
-
-        UserSongDTO dto = new UserSongDTO(
-                songDTO,
-                SongStatus.WANT_TO_LEARN,
-                null,
-                null
-        );
-
         when(authentication.getName()).thenReturn("test");
         when(userSongService.getUserSongs("test"))
-                .thenReturn(List.of(dto));
+                .thenReturn(List.of(userSongDTO));
 
         ResponseEntity<List<UserSongDTO>> response =
                 controller.getAllSongs(authentication);
@@ -75,6 +81,7 @@ class UserSongControllerTest {
         assertEquals("Test Album", result.song().album());
         assertEquals("https://test.image", result.song().imageUrl());
         assertEquals(SongStatus.WANT_TO_LEARN, result.status());
+        assertEquals(dateAdded, result.dateAdded());
 
         verify(authentication).getName();
         verify(userSongService).getUserSongs("test");
@@ -128,5 +135,24 @@ class UserSongControllerTest {
         verify(userService).getUserByUsername("test");
         verify(songService).getOrCreateFromSpotify("spotify123");
         verify(userSongService).saveSong(user, song);
+    }
+
+    @Test
+    void updateSong_returnsUpdatedSong() {
+        UserSongDTO dto = new UserSongDTO(
+                1L, songDTO, SongStatus.LEARNING, null, null, dateAdded);
+
+        UpdateUserSongRequest request =
+                new UpdateUserSongRequest(SongStatus.LEARNING, null, null);
+
+        when(authentication.getName()).thenReturn("test");
+        when(userSongService.updateUserSong(1L, request, "test")).thenReturn(dto);
+
+        ResponseEntity<UserSongDTO> response =
+                controller.updateSong(1L, request, authentication);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(SongStatus.LEARNING, response.getBody().status());
     }
 }

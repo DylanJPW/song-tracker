@@ -1,7 +1,7 @@
 import {useState} from "react";
 import type {Song, SpotifySong} from "@/api/schemas/SongSchema";
 import {SearchBar} from "@/components/SearchBar";
-import {SongList} from "@/components/SongList";
+import {SongList} from "@/components/songDisplay/SongList";
 
 export function SearchResultsList() {
   const [searchResults, setSearchResults] = useState<SpotifySong[]>([]);

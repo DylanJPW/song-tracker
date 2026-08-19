@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,16 +28,21 @@ public class SecurityConfig {
         http
             .cors(cors -> {})
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(
-                            "/api",
-                            "/api/users/register",
-                            "/api/users/login",
-                            "/api/songs"
-                    ).permitAll()
-                    .anyRequest()
-                    .authenticated()
-            )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api",
+                                "/api/users/register",
+                                "/api/users/login"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/songs",
+                                "/api/songs/*",
+                                "/api/spotify/search",
+                                "/api/spotify/tracks/*"
+                        ).permitAll()
+                        .anyRequest()
+                        .authenticated()
+                )
             .exceptionHandling(exception -> exception
                     .authenticationEntryPoint((request, response, authException) -> {
                         response.sendError(

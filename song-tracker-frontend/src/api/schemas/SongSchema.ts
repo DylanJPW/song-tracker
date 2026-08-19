@@ -4,7 +4,7 @@ export const SongDTO = v.object({
   title: v.string(),
   artist: v.string(),
   album: v.string(),
-  imageUrl: v.string(),
+  imageUrl: v.union([v.string(), v.null()])
 })
 export type SongDTO = v.InferOutput<typeof SongDTO>
 
