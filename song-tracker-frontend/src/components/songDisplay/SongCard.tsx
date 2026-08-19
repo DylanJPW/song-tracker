@@ -5,17 +5,19 @@ const ART_SIZE = 100
 
 interface AlbumArtProps {
   album: string
+  className?: string
   imageUrl: string | null
+  size?: number
 }
 
-function AlbumArt({album, imageUrl}: AlbumArtProps) {
+export function AlbumArt({album, className, imageUrl, size = ART_SIZE}: AlbumArtProps) {
   if (imageUrl === null) {
     return (
       <div
         aria-hidden={true}
-        className='flex size-25 shrink-0 items-center justify-center rounded-sm bg-slate-700 text-slate-400'
+        className={`flex items-center justify-center bg-slate-700 text-slate-400 ${className}`}
       >
-        <MdMusicNote size={32}/>
+        <MdMusicNote size={Math.round(size / 3)}/>
       </div>
     )
   }
@@ -23,11 +25,11 @@ function AlbumArt({album, imageUrl}: AlbumArtProps) {
   return (
     <img
       alt={`Album art for ${album}`}
-      className='size-25 shrink-0 rounded-sm object-cover'
-      height={ART_SIZE}
+      className={`object-cover ${className}`}
+      height={size}
       loading='lazy'
       src={imageUrl}
-      width={ART_SIZE}
+      width={size}
     />
   )
 }

@@ -1,4 +1,4 @@
-import type {Song} from '@/api/schemas/SongSchema'
+import type {Song, SpotifySong} from '@/api/schemas/SongSchema'
 import type {UserSong} from '@/api/schemas/UserSongSchema'
 
 export function buildSong(overrides: Partial<Song> = {}): Song {
@@ -20,6 +20,18 @@ export function buildUserSong(overrides: Partial<UserSong> = {}): UserSong {
     id: 10,
     song: buildSong(),
     status: 'WANT_TO_LEARN',
+    dateAdded: new Date(),
+    ...overrides
+  }
+}
+
+export function buildSpotifySong(overrides: Partial<SpotifySong> = {}): SpotifySong {
+  return {
+    album: 'Album A',
+    artist: 'Artist A',
+    imageUrl: 'https://test.image/a.jpg',
+    spotifyId: 'spotify-a',
+    title: 'Song A',
     ...overrides
   }
 }
