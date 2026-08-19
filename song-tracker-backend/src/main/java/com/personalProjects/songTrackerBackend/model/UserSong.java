@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -34,6 +37,10 @@ public class UserSong {
     @Column
     private Integer difficultyRating;
 
+    @Column(updatable = false)
+    @CreationTimestamp
+    private Instant dateAdded;
+
     public UserSong(User user, Song song, SongStatus status) {
         this.user = user;
         this.song = song;
@@ -41,6 +48,6 @@ public class UserSong {
     }
 
     public UserSongDTO toDTO() {
-        return new UserSongDTO(this.id, this.song.toDTO(), this.status, this.capo, this.difficultyRating);
+        return new UserSongDTO(this.id, this.song.toDTO(), this.status, this.capo, this.difficultyRating, this.dateAdded);
     }
 }

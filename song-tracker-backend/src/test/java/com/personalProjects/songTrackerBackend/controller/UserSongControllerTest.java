@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,16 +50,19 @@ class UserSongControllerTest {
             "https://test.image"
     );
 
+    Instant dateAdded = Instant.parse("2000-01-01T00:00:00Z");
     UserSongDTO userSongDTO = new UserSongDTO(
             1L,
             songDTO,
             SongStatus.WANT_TO_LEARN,
             null,
-            null
+            null,
+            dateAdded
     );
 
     @Test
     void getAllSongs_returnsUserSongs() {
+
         when(authentication.getName()).thenReturn("test");
         when(userSongService.getUserSongs("test"))
                 .thenReturn(List.of(userSongDTO));
@@ -77,6 +81,7 @@ class UserSongControllerTest {
         assertEquals("Test Album", result.song().album());
         assertEquals("https://test.image", result.song().imageUrl());
         assertEquals(SongStatus.WANT_TO_LEARN, result.status());
+        assertEquals(dateAdded, result.dateAdded());
 
         verify(authentication).getName();
         verify(userSongService).getUserSongs("test");
@@ -135,7 +140,7 @@ class UserSongControllerTest {
     @Test
     void updateSong_returnsUpdatedSong() {
         UserSongDTO dto = new UserSongDTO(
-                1L, songDTO, SongStatus.LEARNING, null, null);
+                1L, songDTO, SongStatus.LEARNING, null, null, dateAdded);
 
         UpdateUserSongRequest request =
                 new UpdateUserSongRequest(SongStatus.LEARNING, null, null);
