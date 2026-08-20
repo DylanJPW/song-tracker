@@ -77,7 +77,7 @@ describe('FormItem', () => {
     renderFormItem(defaultProps)
 
     expect(screen.queryByText('Username is required')).not.toBeInTheDocument()
-    expect(screen.getByLabelText('Username')).toHaveClass('border-white')
+    expect(screen.getByLabelText('Username')).toHaveClass('border-slate-600')
 
   })
 

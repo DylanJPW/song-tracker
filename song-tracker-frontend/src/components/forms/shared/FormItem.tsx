@@ -25,7 +25,9 @@ export function FormItem<T extends FieldValues>({
       </label>
       <input
         {...register(id)}
-        className={`rounded-2xl border-2 ${error ? 'border-red-800' : 'border-white'} p-2`}
+        className={`rounded-2xl border-2 bg-slate-800 p-2 text-white placeholder:text-slate-500 transition-colors focus:outline-none ${
+          error ? 'border-red-800' : 'border-slate-600 focus:border-amber-500'
+        }`}
         id={id}
         placeholder={placeholder}
         type={type}

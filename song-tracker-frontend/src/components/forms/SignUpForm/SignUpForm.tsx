@@ -33,15 +33,7 @@ export function SignUpForm({setIsSignUp}: LoginSignUpProps) {
     onSuccess: (data, {username}) => {
       login(data.token)
       navigate('/')
-      toast(`Successfully logged in as ${username}`, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        theme: 'light'
-      })
+      toast(`Successfully logged in as ${username}`)
     },
     onError: ({message}) => {
       setError('username', {
@@ -61,6 +53,12 @@ export function SignUpForm({setIsSignUp}: LoginSignUpProps) {
       id='sign-up-form'
       onSubmit={handleSubmit(onSubmit)}
     >
+      <div className="mb-6">
+        <h2 className="font-bold text-2xl">Create an account</h2>
+        <p className="mt-1 text-slate-400 text-sm">
+          Start tracking the songs you're learning to play.
+        </p>
+      </div>
       <FormItem
         error={errors.username}
         id='username'
@@ -85,7 +83,7 @@ export function SignUpForm({setIsSignUp}: LoginSignUpProps) {
         type='password'
       />
       <button
-        className='my-2 w-fit cursor-pointer self-end rounded-sm bg-blue-500 p-2 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400'
+        className='my-2 w-fit cursor-pointer self-end rounded-sm bg-amber-600 hover:bg-amber-500 p-2 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400'
         disabled={!isValid}
         type='submit'
       >
