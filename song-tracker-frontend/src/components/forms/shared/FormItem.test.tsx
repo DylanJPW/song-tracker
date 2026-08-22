@@ -1,95 +1,97 @@
 import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {describe, expect, it, vi} from 'vitest'
+import type {User} from '@/api/authentication'
 import {FormItem, type FormItemProps} from './FormItem'
-import type {User} from "@/api/authentication";
 
-const registerMock = vi.fn();
+const registerMock = vi.fn()
 
 const defaultProps: FormItemProps<User> = {
-  error: undefined,
-  id: 'username',
-  placeholder: 'Enter username',
-  register: registerMock,
-  title: 'Username',
-  type: 'text'
+	error: undefined,
+	id: 'username',
+	placeholder: 'Enter username',
+	register: registerMock,
+	title: 'Username',
+	type: 'text'
 }
 
 describe('FormItem', () => {
-  const renderFormItem = ({
-                            error, id, placeholder = 'Enter username', register, title, type = 'text'
-                          }: FormItemProps<User>) => {
+	const renderFormItem = ({
+		error,
+		id,
+		placeholder = 'Enter username',
+		register,
+		title,
+		type = 'text'
+	}: FormItemProps<User>) => {
+		render(
+			<FormItem
+				error={error}
+				id={id}
+				placeholder={placeholder}
+				register={register}
+				title={title}
+				type={type}
+			/>
+		)
+	}
 
+	it('renders the label and input', () => {
+		renderFormItem(defaultProps)
 
-    render(
-      <FormItem
-        error={error}
-        id={id}
-        placeholder={placeholder}
-        register={register}
-        title={title}
-        type={type}
-      />
-    )
-  }
+		expect(screen.getByLabelText('Username')).toBeInTheDocument()
+		expect(screen.getByPlaceholderText('Enter username')).toBeInTheDocument()
+	})
 
-  it('renders the label and input', () => {
-    renderFormItem(defaultProps)
+	it('allows the user to type', async () => {
+		const user = userEvent.setup()
 
-    expect(screen.getByLabelText('Username')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('Enter username')).toBeInTheDocument()
-  })
+		renderFormItem(defaultProps)
 
-  it('allows the user to type', async () => {
-    const user = userEvent.setup()
+		const input = screen.getByLabelText('Username')
 
-    renderFormItem(defaultProps);
+		await user.type(input, 'test')
 
-    const input = screen.getByLabelText('Username')
+		expect(input).toHaveValue('test')
+	})
 
-    await user.type(input, 'test')
+	it('renders the supplied input type', () => {
+		renderFormItem({...defaultProps, title: 'Password', type: 'password'})
 
-    expect(input).toHaveValue('test')
-  })
+		expect(screen.getByLabelText('Password')).toHaveAttribute(
+			'type',
+			'password'
+		)
+	})
 
-  it('renders the supplied input type', () => {
-    renderFormItem({...defaultProps, title: "Password", type: "password"});
+	it('shows the error message when an error exists', () => {
+		renderFormItem({
+			...defaultProps,
+			error: {
+				type: 'required',
+				message: 'Username is required'
+			}
+		})
 
-    expect(screen.getByLabelText('Password')).toHaveAttribute(
-      'type',
-      'password'
-    )
-  })
+		expect(screen.getByText('Username is required')).toBeInTheDocument()
+	})
 
-  it('shows the error message when an error exists', () => {
-    renderFormItem({
-      ...defaultProps,
-      error: {
-        type: 'required',
-        message: 'Username is required'
-      }
-    });
+	it('does not render an error message when there is no error', () => {
+		renderFormItem(defaultProps)
 
-    expect(screen.getByText('Username is required')).toBeInTheDocument()
-  })
+		expect(screen.queryByText('Username is required')).not.toBeInTheDocument()
+		expect(screen.getByLabelText('Username')).toHaveClass('border-white')
+	})
 
-  it('does not render an error message when there is no error', () => {
-    renderFormItem(defaultProps)
+	it('applies the error border when an error exists', () => {
+		renderFormItem({
+			...defaultProps,
+			error: {
+				type: 'required',
+				message: 'Username is required'
+			}
+		})
 
-    expect(screen.queryByText('Username is required')).not.toBeInTheDocument()
-    expect(screen.getByLabelText('Username')).toHaveClass('border-white')
-
-  })
-
-  it('applies the error border when an error exists', () => {
-    renderFormItem({
-      ...defaultProps,
-      error: {
-        type: 'required',
-        message: 'Username is required'
-      }
-    });
-
-    expect(screen.getByLabelText('Username')).toHaveClass('border-red-800')
-  })
+		expect(screen.getByLabelText('Username')).toHaveClass('border-red-800')
+	})
 })

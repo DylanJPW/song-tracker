@@ -1,51 +1,51 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { getSearchResults, type Song } from "../api/songs";
+import {useQuery} from '@tanstack/react-query'
+import {useEffect, useState} from 'react'
+import {getSearchResults, type Song} from '../api/songs'
 
 interface SearchBarProps {
-  setSearchResults: (results: Song[]) => void;
+	setSearchResults: (results: Song[]) => void
 }
 
-export function SearchBar({ setSearchResults }: SearchBarProps) {
-  const [input, setInput] = useState("");
-  const [query, setQuery] = useState("");
+export function SearchBar({setSearchResults}: SearchBarProps) {
+	const [input, setInput] = useState('')
+	const [query, setQuery] = useState('')
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["query", query],
-    queryFn: () => getSearchResults(query),
-    enabled: query.length > 0,
-    staleTime: Number.POSITIVE_INFINITY,
-    retry: false,
-  });
+	const {data, isLoading, error} = useQuery({
+		queryKey: ['query', query],
+		queryFn: () => getSearchResults(query),
+		enabled: query.length > 0,
+		staleTime: Number.POSITIVE_INFINITY,
+		retry: false
+	})
 
-  useEffect(() => {
-    if (data && setSearchResults) setSearchResults(data);
-  }, [data]);
+	useEffect(() => {
+		if (data && setSearchResults) setSearchResults(data)
+	}, [data, setSearchResults])
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setQuery(input);
-  }
+	function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+		e.preventDefault()
+		setQuery(input)
+	}
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInput(e.target.value);
-  }
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+		setInput(e.target.value)
+	}
 
-  return (
-    <>
-      <form className="flex w-full" onSubmit={handleSubmit}>
-        <input
-          className="m-2 flex grow rounded-md border p-1 dark:border-gray-400"
-          onChange={handleChange}
-          placeholder="Search for songs..."
-          type="text"
-          value={input}
-        />
-      </form>
+	return (
+		<>
+			<form className='flex w-full' onSubmit={handleSubmit}>
+				<input
+					className='m-2 flex grow rounded-md border p-1 dark:border-gray-400'
+					onChange={handleChange}
+					placeholder='Search for songs...'
+					type='text'
+					value={input}
+				/>
+			</form>
 
-      {isLoading && <p>Searching...</p>}
+			{isLoading && <p>Searching...</p>}
 
-      {error && <p>{error.message}</p>}
-    </>
-  );
+			{error && <p>{error.message}</p>}
+		</>
+	)
 }

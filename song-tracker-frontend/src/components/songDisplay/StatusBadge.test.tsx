@@ -4,16 +4,16 @@ import type {SongStatus} from '@/api/schemas/UserSongSchema'
 import {StatusBadge} from './StatusBadge'
 
 const cases: [SongStatus, string][] = [
-  ['WANT_TO_LEARN', 'Want to learn'],
-  ['LEARNING', 'Learning'],
-  ['LEARNED', 'Learned']
+	['WANT_TO_LEARN', 'Want to learn'],
+	['LEARNING', 'Learning'],
+	['LEARNED', 'Learned']
 ]
 
 describe('StatusBadge', () => {
-  it.each(cases)('renders %s as "%s"', (status, label) => {
-    render(<StatusBadge status={status}/>)
+	it.each(cases)('renders %s as "%s"', (status, label) => {
+		render(<StatusBadge status={status} />)
 
-    expect(screen.getByText(label)).toBeInTheDocument()
-    expect(screen.queryByText(status)).not.toBeInTheDocument()
-  })
+		expect(screen.getByText(label)).toBeInTheDocument()
+		expect(screen.queryByText(status)).not.toBeInTheDocument()
+	})
 })
