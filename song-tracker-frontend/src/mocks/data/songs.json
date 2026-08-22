@@ -1,352 +1,352 @@
 [
-  {
-    "name": "Something in the Orange",
-    "artist": "Zach Bryan",
-    "dateAdded": "2026-03-17",
-    "notes": "",
-    "links": ["youtube.com", "spotify.com"]
-  },
-  {
-    "name": "Maine",
-    "artist": "Noah Kahan",
-    "dateAdded": "2025-09-04",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Lonely Island",
-    "artist": "Amble",
-    "dateAdded": "2026-01-28",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Stick Season",
-    "artist": "Noah Kahan",
-    "dateAdded": "2025-11-13",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Northern Attitude",
-    "artist": "Noah Kahan",
-    "dateAdded": "2025-07-22",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Dial Drunk",
-    "artist": "Noah Kahan",
-    "dateAdded": "2026-05-09",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Heading South",
-    "artist": "Zach Bryan",
-    "dateAdded": "2025-08-15",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Oklahoma Smokeshow",
-    "artist": "Zach Bryan",
-    "dateAdded": "2026-04-21",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Revival",
-    "artist": "Zach Bryan",
-    "dateAdded": "2025-12-06",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Burn, Burn, Burn",
-    "artist": "Zach Bryan",
-    "dateAdded": "2025-10-30",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "The Night We Met",
-    "artist": "Lord Huron",
-    "dateAdded": "2026-02-11",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Ends of the Earth",
-    "artist": "Lord Huron",
-    "dateAdded": "2025-06-29",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Meet Me in the Woods",
-    "artist": "Lord Huron",
-    "dateAdded": "2026-06-01",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "All My Love",
-    "artist": "Noah Kahan",
-    "dateAdded": "2025-08-27",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Growing Sideways",
-    "artist": "Noah Kahan",
-    "dateAdded": "2026-01-05",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Orange Juice",
-    "artist": "Noah Kahan",
-    "dateAdded": "2025-11-25",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Forever",
-    "artist": "Noah Kahan",
-    "dateAdded": "2025-07-11",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Take Me Home, Country Roads",
-    "artist": "John Denver",
-    "dateAdded": "2026-04-04",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Wagon Wheel",
-    "artist": "Darius Rucker",
-    "dateAdded": "2025-12-18",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Feathered Indians",
-    "artist": "Tyler Childers",
-    "dateAdded": "2025-09-20",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Lady May",
-    "artist": "Tyler Childers",
-    "dateAdded": "2026-02-24",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Whitehouse Road",
-    "artist": "Tyler Childers",
-    "dateAdded": "2025-10-08",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Coal",
-    "artist": "Dylan Gossett",
-    "dateAdded": "2026-03-02",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Beneath Oak Trees",
-    "artist": "Dylan Gossett",
-    "dateAdded": "2025-08-02",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Evergreen",
-    "artist": "Richy Mitch & The Coal Miners",
-    "dateAdded": "2026-05-22",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Lake Missoula",
-    "artist": "Richy Mitch & The Coal Miners",
-    "dateAdded": "2025-11-02",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Pink Skies",
-    "artist": "Zach Bryan",
-    "dateAdded": "2026-01-14",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "I Remember Everything",
-    "artist": "Zach Bryan",
-    "dateAdded": "2025-09-28",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Sun to Me",
-    "artist": "Zach Bryan",
-    "dateAdded": "2026-04-28",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Tennessee Whiskey",
-    "artist": "Chris Stapleton",
-    "dateAdded": "2025-07-05",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Starting Over",
-    "artist": "Chris Stapleton",
-    "dateAdded": "2026-02-03",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Broken Halos",
-    "artist": "Chris Stapleton",
-    "dateAdded": "2025-10-16",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Dust in a Baggie",
-    "artist": "Billy Strings",
-    "dateAdded": "2026-05-15",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Away From the Mire",
-    "artist": "Billy Strings",
-    "dateAdded": "2025-08-21",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Cover Me Up",
-    "artist": "Jason Isbell",
-    "dateAdded": "2026-03-29",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "If We Were Vampires",
-    "artist": "Jason Isbell and the 400 Unit",
-    "dateAdded": "2025-12-29",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Sleeping on the Blacktop",
-    "artist": "Colter Wall",
-    "dateAdded": "2025-07-30",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "The Devil Wears a Suit and Tie",
-    "artist": "Colter Wall",
-    "dateAdded": "2026-04-13",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "The Stable Song",
-    "artist": "Gregory Alan Isakov",
-    "dateAdded": "2025-11-20",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Big Black Car",
-    "artist": "Gregory Alan Isakov",
-    "dateAdded": "2026-01-20",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "San Luis",
-    "artist": "Gregory Alan Isakov",
-    "dateAdded": "2025-09-11",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Cherry Wine",
-    "artist": "Hozier",
-    "dateAdded": "2026-05-03",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Work Song",
-    "artist": "Hozier",
-    "dateAdded": "2025-08-09",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "From Austin",
-    "artist": "Zach Bryan",
-    "dateAdded": "2026-02-16",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "East Side of Sorrow",
-    "artist": "Zach Bryan",
-    "dateAdded": "2025-10-24",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "68 Fastback",
-    "artist": "Zach Bryan",
-    "dateAdded": "2026-03-11",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Take Me Back to Eden",
-    "artist": "Sleep Token",
-    "dateAdded": "2025-07-17",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Euclid",
-    "artist": "Sleep Token",
-    "dateAdded": "2026-06-12",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Like Real People Do",
-    "artist": "Hozier",
-    "dateAdded": "2025-12-12",
-    "notes": "",
-    "links": ["", ""]
-  },
-  {
-    "name": "Unknown / Nth",
-    "artist": "Hozier",
-    "dateAdded": "2026-04-18",
-    "notes": "",
-    "links": ["", ""]
-  }
+	{
+		"name": "Something in the Orange",
+		"artist": "Zach Bryan",
+		"dateAdded": "2026-03-17",
+		"notes": "",
+		"links": ["youtube.com", "spotify.com"]
+	},
+	{
+		"name": "Maine",
+		"artist": "Noah Kahan",
+		"dateAdded": "2025-09-04",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Lonely Island",
+		"artist": "Amble",
+		"dateAdded": "2026-01-28",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Stick Season",
+		"artist": "Noah Kahan",
+		"dateAdded": "2025-11-13",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Northern Attitude",
+		"artist": "Noah Kahan",
+		"dateAdded": "2025-07-22",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Dial Drunk",
+		"artist": "Noah Kahan",
+		"dateAdded": "2026-05-09",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Heading South",
+		"artist": "Zach Bryan",
+		"dateAdded": "2025-08-15",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Oklahoma Smokeshow",
+		"artist": "Zach Bryan",
+		"dateAdded": "2026-04-21",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Revival",
+		"artist": "Zach Bryan",
+		"dateAdded": "2025-12-06",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Burn, Burn, Burn",
+		"artist": "Zach Bryan",
+		"dateAdded": "2025-10-30",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "The Night We Met",
+		"artist": "Lord Huron",
+		"dateAdded": "2026-02-11",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Ends of the Earth",
+		"artist": "Lord Huron",
+		"dateAdded": "2025-06-29",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Meet Me in the Woods",
+		"artist": "Lord Huron",
+		"dateAdded": "2026-06-01",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "All My Love",
+		"artist": "Noah Kahan",
+		"dateAdded": "2025-08-27",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Growing Sideways",
+		"artist": "Noah Kahan",
+		"dateAdded": "2026-01-05",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Orange Juice",
+		"artist": "Noah Kahan",
+		"dateAdded": "2025-11-25",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Forever",
+		"artist": "Noah Kahan",
+		"dateAdded": "2025-07-11",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Take Me Home, Country Roads",
+		"artist": "John Denver",
+		"dateAdded": "2026-04-04",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Wagon Wheel",
+		"artist": "Darius Rucker",
+		"dateAdded": "2025-12-18",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Feathered Indians",
+		"artist": "Tyler Childers",
+		"dateAdded": "2025-09-20",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Lady May",
+		"artist": "Tyler Childers",
+		"dateAdded": "2026-02-24",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Whitehouse Road",
+		"artist": "Tyler Childers",
+		"dateAdded": "2025-10-08",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Coal",
+		"artist": "Dylan Gossett",
+		"dateAdded": "2026-03-02",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Beneath Oak Trees",
+		"artist": "Dylan Gossett",
+		"dateAdded": "2025-08-02",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Evergreen",
+		"artist": "Richy Mitch & The Coal Miners",
+		"dateAdded": "2026-05-22",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Lake Missoula",
+		"artist": "Richy Mitch & The Coal Miners",
+		"dateAdded": "2025-11-02",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Pink Skies",
+		"artist": "Zach Bryan",
+		"dateAdded": "2026-01-14",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "I Remember Everything",
+		"artist": "Zach Bryan",
+		"dateAdded": "2025-09-28",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Sun to Me",
+		"artist": "Zach Bryan",
+		"dateAdded": "2026-04-28",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Tennessee Whiskey",
+		"artist": "Chris Stapleton",
+		"dateAdded": "2025-07-05",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Starting Over",
+		"artist": "Chris Stapleton",
+		"dateAdded": "2026-02-03",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Broken Halos",
+		"artist": "Chris Stapleton",
+		"dateAdded": "2025-10-16",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Dust in a Baggie",
+		"artist": "Billy Strings",
+		"dateAdded": "2026-05-15",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Away From the Mire",
+		"artist": "Billy Strings",
+		"dateAdded": "2025-08-21",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Cover Me Up",
+		"artist": "Jason Isbell",
+		"dateAdded": "2026-03-29",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "If We Were Vampires",
+		"artist": "Jason Isbell and the 400 Unit",
+		"dateAdded": "2025-12-29",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Sleeping on the Blacktop",
+		"artist": "Colter Wall",
+		"dateAdded": "2025-07-30",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "The Devil Wears a Suit and Tie",
+		"artist": "Colter Wall",
+		"dateAdded": "2026-04-13",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "The Stable Song",
+		"artist": "Gregory Alan Isakov",
+		"dateAdded": "2025-11-20",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Big Black Car",
+		"artist": "Gregory Alan Isakov",
+		"dateAdded": "2026-01-20",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "San Luis",
+		"artist": "Gregory Alan Isakov",
+		"dateAdded": "2025-09-11",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Cherry Wine",
+		"artist": "Hozier",
+		"dateAdded": "2026-05-03",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Work Song",
+		"artist": "Hozier",
+		"dateAdded": "2025-08-09",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "From Austin",
+		"artist": "Zach Bryan",
+		"dateAdded": "2026-02-16",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "East Side of Sorrow",
+		"artist": "Zach Bryan",
+		"dateAdded": "2025-10-24",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "68 Fastback",
+		"artist": "Zach Bryan",
+		"dateAdded": "2026-03-11",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Take Me Back to Eden",
+		"artist": "Sleep Token",
+		"dateAdded": "2025-07-17",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Euclid",
+		"artist": "Sleep Token",
+		"dateAdded": "2026-06-12",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Like Real People Do",
+		"artist": "Hozier",
+		"dateAdded": "2025-12-12",
+		"notes": "",
+		"links": ["", ""]
+	},
+	{
+		"name": "Unknown / Nth",
+		"artist": "Hozier",
+		"dateAdded": "2026-04-18",
+		"notes": "",
+		"links": ["", ""]
+	}
 ]

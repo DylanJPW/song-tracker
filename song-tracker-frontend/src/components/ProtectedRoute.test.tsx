@@ -5,46 +5,45 @@ import {type AuthContextType, useAuth} from '@/context/AuthContext'
 import {ProtectedRoute} from './ProtectedRoute'
 
 vi.mock('@/context/AuthContext', () => ({
-  useAuth: vi.fn()
+	useAuth: vi.fn()
 }))
 
 describe('ProtectedRoute', () => {
+	const renderProtectedRoute = () => {
+		render(
+			<MemoryRouter initialEntries={['/protected']}>
+				<Routes>
+					<Route element={<div>Home</div>} path='/' />
+					<Route element={<ProtectedRoute />}>
+						<Route element={<div>Protected Content</div>} path='/protected' />
+					</Route>
+				</Routes>
+			</MemoryRouter>
+		)
+	}
 
-  const renderProtectedRoute = () => {
-    render(
-      <MemoryRouter initialEntries={['/protected']}>
-        <Routes>
-          <Route element={<div>Home</div>} path='/'/>
-          <Route element={<ProtectedRoute/>}>
-            <Route element={<div>Protected Content</div>} path='/protected'/>
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    )
-  }
+	beforeEach(() => {
+		vi.clearAllMocks()
+	})
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
+	it('renders child route when user is authenticated', () => {
+		vi.mocked(useAuth).mockReturnValue({
+			isLoggedIn: true
+		} as AuthContextType)
 
-  it('renders child route when user is authenticated', () => {
-    vi.mocked(useAuth).mockReturnValue({
-      isLoggedIn: true
-    } as AuthContextType)
+		renderProtectedRoute()
 
-    renderProtectedRoute()
+		expect(screen.getByText('Protected Content')).toBeInTheDocument()
+	})
 
-    expect(screen.getByText('Protected Content')).toBeInTheDocument()
-  })
+	it('redirects to home when user is not authenticated', () => {
+		vi.mocked(useAuth).mockReturnValue({
+			isLoggedIn: false
+		} as AuthContextType)
 
-  it('redirects to home when user is not authenticated', () => {
-    vi.mocked(useAuth).mockReturnValue({
-      isLoggedIn: false
-    } as AuthContextType)
+		renderProtectedRoute()
 
-    renderProtectedRoute()
-
-    expect(screen.getByText('Home')).toBeInTheDocument()
-    expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
-  })
+		expect(screen.getByText('Home')).toBeInTheDocument()
+		expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
+	})
 })
