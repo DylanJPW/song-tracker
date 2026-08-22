@@ -1,93 +1,127 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useAuth } from "@/context/AuthContext";
-import { Navbar } from "./Navbar";
+import {fireEvent, render, screen} from '@testing-library/react'
+import {MemoryRouter} from 'react-router'
+import {beforeEach, describe, expect, it, vi} from 'vitest'
+import {useAuth} from '@/context/AuthContext'
+import {Navbar} from './Navbar'
 
-vi.mock("@/context/AuthContext", () => ({
-  useAuth: vi.fn(),
-}));
+vi.mock('@/context/AuthContext', () => ({
+	useAuth: vi.fn()
+}))
 
-describe("Navbar", () => {
-  const renderNavbar = (initialEntry = "/") =>
-    render(
-      <MemoryRouter initialEntries={[initialEntry]}>
-        <Navbar />
-      </MemoryRouter>,
-    );
+describe('Navbar', () => {
+	const renderNavbar = (initialEntry = '/') =>
+		render(
+			<MemoryRouter initialEntries={[initialEntry]}>
+				<Navbar />
+			</MemoryRouter>
+		)
 
-  beforeEach(() => {
-    vi.mocked(useAuth).mockReturnValue({
-      authToken: null,
-      isLoggedIn: false,
-      login: vi.fn(),
-      logout: vi.fn(),
-    });
-  });
+	const getMenuButton = () =>
+		screen.getByRole('button', {name: /navigation menu/iu})
 
-  it("renders the app name and navigation links", () => {
-    renderNavbar();
+	beforeEach(() => {
+		vi.mocked(useAuth).mockReturnValue({
+			authToken: null,
+			isLoggedIn: false,
+			login: vi.fn(),
+			logout: vi.fn()
+		})
+	})
 
-    expect(screen.getByText("SongTracker")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "HOME" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "SEARCH" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "LOG IN" })).toBeInTheDocument();
-  });
+	it('renders the app name and navigation links', () => {
+		renderNavbar()
 
-  it("marks the current page as active", () => {
-    renderNavbar("/search");
+		expect(screen.getByText('SongTracker')).toBeInTheDocument()
+		expect(screen.getByRole('link', {name: 'HOME'})).toBeInTheDocument()
+		expect(screen.getByRole('link', {name: 'SEARCH'})).toBeInTheDocument()
+		expect(screen.getByRole('link', {name: 'LOG IN'})).toBeInTheDocument()
+	})
 
-    const searchLink = screen.getByRole("link", { name: "SEARCH" });
+	it('marks the current page as active', () => {
+		renderNavbar('/search')
 
-    expect(searchLink).toHaveAttribute("href", "/search");
-    expect(searchLink).toHaveClass("text-amber-600");
-  });
+		const searchLink = screen.getByRole('link', {name: 'SEARCH'})
 
-  it("renders the log out button when the user is logged in", () => {
-    vi.mocked(useAuth).mockReturnValue({
-      authToken: "token",
-      isLoggedIn: true,
-      login: vi.fn(),
-      logout: vi.fn(),
-    });
+		expect(searchLink).toHaveAttribute('href', '/search')
+		expect(searchLink).toHaveAttribute('aria-current', 'page')
+	})
 
-    renderNavbar();
+	it('does not mark home as active on another route', () => {
+		renderNavbar('/search')
 
-    expect(screen.getByRole("button", { name: "LOG OUT" })).toBeInTheDocument();
-  });
+		expect(screen.getByRole('link', {name: 'HOME'})).not.toHaveAttribute(
+			'aria-current'
+		)
+	})
 
-  it("calls logout when the log out button is clicked", () => {
-    const logout = vi.fn();
+	it('renders the log out button when the user is logged in', () => {
+		vi.mocked(useAuth).mockReturnValue({
+			authToken: 'token',
+			isLoggedIn: true,
+			login: vi.fn(),
+			logout: vi.fn()
+		})
 
-    vi.mocked(useAuth).mockReturnValue({
-      authToken: "token",
-      isLoggedIn: true,
-      login: vi.fn(),
-      logout,
-    });
+		renderNavbar()
 
-    renderNavbar();
+		expect(screen.getByRole('button', {name: 'LOG OUT'})).toBeInTheDocument()
+	})
 
-    fireEvent.click(screen.getByRole("button", { name: "LOG OUT" }));
+	it('calls logout when the log out button is clicked', () => {
+		const logout = vi.fn()
 
-    expect(logout).toHaveBeenCalledTimes(1);
-  });
+		vi.mocked(useAuth).mockReturnValue({
+			authToken: 'token',
+			isLoggedIn: true,
+			login: vi.fn(),
+			logout
+		})
 
-  it("opens and closes the mobile menu", () => {
-    renderNavbar();
+		renderNavbar()
 
-    const button = screen.getByRole("button", {
-      name: /open navigation menu/iu,
-    });
+		fireEvent.click(screen.getByRole('button', {name: 'LOG OUT'}))
 
-    const menu = screen.getByRole("button").parentElement?.nextElementSibling;
+		expect(logout).toHaveBeenCalledTimes(1)
+	})
 
-    expect(menu).toHaveClass("hidden");
+	it('reports the mobile menu state through aria-expanded', () => {
+		renderNavbar()
 
-    fireEvent.click(button);
-    expect(menu).toHaveClass("flex");
+		const button = getMenuButton()
 
-    fireEvent.click(button);
-    expect(menu).toHaveClass("hidden");
-  });
-});
+		expect(button).toHaveAttribute('aria-controls', 'navbar-menu')
+		expect(button).toHaveAttribute('aria-expanded', 'false')
+
+		fireEvent.click(button)
+		expect(button).toHaveAttribute('aria-expanded', 'true')
+
+		fireEvent.click(button)
+		expect(button).toHaveAttribute('aria-expanded', 'false')
+	})
+
+	it('closes the mobile menu after following a link', () => {
+		renderNavbar()
+
+		const button = getMenuButton()
+
+		fireEvent.click(button)
+		expect(button).toHaveAttribute('aria-expanded', 'true')
+
+		fireEvent.click(screen.getByRole('link', {name: 'SEARCH'}))
+
+		expect(button).toHaveAttribute('aria-expanded', 'false')
+	})
+
+	it('closes the mobile menu when escape is pressed', () => {
+		renderNavbar()
+
+		const button = getMenuButton()
+
+		fireEvent.click(button)
+		expect(button).toHaveAttribute('aria-expanded', 'true')
+
+		fireEvent.keyDown(globalThis.document, {key: 'Escape'})
+
+		expect(button).toHaveAttribute('aria-expanded', 'false')
+	})
+})
