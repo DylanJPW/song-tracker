@@ -2,7 +2,7 @@ import {AuthPanel} from "@/components/forms/AuthPanel";
 
 export function LoginPage() {
   return (
-    <div className="flex w-full grow justify-center self-center bg-slate-900 md:w-lg">
+    <div className="flex w-full grow justify-center self-center bg-slate-900 md:w-lg px-10">
       <AuthPanel/>
     </div>
   );

@@ -49,11 +49,11 @@ export function SignUpForm({setIsSignUp}: LoginSignUpProps) {
 
   return (
     <form
-      className='flex w-full flex-col justify-center px-10 sm:px-40 md:px-20'
+      className='flex w-full flex-col justify-center'
       id='sign-up-form'
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="mb-6">
+      <div className="mb-4 md:mb-6">
         <h2 className="font-bold text-2xl">Create an account</h2>
         <p className="mt-1 text-slate-400 text-sm">
           Start tracking the songs you're learning to play.
