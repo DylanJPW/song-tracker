@@ -1,9 +1,9 @@
-import {AuthPanel} from "@/components/forms/AuthPanel";
+import {AuthPanel} from '@/components/forms/AuthPanel'
 
 export function LoginPage() {
-  return (
-    <div className="flex w-full grow justify-center self-center bg-slate-900 md:w-lg px-10">
-      <AuthPanel/>
-    </div>
-  );
+	return (
+		<div className='flex w-full grow justify-center self-center bg-slate-900 px-10 md:w-lg'>
+			<AuthPanel />
+		</div>
+	)
 }
