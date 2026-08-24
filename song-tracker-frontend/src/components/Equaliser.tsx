@@ -15,6 +15,10 @@ export function Equaliser() {
         <span
           className="h-6 w-1 origin-bottom rounded-full bg-amber-500 motion-safe:animate-equalize"
           key={index}
+          style={{
+            animationDelay: `${delayMs}ms`,
+            animationDuration: `${durationMs}ms`,
+          }}
         />
       ))}
     </div>
