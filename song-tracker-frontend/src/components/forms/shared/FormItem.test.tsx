@@ -79,9 +79,10 @@ describe('FormItem', () => {
 	it('does not render an error message when there is no error', () => {
 		renderFormItem(defaultProps)
 
-		expect(screen.queryByText('Username is required')).not.toBeInTheDocument()
-		expect(screen.getByLabelText('Username')).toHaveClass('border-white')
-	})
+    expect(screen.queryByText('Username is required')).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Username')).toHaveClass('border-slate-600')
+
+  })
 
 	it('applies the error border when an error exists', () => {
 		renderFormItem({

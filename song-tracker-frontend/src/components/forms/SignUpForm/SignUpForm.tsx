@@ -28,78 +28,76 @@ export function SignUpForm({setIsSignUp}: LoginSignUpProps) {
 	const {login} = useAuth()
 	const navigate = useNavigate()
 
-	const createUserMutation = useMutation({
-		mutationFn: createUser,
-		onSuccess: (data, {username}) => {
-			login(data.token)
-			navigate('/')
-			toast(`Successfully logged in as ${username}`, {
-				position: 'top-right',
-				autoClose: 5000,
-				hideProgressBar: true,
-				closeOnClick: false,
-				pauseOnHover: true,
-				draggable: true,
-				theme: 'light'
-			})
-		},
-		onError: ({message}) => {
-			setError('username', {
-				type: 'server',
-				message
-			})
-		}
-	})
+  const createUserMutation = useMutation({
+    mutationFn: createUser,
+    onSuccess: (data, {username}) => {
+      login(data.token)
+      navigate('/')
+      toast(`Successfully logged in as ${username}`)
+    },
+    onError: ({message}) => {
+      setError('username', {
+        type: 'server',
+        message
+      })
+    }
+  })
 
 	function onSubmit({username, password}: SignUpFormData) {
 		createUserMutation.mutate({username, password})
 	}
 
-	return (
-		<form
-			className='flex w-full flex-col justify-center px-10 sm:px-40 md:px-20'
-			id='sign-up-form'
-			onSubmit={handleSubmit(onSubmit)}
-		>
-			<FormItem
-				error={errors.username}
-				id='username'
-				placeholder='Enter username'
-				register={register}
-				title='Username'
-			/>
-			<FormItem
-				error={errors.password}
-				id='password'
-				placeholder='Enter password'
-				register={register}
-				title='Password'
-				type='password'
-			/>
-			<FormItem
-				error={errors.confirmPassword}
-				id='confirmPassword'
-				placeholder='Confirm password'
-				register={register}
-				title='Confirm Password'
-				type='password'
-			/>
-			<button
-				className='my-2 w-fit cursor-pointer self-end rounded-sm bg-blue-500 p-2 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400'
-				disabled={!isValid}
-				type='submit'
-			>
-				Sign Up
-			</button>
-			<div className='text-center'>
-				<button
-					className='cursor-pointer underline hover:text-blue-500'
-					onClick={() => setIsSignUp(false)}
-					type='button'
-				>
-					Log in with existing account
-				</button>
-			</div>
-		</form>
-	)
+  return (
+    <form
+      className='flex w-full flex-col justify-center'
+      id='sign-up-form'
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="mb-4 md:mb-6">
+        <h2 className="font-bold text-2xl">Create an account</h2>
+        <p className="mt-1 text-slate-400 text-sm">
+          Start tracking the songs you're learning to play.
+        </p>
+      </div>
+      <FormItem
+        error={errors.username}
+        id='username'
+        placeholder='Enter username'
+        register={register}
+        title='Username'
+      />
+      <FormItem
+        error={errors.password}
+        id='password'
+        placeholder='Enter password'
+        register={register}
+        title='Password'
+        type='password'
+      />
+      <FormItem
+        error={errors.confirmPassword}
+        id='confirmPassword'
+        placeholder='Confirm password'
+        register={register}
+        title='Confirm Password'
+        type='password'
+      />
+      <button
+        className='my-2 w-fit cursor-pointer self-end rounded-sm bg-amber-600 hover:bg-amber-500 p-2 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400'
+        disabled={!isValid}
+        type='submit'
+      >
+        Sign Up
+      </button>
+      <div className='text-center'>
+        <button
+          className='cursor-pointer underline hover:text-blue-500'
+          onClick={() => setIsSignUp(false)}
+          type='button'
+        >
+          Log in with existing account
+        </button>
+      </div>
+    </form>
+  )
 }

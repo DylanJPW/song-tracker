@@ -16,26 +16,28 @@ export interface FormItemProps<T extends FieldValues> {
 }
 
 export function FormItem<T extends FieldValues>({
-	id,
-	title,
-	register,
-	placeholder,
-	error,
-	type = 'text'
-}: FormItemProps<T>) {
-	return (
-		<div className='my-2 flex flex-col'>
-			<label className='pl-2' htmlFor={id}>
-				{title}
-			</label>
-			<input
-				{...register(id)}
-				className={`rounded-2xl border-2 ${error ? 'border-red-800' : 'border-white'} p-2`}
-				id={id}
-				placeholder={placeholder}
-				type={type}
-			/>
-			{error && <p className='pl-2 text-red-500'>{error.message}</p>}
-		</div>
-	)
+                                                  id,
+                                                  title,
+                                                  register,
+                                                  placeholder,
+                                                  error,
+                                                  type = 'text'
+                                                }: FormItemProps<T>) {
+  return (
+    <div className='my-2 flex flex-col'>
+      <label className='pl-2' htmlFor={id}>
+        {title}
+      </label>
+      <input
+        {...register(id)}
+        className={`rounded-2xl border-2 bg-slate-800 p-2 text-white placeholder:text-slate-500 transition-colors focus:outline-none ${
+          error ? 'border-red-800' : 'border-slate-600 focus:border-amber-500'
+        }`}
+        id={id}
+        placeholder={placeholder}
+        type={type}
+      />
+      {error && <p className='pl-2 text-red-500'>{error.message}</p>}
+    </div>
+  )
 }
