@@ -1,9 +1,9 @@
-import {useSuspenseQuery} from "@tanstack/react-query";
-import {render, screen} from "@testing-library/react";
-import {beforeEach, describe, expect, it, vi} from "vitest";
-import type {Song} from "@/api/schemas/SongSchema";
-import {useAuth} from "@/context/AuthContext";
-import {HomePage} from "./HomePage";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { Song } from "@/api/schemas/SongSchema";
+import { useAuth } from "@/context/AuthContext";
+import { HomePage } from "./HomePage";
 
 vi.mock("@tanstack/react-query", () => ({
   useSuspenseQuery: vi.fn(),
@@ -14,7 +14,9 @@ vi.mock("@/context/AuthContext", () => ({
 }));
 
 vi.mock("@/components/songDisplay/SongList", () => ({
-  SongList: ({songs}: { songs: Song[] }) => <p>{songs.length} catalogue songs</p>,
+  SongList: ({ songs }: { songs: Song[] }) => (
+    <p>{songs.length} catalogue songs</p>
+  ),
 }));
 
 vi.mock("@/pages/LandingPage", () => ({
@@ -34,7 +36,7 @@ describe("HomePage", () => {
       logout: vi.fn(),
     });
 
-    render(<HomePage/>);
+    render(<HomePage />);
 
     expect(screen.getByText("Landing page")).toBeInTheDocument();
     expect(useSuspenseQuery).not.toHaveBeenCalled();
@@ -48,10 +50,10 @@ describe("HomePage", () => {
       logout: vi.fn(),
     });
     vi.mocked(useSuspenseQuery).mockReturnValue({
-      data: [{id: 1}, {id: 2}],
+      data: [{ id: 1 }, { id: 2 }],
     } as never);
 
-    render(<HomePage/>);
+    render(<HomePage />);
 
     expect(screen.getByText("2 catalogue songs")).toBeInTheDocument();
     expect(screen.queryByText("Landing page")).not.toBeInTheDocument();

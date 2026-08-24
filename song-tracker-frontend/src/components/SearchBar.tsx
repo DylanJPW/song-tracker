@@ -20,7 +20,7 @@ export function SearchBar({ setSearchResults }: SearchBarProps) {
 
   useEffect(() => {
     if (data && setSearchResults) setSearchResults(data);
-  }, [data]);
+  }, [data, setSearchResults]);
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();

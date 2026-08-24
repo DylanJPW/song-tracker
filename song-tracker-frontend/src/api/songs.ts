@@ -1,7 +1,6 @@
 import * as v from "valibot";
-import {apiClient} from "@/api/client";
-import {Songs, SpotifySong, SpotifySongs} from "@/api/schemas/SongSchema";
-
+import { apiClient } from "@/api/client";
+import { Songs, SpotifySong, SpotifySongs } from "@/api/schemas/SongSchema";
 
 export async function getSongs() {
   const response = await apiClient("/songs");
@@ -12,7 +11,9 @@ export async function getSongs() {
 }
 
 export async function getSearchResults(query: string) {
-  const response = await apiClient(`/spotify/search?query=${encodeURIComponent(query)}`);
+  const response = await apiClient(
+    `/spotify/search?query=${encodeURIComponent(query)}`,
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch");
   }
@@ -20,9 +21,11 @@ export async function getSearchResults(query: string) {
 }
 
 export async function getSpotifySong(spotifyId: string) {
-  const response = await apiClient(`/spotify/tracks/${encodeURIComponent(spotifyId)}`)
+  const response = await apiClient(
+    `/spotify/tracks/${encodeURIComponent(spotifyId)}`,
+  );
   if (!response.ok) {
-    throw new Error('Failed to fetch')
+    throw new Error("Failed to fetch");
   }
-  return v.parse(SpotifySong, await response.json())
+  return v.parse(SpotifySong, await response.json());
 }

@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import {apiClient} from "@/api/client";
+import { apiClient } from "@/api/client";
 
 const User = v.object({
   username: v.string(),
@@ -15,15 +15,18 @@ export type LoginResponse = v.InferOutput<typeof LoginResponse>;
 function getCommonRequestOptions(user: User) {
   return {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
   };
 }
 
 export async function createUser(user: User) {
-  const response = await apiClient("/users/register", getCommonRequestOptions(user));
+  const response = await apiClient(
+    "/users/register",
+    getCommonRequestOptions(user),
+  );
   if (response.status === 409) {
-    throw new Error(`Username '${user.username}' already in use`)
+    throw new Error(`Username '${user.username}' already in use`);
   }
   if (!response.ok) {
     throw new Error("Failed to create account");
@@ -37,7 +40,7 @@ export async function loginRequest(user: User) {
     getCommonRequestOptions(user),
   );
   if (response.status === 401) {
-    throw new Error('Username or password is incorrect')
+    throw new Error("Username or password is incorrect");
   }
   if (!response.ok) {
     throw new Error("Failed to log in");

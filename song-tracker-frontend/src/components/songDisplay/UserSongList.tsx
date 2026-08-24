@@ -1,18 +1,18 @@
-import type {UserSong} from '@/api/schemas/UserSongSchema'
-import {UserSongItem} from '@/components/songDisplay/UserSongItem'
+import type { UserSong } from "@/api/schemas/UserSongSchema";
+import { UserSongItem } from "@/components/songDisplay/UserSongItem";
 
 interface UserSongListProps {
-  userSongs: UserSong[]
+  userSongs: UserSong[];
 }
 
-export function UserSongList({userSongs}: UserSongListProps) {
+export function UserSongList({ userSongs }: UserSongListProps) {
   return (
-    <ul className='flex w-full flex-col'>
-      {userSongs.map(userSong => (
+    <ul className="flex w-full flex-col">
+      {userSongs.map((userSong) => (
         <li key={userSong.id}>
-          <UserSongItem userSong={userSong}/>
+          <UserSongItem userSong={userSong} />
         </li>
       ))}
     </ul>
-  )
+  );
 }

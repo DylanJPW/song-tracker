@@ -1,50 +1,49 @@
-import {render, screen} from '@testing-library/react'
-import {MemoryRouter, Route, Routes} from 'react-router'
-import {beforeEach, describe, expect, it, vi} from 'vitest'
-import {type AuthContextType, useAuth} from '@/context/AuthContext'
-import {ProtectedRoute} from './ProtectedRoute'
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { type AuthContextType, useAuth } from "@/context/AuthContext";
+import { ProtectedRoute } from "./ProtectedRoute";
 
-vi.mock('@/context/AuthContext', () => ({
-  useAuth: vi.fn()
-}))
+vi.mock("@/context/AuthContext", () => ({
+  useAuth: vi.fn(),
+}));
 
-describe('ProtectedRoute', () => {
-
+describe("ProtectedRoute", () => {
   const renderProtectedRoute = () => {
     render(
-      <MemoryRouter initialEntries={['/protected']}>
+      <MemoryRouter initialEntries={["/protected"]}>
         <Routes>
-          <Route element={<div>Home</div>} path='/'/>
-          <Route element={<ProtectedRoute/>}>
-            <Route element={<div>Protected Content</div>} path='/protected'/>
+          <Route element={<div>Home</div>} path="/" />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<div>Protected Content</div>} path="/protected" />
           </Route>
         </Routes>
-      </MemoryRouter>
-    )
-  }
+      </MemoryRouter>,
+    );
+  };
 
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
-  it('renders child route when user is authenticated', () => {
+  it("renders child route when user is authenticated", () => {
     vi.mocked(useAuth).mockReturnValue({
-      isLoggedIn: true
-    } as AuthContextType)
+      isLoggedIn: true,
+    } as AuthContextType);
 
-    renderProtectedRoute()
+    renderProtectedRoute();
 
-    expect(screen.getByText('Protected Content')).toBeInTheDocument()
-  })
+    expect(screen.getByText("Protected Content")).toBeInTheDocument();
+  });
 
-  it('redirects to home when user is not authenticated', () => {
+  it("redirects to home when user is not authenticated", () => {
     vi.mocked(useAuth).mockReturnValue({
-      isLoggedIn: false
-    } as AuthContextType)
+      isLoggedIn: false,
+    } as AuthContextType);
 
-    renderProtectedRoute()
+    renderProtectedRoute();
 
-    expect(screen.getByText('Home')).toBeInTheDocument()
-    expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
-  })
-})
+    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
+  });
+});

@@ -13,7 +13,7 @@
     "lint:tsc": "tsc -b",
     "lint:biome": "biome check --write --unsafe",
     "lint": "pnpm run \"/lint:./\"",
-    "format": "biome format --write",
+    "format": "prettier --log-level warn --write \"src/*.{tsx,ts}\"",
     "validate": "pnpm lint && pnpm test:ci && pnpm test:e2e:ci",
     "build": "vite build",
     "preview": "vite preview"
@@ -22,6 +22,7 @@
     "@hookform/resolvers": "^5.4.0",
     "@tanstack/react-query": "5.95.2",
     "@tanstack/react-query-devtools": "5.95.2",
+    "prettier": "^3.9.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-error-boundary": "6.1.1",

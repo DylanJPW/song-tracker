@@ -4,17 +4,17 @@ export const SongDTO = v.object({
   title: v.string(),
   artist: v.string(),
   album: v.string(),
-  imageUrl: v.union([v.string(), v.null()])
-})
-export type SongDTO = v.InferOutput<typeof SongDTO>
+  imageUrl: v.union([v.string(), v.null()]),
+});
+export type SongDTO = v.InferOutput<typeof SongDTO>;
 
 export const SpotifySong = v.object({
   ...v.entriesFromObjects([SongDTO]),
   spotifyId: v.union([v.string(), v.null()]),
-})
-export type SpotifySong = v.InferOutput<typeof SpotifySong>
+});
+export type SpotifySong = v.InferOutput<typeof SpotifySong>;
 
-export const SpotifySongs = v.array(SpotifySong)
+export const SpotifySongs = v.array(SpotifySong);
 
 export const Song = v.object({
   ...v.entriesFromObjects([SongDTO]),

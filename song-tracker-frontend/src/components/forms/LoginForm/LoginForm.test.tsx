@@ -1,10 +1,10 @@
-import {useMutation} from "@tanstack/react-query";
-import {render, screen, waitFor} from "@testing-library/react";
-import {useNavigate} from "react-router";
-import {beforeEach, describe, expect, it, vi} from "vitest";
-import {useAuth} from "@/context/AuthContext";
-import {LoginForm} from "./LoginForm";
+import { useMutation } from "@tanstack/react-query";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useNavigate } from "react-router";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useAuth } from "@/context/AuthContext";
+import { LoginForm } from "./LoginForm";
 
 vi.mock("@tanstack/react-query", () => ({
   useMutation: vi.fn(),
@@ -29,7 +29,7 @@ describe("LoginForm", () => {
   let mutationOptions: any;
 
   const renderLoginForm = () => {
-    render(<LoginForm setIsSignUp={vi.fn()}/>);
+    render(<LoginForm setIsSignUp={vi.fn()} />);
   };
 
   beforeEach(() => {
@@ -58,11 +58,9 @@ describe("LoginForm", () => {
 
     expect(screen.getByLabelText("Username")).toBeInTheDocument();
     expect(screen.getByLabelText("Password")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Log In" })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", {name: "Log In"}),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", {name: "Create new account"}),
+      screen.getByRole("button", { name: "Create new account" }),
     ).toBeInTheDocument();
   });
 
@@ -132,11 +130,11 @@ describe("LoginForm", () => {
     renderLoginForm();
 
     mutationOptions.onSuccess(
-      {token: "jwt-token"},
+      { token: "jwt-token" },
       {
         username: "test",
         password: "password",
-      }
+      },
     );
 
     expect(login).toHaveBeenCalledWith("jwt-token");
@@ -147,7 +145,7 @@ describe("LoginForm", () => {
     const user = userEvent;
     const setIsSignUp = vi.fn();
 
-    render(<LoginForm setIsSignUp={setIsSignUp}/>);
+    render(<LoginForm setIsSignUp={setIsSignUp} />);
 
     const createNewAccountButton = screen.getByRole("button", {
       name: "Create new account",

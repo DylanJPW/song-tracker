@@ -1,11 +1,11 @@
-import {render, screen} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {describe, expect, it, vi} from "vitest";
-import type {LoginSignUpProps} from "@/components/types";
-import {AuthPanel} from "./AuthPanel";
+import { describe, expect, it, vi } from "vitest";
+import type { LoginSignUpProps } from "@/components/types";
+import { AuthPanel } from "./AuthPanel";
 
 vi.mock("@/components/forms/LoginForm/LoginForm", () => ({
-  LoginForm: ({setIsSignUp}: LoginSignUpProps) => (
+  LoginForm: ({ setIsSignUp }: LoginSignUpProps) => (
     <div>
       <p>Login form</p>
       <button onClick={() => setIsSignUp(true)} type="button">
@@ -16,7 +16,7 @@ vi.mock("@/components/forms/LoginForm/LoginForm", () => ({
 }));
 
 vi.mock("@/components/forms/SignUpForm/SignUpForm", () => ({
-  SignUpForm: ({setIsSignUp}: LoginSignUpProps) => (
+  SignUpForm: ({ setIsSignUp }: LoginSignUpProps) => (
     <div>
       <p>Sign up form</p>
       <button onClick={() => setIsSignUp(false)} type="button">
@@ -28,7 +28,7 @@ vi.mock("@/components/forms/SignUpForm/SignUpForm", () => ({
 
 describe("AuthPanel", () => {
   it("shows the login form by default", () => {
-    render(<AuthPanel/>);
+    render(<AuthPanel />);
 
     expect(screen.getByText("Login form")).toBeInTheDocument();
     expect(screen.queryByText("Sign up form")).not.toBeInTheDocument();
@@ -37,10 +37,10 @@ describe("AuthPanel", () => {
   it("switches to the sign up form", async () => {
     const user = userEvent.setup();
 
-    render(<AuthPanel/>);
+    render(<AuthPanel />);
 
     await user.click(
-      screen.getByRole("button", {name: "Create new account"}),
+      screen.getByRole("button", { name: "Create new account" }),
     );
 
     expect(screen.getByText("Sign up form")).toBeInTheDocument();
@@ -50,13 +50,13 @@ describe("AuthPanel", () => {
   it("switches back to the login form", async () => {
     const user = userEvent.setup();
 
-    render(<AuthPanel/>);
+    render(<AuthPanel />);
 
     await user.click(
-      screen.getByRole("button", {name: "Create new account"}),
+      screen.getByRole("button", { name: "Create new account" }),
     );
     await user.click(
-      screen.getByRole("button", {name: "Log in with existing account"}),
+      screen.getByRole("button", { name: "Log in with existing account" }),
     );
 
     expect(screen.getByText("Login form")).toBeInTheDocument();

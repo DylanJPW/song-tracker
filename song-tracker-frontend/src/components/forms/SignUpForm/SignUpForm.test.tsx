@@ -1,10 +1,10 @@
-import {useMutation} from "@tanstack/react-query";
-import {render, screen, waitFor} from "@testing-library/react";
+import { useMutation } from "@tanstack/react-query";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {useNavigate} from "react-router";
-import {beforeEach, describe, expect, it, vi} from "vitest";
-import {useAuth} from "@/context/AuthContext";
-import {SignUpForm} from "./SignUpForm";
+import { useNavigate } from "react-router";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useAuth } from "@/context/AuthContext";
+import { SignUpForm } from "./SignUpForm";
 
 vi.mock("@tanstack/react-query", () => ({
   useMutation: vi.fn(),
@@ -29,7 +29,7 @@ describe("SignUpForm", () => {
   let mutationOptions: any;
 
   const renderSignUpForm = () => {
-    render(<SignUpForm setIsSignUp={vi.fn()}/>);
+    render(<SignUpForm setIsSignUp={vi.fn()} />);
   };
 
   beforeEach(() => {
@@ -59,9 +59,7 @@ describe("SignUpForm", () => {
     expect(screen.getByLabelText("Username")).toBeInTheDocument();
     expect(screen.getByLabelText("Password")).toBeInTheDocument();
     expect(screen.getByLabelText("Confirm Password")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", {name: "Sign Up"}),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign Up" })).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
         name: "Log in with existing account",
@@ -76,8 +74,7 @@ describe("SignUpForm", () => {
 
     const usernameInput = screen.getByLabelText("Username");
     const passwordInput = screen.getByLabelText("Password");
-    const confirmPasswordInput =
-      screen.getByLabelText("Confirm Password");
+    const confirmPasswordInput = screen.getByLabelText("Confirm Password");
 
     await user.type(usernameInput, "test");
     await user.type(passwordInput, "password");
@@ -101,10 +98,7 @@ describe("SignUpForm", () => {
 
     await user.type(screen.getByLabelText("Username"), "test");
     await user.type(screen.getByLabelText("Password"), "password");
-    await user.type(
-      screen.getByLabelText("Confirm Password"),
-      "password",
-    );
+    await user.type(screen.getByLabelText("Confirm Password"), "password");
 
     await user.tab();
 
@@ -120,10 +114,7 @@ describe("SignUpForm", () => {
 
     await user.type(screen.getByLabelText("Username"), "test");
     await user.type(screen.getByLabelText("Password"), "password");
-    await user.type(
-      screen.getByLabelText("Confirm Password"),
-      "password",
-    );
+    await user.type(screen.getByLabelText("Confirm Password"), "password");
 
     await user.tab();
 
@@ -145,7 +136,7 @@ describe("SignUpForm", () => {
     renderSignUpForm();
 
     mutationOptions.onSuccess(
-      {token: "jwt-token"},
+      { token: "jwt-token" },
       {
         username: "test",
         password: "password",
@@ -157,22 +148,22 @@ describe("SignUpForm", () => {
   });
 
   it.skip("shows a username error when signup fails", () => {
-    renderSignUpForm();
+    act(() => {
+      renderSignUpForm();
+    });
 
     mutationOptions.onError({
       message: "Username already exists",
     });
 
-    expect(
-      screen.getByText("Username already exists"),
-    ).toBeInTheDocument();
+    expect(screen.findByText("Username already exists")).toBeInTheDocument();
   });
 
   it("switches back to the login form", async () => {
     const user = userEvent.setup();
     const setIsSignUp = vi.fn();
 
-    render(<SignUpForm setIsSignUp={setIsSignUp}/>);
+    render(<SignUpForm setIsSignUp={setIsSignUp} />);
 
     await user.click(
       screen.getByRole("button", {

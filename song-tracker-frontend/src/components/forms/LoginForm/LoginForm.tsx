@@ -1,57 +1,55 @@
-import {useMutation} from '@tanstack/react-query'
-import {useForm} from 'react-hook-form'
-import {useNavigate} from 'react-router'
-import {toast} from 'react-toastify'
-import {loginRequest} from '@/api/authentication'
-import {FormItem} from '@/components/forms/shared/FormItem'
-import {useAuth} from '@/context/AuthContext'
-import type {LoginSignUpProps} from '../../types'
-import {type LoginFormData, loginSchema} from './LoginSchema'
-import {valibotResolver} from "@hookform/resolvers/valibot";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { loginRequest } from "@/api/authentication";
+import { FormItem } from "@/components/forms/shared/FormItem";
+import { useAuth } from "@/context/AuthContext";
+import type { LoginSignUpProps } from "../../types";
+import { type LoginFormData, loginSchema } from "./LoginSchema";
 
-export function LoginForm({setIsSignUp}: LoginSignUpProps) {
+export function LoginForm({ setIsSignUp }: LoginSignUpProps) {
   const {
     setError,
     register,
     handleSubmit,
-    formState: {errors, isValid}
+    formState: { errors, isValid },
   } = useForm<LoginFormData>({
     resolver: valibotResolver(loginSchema),
-    mode: 'onTouched',
+    mode: "onTouched",
     defaultValues: {
-      username: '',
-      password: ''
-    }
-  })
+      username: "",
+      password: "",
+    },
+  });
 
-  const {login} = useAuth()
-  const navigate = useNavigate()
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const loginMutation = useMutation({
     mutationFn: loginRequest,
-    onSuccess: (data, {username}) => {
-      login(data.token)
-      navigate('/')
-      toast(`Successfully logged in as ${username}`)
+    onSuccess: (data, { username }) => {
+      login(data.token);
+      navigate("/");
+      toast(`Successfully logged in as ${username}`);
     },
-    onError: ({message}) => {
-      setError(
-        'password', {
-          type: "server",
-          message
-        }
-      )
-    }
-  })
+    onError: ({ message }) => {
+      setError("password", {
+        type: "server",
+        message,
+      });
+    },
+  });
 
   function onSubmit(data: LoginFormData) {
-    loginMutation.mutate(data)
+    loginMutation.mutate(data);
   }
 
   return (
     <form
-      className='flex w-full flex-col justify-center'
-      id='login-form'
+      className="flex w-full flex-col justify-center"
+      id="login-form"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="mb-4 md:mb-6">
@@ -62,35 +60,35 @@ export function LoginForm({setIsSignUp}: LoginSignUpProps) {
       </div>
       <FormItem
         error={errors.username}
-        id='username'
-        placeholder='Enter username'
+        id="username"
+        placeholder="Enter username"
         register={register}
-        title='Username'
+        title="Username"
       />
       <FormItem
         error={errors.password}
-        id='password'
-        placeholder='Enter password'
+        id="password"
+        placeholder="Enter password"
         register={register}
-        title='Password'
-        type='password'
+        title="Password"
+        type="password"
       />
       <button
-        className='my-2 w-fit cursor-pointer self-end rounded-sm bg-amber-600 hover:bg-amber-500 p-2 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400'
+        className="my-2 w-fit cursor-pointer self-end rounded-sm bg-amber-600 p-2 hover:bg-amber-500 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400"
         disabled={!isValid}
-        type='submit'
+        type="submit"
       >
         Log In
       </button>
-      <div className='text-center'>
+      <div className="text-center">
         <button
-          className='cursor-pointer underline hover:text-blue-500'
+          className="cursor-pointer underline hover:text-blue-500"
           onClick={() => setIsSignUp(true)}
-          type='button'
+          type="button"
         >
           Create new account
         </button>
       </div>
     </form>
-  )
+  );
 }
