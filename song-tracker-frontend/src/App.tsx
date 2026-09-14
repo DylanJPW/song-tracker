@@ -23,15 +23,15 @@ export function App() {
       <Suspense fallback={<LoadingOrError />}>
         <Head title="SongTracker" />
         <AuthProvider>
-          <div className="flex min-h-dvh flex-col">
+          <main className="flex min-h-dvh flex-col grow pb-24 md:pb-0">
             <Navbar />
             <Routes>
               <Route element={<HomePage />} index={true} />
               <Route element={<SearchResultsList />} path="/search" />
               <Route element={<LoginPage />} path="/login" />
+              <Route element={<SongDetailsPage />} path="/songs/:spotifyId" />
               <Route element={<ProtectedRoute />}>
                 <Route element={<MySongsPage />} path="/songs" />
-                <Route element={<SongDetailsPage />} path="/songs/:spotifyId" />
               </Route>
             </Routes>
             <ToastContainer
@@ -40,7 +40,7 @@ export function App() {
               position="top-right"
               theme="light"
             />
-          </div>
+          </main>
         </AuthProvider>
       </Suspense>
     </ErrorBoundary>
