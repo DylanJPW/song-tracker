@@ -1,18 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { getSearchResults } from "../api/songs";
+import { useState } from "react";
+import type {SetURLSearchParams} from "react-router";
 
 interface SearchBarProps {
   defaultValue: string;
-  onSearch: (query: string) => void;
+  setSearchParams: SetURLSearchParams;
 }
 
-export function SearchBar({ defaultValue, onSearch }: SearchBarProps) {
+export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   const [input, setInput] = useState("");
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    onSearch(input);
+    setSearchParams(`?q=${input}`);
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

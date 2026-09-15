@@ -25,7 +25,7 @@ export function SearchResultsList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") ?? "";
 
-  const { data, isPending, error, refetch } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ["songSearch", query],
     queryFn: ({ signal }) => getSearchResults(query, signal),
     enabled: query.length > 0,
@@ -40,7 +40,7 @@ export function SearchResultsList() {
     <div className="flex flex-col items-center">
       <SearchBar
         defaultValue={getSearchMessage({ query, isPending, error })}
-        onSearch={setSearchParams}
+        setSearchParams={setSearchParams}
       />
       {data !== undefined && data.length > 0 ? (
         <SongList songs={mappedResults} />
