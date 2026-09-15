@@ -1,30 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { getSearchResults, type Song } from "../api/songs";
+import { getSearchResults } from "../api/songs";
 
 interface SearchBarProps {
-  setSearchResults: (results: Song[]) => void;
+  defaultValue: string;
+  onSearch: (query: string) => void;
 }
 
-export function SearchBar({ setSearchResults }: SearchBarProps) {
+export function SearchBar({ defaultValue, onSearch }: SearchBarProps) {
   const [input, setInput] = useState("");
-  const [query, setQuery] = useState("");
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["query", query],
-    queryFn: () => getSearchResults(query),
-    enabled: query.length > 0,
-    staleTime: Number.POSITIVE_INFINITY,
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (data && setSearchResults) setSearchResults(data);
-  }, [data, setSearchResults]);
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    setQuery(input);
+    onSearch(input);
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -36,16 +24,13 @@ export function SearchBar({ setSearchResults }: SearchBarProps) {
       <form className="flex w-full" onSubmit={handleSubmit}>
         <input
           className="m-2 flex grow rounded-md border p-1 dark:border-gray-400"
+          defaultValue={defaultValue}
           onChange={handleChange}
           placeholder="Search for songs..."
           type="text"
           value={input}
         />
       </form>
-
-      {isLoading && <p>Searching...</p>}
-
-      {error && <p>{error.message}</p>}
     </>
   );
 }

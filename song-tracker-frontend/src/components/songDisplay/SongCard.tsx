@@ -12,7 +12,7 @@ interface AlbumArtProps {
 
 export function AlbumArt({
   album,
-  className,
+  className = "",
   imageUrl,
   size = ART_SIZE,
 }: AlbumArtProps) {
@@ -20,7 +20,7 @@ export function AlbumArt({
     return (
       <div
         aria-hidden={true}
-        className={`flex items-center justify-center bg-slate-700 text-slate-400 ${className}`}
+        className={`flex items-center justify-center bg-slate-700 text-slate-400 size-25 shrink-0 rounded-sm ${className}`}
       >
         <MdMusicNote size={Math.round(size / 3)} />
       </div>
