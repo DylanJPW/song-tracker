@@ -27,7 +27,7 @@ export function SearchResultsList() {
 
   const { data, isPending, error } = useQuery({
     queryKey: ["songSearch", query],
-    queryFn: ({ signal }) => getSearchResults(query, signal),
+    queryFn: () => getSearchResults(query),
     enabled: query.length > 0,
     staleTime: 5 * 60 * 1000,
   });
