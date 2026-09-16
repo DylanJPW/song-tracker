@@ -9,12 +9,12 @@ interface SongRowLinkProps {
 
 export function SongRowLink({ children, spotifyId, state }: SongRowLinkProps) {
   if (spotifyId === null) {
-    return <div>{children}</div>;
+    return <div className="opacity-60">{children}</div>;
   }
 
   return (
     <Link
-      className="group block focus-visible:outline-2 focus-visible:outline-blue-400"
+      className="group block focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-accent"
       state={state}
       to={`/songs/${spotifyId}`}
     >

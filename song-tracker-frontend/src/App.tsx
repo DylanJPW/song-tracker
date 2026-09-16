@@ -11,7 +11,7 @@ import { Navbar } from "./components/navigation/Navbar";
 import { AuthProvider } from "./context/AuthContext";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
-import { SearchResultsList } from "./pages/SearchResultsPage";
+import { SearchResultsPage } from "./pages/SearchResultsPage";
 
 function renderError({ error }: FallbackProps) {
   return <LoadingOrError error={error} />;
@@ -27,7 +27,7 @@ export function App() {
             <Navbar />
             <Routes>
               <Route element={<HomePage />} index={true} />
-              <Route element={<SearchResultsList />} path="/search" />
+              <Route element={<SearchResultsPage />} path="/search" />
               <Route element={<LoginPage />} path="/login" />
               <Route element={<SongDetailsPage />} path="/songs/:spotifyId" />
               <Route element={<ProtectedRoute />}>
