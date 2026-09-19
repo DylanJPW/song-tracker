@@ -9,11 +9,12 @@ interface SearchBarProps {
 
 export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   const [input, setInput] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestions = list();
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSearchParams(`?q=${input}`);
+    setSearchParams({ q: input.trim() });
     add(input);
   }
 
@@ -31,19 +32,23 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
           placeholder="Search for songs..."
           type="text"
           value={input}
+          onClick={() => setShowSuggestions(true)}
+          onBlur={() => setShowSuggestions(false)}
         />
       </form>
-      <ul className="absolute z-10 bg-surface rounded-md">
-        {suggestions.map((s) => (
-          <li
-            key={s}
-            className="px-3 hover:bg-surface-hover"
-            onClick={() => setSearchParams(`?q=${input}`)}
-          >
-            {s}
-          </li>
-        ))}
-      </ul>
+      {showSuggestions && (
+        <ul className="absolute z-10 bg-surface rounded-md">
+          {suggestions.map((s) => (
+            <li
+              key={s}
+              className="px-3 hover:bg-surface-hover"
+              onClick={() => setSearchParams({ q: s })}
+            >
+              {s}
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }

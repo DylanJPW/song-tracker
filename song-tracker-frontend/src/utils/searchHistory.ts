@@ -5,8 +5,17 @@ const MAX_ENTRIES = 8;
 
 const history = v.array(v.string());
 
-function save(list: string[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+function save(entries: string[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  } catch {}
+}
+
+export function clear(): string[] {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {}
+  return [];
 }
 
 export function list(): string[] {

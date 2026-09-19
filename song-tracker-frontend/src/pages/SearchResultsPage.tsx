@@ -139,6 +139,10 @@ export function SearchResultsPage() {
         setSearchParams={setSearchParams}
       />
 
+      <p aria-live="polite" className="sr-only">
+        {getSearchMessage({ query, isPending, isError, count: data?.length })}
+      </p>
+
       <SearchContent
         data={mappedResults}
         isError={isError}
