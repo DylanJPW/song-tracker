@@ -130,12 +130,7 @@ export function SearchResultsPage() {
       <h1 className="mb-4 font-bold text-xl">Search</h1>
 
       <SearchBar
-        defaultValue={getSearchMessage({
-          query,
-          isPending,
-          isError,
-          count: data?.length,
-        })}
+        defaultValue={query}
         setSearchParams={setSearchParams}
       />
 

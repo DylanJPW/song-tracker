@@ -8,7 +8,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(defaultValue);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestions = list();
 
@@ -22,18 +22,26 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
     setInput(e.target.value);
   }
 
+  function handleSuggestionClick(suggestion: string) {
+    setSearchParams({ q: suggestion });
+    setInput(suggestion);
+    setShowSuggestions(false);
+  }
+
   return (
-    <>
+    <div>
       <form className="flex flex-col w-full" onSubmit={handleSubmit}>
         <input
           className="m-2 flex grow rounded-md border p-1 dark:border-gray-400"
-          defaultValue={defaultValue}
           onChange={handleChange}
           placeholder="Search for songs..."
           type="text"
           value={input}
           onClick={() => setShowSuggestions(true)}
-          onBlur={() => setShowSuggestions(false)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget))
+              setShowSuggestions(false);
+          }}
         />
       </form>
       {showSuggestions && (
@@ -41,14 +49,15 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
           {suggestions.map((s) => (
             <li
               key={s}
-              className="px-3 hover:bg-surface-hover"
-              onClick={() => setSearchParams({ q: s })}
+              className="px-3 hover:bg-surface-hover cursor-pointer"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => handleSuggestionClick(s)}
             >
               {s}
             </li>
           ))}
         </ul>
       )}
-    </>
+    </div>
   );
 }
