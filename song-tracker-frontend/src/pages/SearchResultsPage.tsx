@@ -98,7 +98,7 @@ function SearchContent({
 
   return (
     <>
-      <p className="mb-2 text-muted text-sm">
+      <p className="my-2 text-muted text-sm">
         {data.length} {data.length === 1 ? "result" : "results"} for "{query}"
       </p>
       <SongList songs={data} />
@@ -129,10 +129,7 @@ export function SearchResultsPage() {
       />
       <h1 className="mb-4 font-bold text-xl">Search</h1>
 
-      <SearchBar
-        defaultValue={query}
-        setSearchParams={setSearchParams}
-      />
+      <SearchBar defaultValue={query} setSearchParams={setSearchParams} />
 
       <p aria-live="polite" className="sr-only">
         {getSearchMessage({ query, isPending, isError, count: data?.length })}

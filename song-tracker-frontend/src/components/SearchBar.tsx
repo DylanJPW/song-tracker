@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { SetURLSearchParams } from "react-router";
 import { add, list } from "@/utils/searchHistory";
+import { FiClock } from "react-icons/fi";
 
 interface SearchBarProps {
   defaultValue: string;
@@ -29,13 +30,13 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   }
 
   return (
-    <div>
-      <form className="flex flex-col w-full" onSubmit={handleSubmit}>
+    <div className="relative w-full">
+      <form onSubmit={handleSubmit}>
         <input
-          className="m-2 flex grow rounded-md border p-1 dark:border-gray-400"
+          className="h-11 w-full rounded-lg border border-line bg-surface px-4 text-base text-content placeholder:text-muted focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-accent"
           onChange={handleChange}
           placeholder="Search for songs..."
-          type="text"
+          type="search"
           value={input}
           onClick={() => setShowSuggestions(true)}
           onBlur={(event) => {
@@ -44,19 +45,25 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
           }}
         />
       </form>
-      {showSuggestions && (
-        <ul className="absolute z-10 bg-surface rounded-md">
-          {suggestions.map((s) => (
-            <li
-              key={s}
-              className="px-3 hover:bg-surface-hover cursor-pointer"
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => handleSuggestionClick(s)}
-            >
-              {s}
-            </li>
-          ))}
-        </ul>
+      {showSuggestions && suggestions.length > 0 && (
+        <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-lg border border-line bg-raised shadow-lg shadow-black/40">
+          <ul className="max-h-72 overflow-y-auto py-1">
+            {suggestions.map((s) => (
+              <li
+                key={s}
+                className="flex cursor-pointer items-center gap-x-3 px-4 py-2.5 text-sm hover:bg-surface-hover"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleSuggestionClick(s)}
+              >
+                <FiClock
+                  aria-hidden={true}
+                  className="size-4 shrink-0 text-muted"
+                />
+                <span className="truncate">{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
