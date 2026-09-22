@@ -7,7 +7,7 @@ interface UserSongListProps {
 
 export function UserSongList({ userSongs }: UserSongListProps) {
   return (
-    <ul className="flex w-full flex-col">
+    <ul className="w-full divide-y divide-line border-line border-y">
       {userSongs.map((userSong) => (
         <li key={userSong.id}>
           <UserSongItem userSong={userSong} />

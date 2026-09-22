@@ -110,4 +110,10 @@ describe("AlbumArt", () => {
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
     expect(container.firstElementChild).toHaveClass("aspect-square");
   });
+
+  it("sizes the placeholder when no className is given", () => {
+    const { container } = render(<AlbumArt album="Album A" imageUrl={null} />);
+
+    expect(container.firstElementChild).toHaveClass("size-25");
+  });
 });

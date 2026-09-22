@@ -1,51 +1,70 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { getSearchResults, type Song } from "../api/songs";
+import { useState } from "react";
+import type { SetURLSearchParams } from "react-router";
+import { add, list } from "@/utils/searchHistory";
+import { FiClock } from "react-icons/fi";
 
 interface SearchBarProps {
-  setSearchResults: (results: Song[]) => void;
+  defaultValue: string;
+  setSearchParams: SetURLSearchParams;
 }
 
-export function SearchBar({ setSearchResults }: SearchBarProps) {
-  const [input, setInput] = useState("");
-  const [query, setQuery] = useState("");
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["query", query],
-    queryFn: () => getSearchResults(query),
-    enabled: query.length > 0,
-    staleTime: Number.POSITIVE_INFINITY,
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (data && setSearchResults) setSearchResults(data);
-  }, [data, setSearchResults]);
+export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
+  const [input, setInput] = useState(defaultValue);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestions = list();
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    setQuery(input);
+    setSearchParams({ q: input.trim() });
+    add(input);
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInput(e.target.value);
   }
 
+  function handleSuggestionClick(suggestion: string) {
+    setSearchParams({ q: suggestion });
+    setInput(suggestion);
+    setShowSuggestions(false);
+  }
+
   return (
-    <>
-      <form className="flex w-full" onSubmit={handleSubmit}>
+    <div className="relative w-full">
+      <form onSubmit={handleSubmit}>
         <input
-          className="m-2 flex grow rounded-md border p-1 dark:border-gray-400"
+          className="h-11 w-full rounded-lg border border-line bg-surface px-4 text-base text-content placeholder:text-muted focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-accent"
           onChange={handleChange}
-          placeholder="Search for songs..."
-          type="text"
+          placeholder="Song, album, or artist"
+          type="search"
           value={input}
+          onClick={() => setShowSuggestions(true)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget))
+              setShowSuggestions(false);
+          }}
         />
       </form>
-
-      {isLoading && <p>Searching...</p>}
-
-      {error && <p>{error.message}</p>}
-    </>
+      {showSuggestions && suggestions.length > 0 && (
+        <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-lg border border-line bg-raised shadow-lg shadow-black/40">
+          <ul className="max-h-72 overflow-y-auto py-1">
+            {suggestions.map((s) => (
+              <li
+                key={s}
+                className="flex cursor-pointer items-center gap-x-3 px-4 py-2.5 text-sm hover:bg-surface-hover"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleSuggestionClick(s)}
+              >
+                <FiClock
+                  aria-hidden={true}
+                  className="size-4 shrink-0 text-muted"
+                />
+                <span className="truncate">{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }
