@@ -35,7 +35,8 @@ function getSearchMessage({
   if (isError) {
     return "Search failed";
   }
-  return `${count ?? 0} results for ${query}`;
+  const noun = count === 1 ? "result" : "results";
+  return `${count ?? 0} ${noun} for ${query}`;
 }
 
 interface SearchContentProps {

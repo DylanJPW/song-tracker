@@ -1,90 +1,143 @@
-/** biome-ignore-all lint/complexity/noExcessiveLinesPerFunction: <explanation> */
-
-import { useQuery } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { vi } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { add, list } from "@/utils/searchHistory";
 import { SearchBar } from "./SearchBar";
 
-vi.mock("@tanstack/react-query");
+vi.mock("@/utils/searchHistory", () => ({
+  add: vi.fn(),
+  list: vi.fn(),
+}));
 
-const mockUseQuery = vi.mocked(useQuery);
+const PLACEHOLDER = "Song, album, or artist";
+
+interface RenderOptions {
+  defaultValue?: string;
+  suggestions?: string[];
+}
+
+function renderSearchBar({
+  defaultValue = "",
+  suggestions = [],
+}: RenderOptions = {}) {
+  vi.mocked(list).mockReturnValue(suggestions);
+
+  const setSearchParams = vi.fn();
+
+  return {
+    setSearchParams,
+    user: userEvent.setup(),
+    ...render(
+      <SearchBar
+        defaultValue={defaultValue}
+        setSearchParams={setSearchParams}
+      />,
+    ),
+  };
+}
+
+function submitSearch(input: HTMLElement) {
+  const form = input.closest("form");
+
+  if (form === null) {
+    throw new Error("The search input is not inside a form");
+  }
+
+  fireEvent.submit(form);
+}
 
 describe("SearchBar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    mockUseQuery.mockReturnValue({
-      data: undefined,
-      error: null,
-      isLoading: false,
-    } as ReturnType<typeof useQuery>);
   });
 
-  it("renders the search input", () => {
-    render(<SearchBar setSearchResults={() => {}} />);
+  it("seeds the input from the current query", () => {
+    renderSearchBar({ defaultValue: "noah kahan" });
 
-    expect(
-      screen.getByPlaceholderText("Search for songs..."),
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(PLACEHOLDER)).toHaveValue("noah kahan");
   });
 
-  it("updates the input value", () => {
-    render(<SearchBar setSearchResults={() => {}} />);
+  it("searches for the submitted value, trimmed", async () => {
+    const { setSearchParams, user } = renderSearchBar();
+    const input = screen.getByPlaceholderText(PLACEHOLDER);
 
-    const input = screen.getByPlaceholderText(
-      "Search for songs...",
-    ) as HTMLInputElement;
+    await user.type(input, "  nirvana  ");
+    submitSearch(input);
 
-    fireEvent.change(input, {
-      target: { value: "Noah Kahan" },
+    expect(setSearchParams).toHaveBeenCalledWith({ q: "nirvana" });
+  });
+
+  it("records the submitted search in the history", async () => {
+    const { user } = renderSearchBar();
+    const input = screen.getByPlaceholderText(PLACEHOLDER);
+
+    await user.type(input, "nirvana");
+    submitSearch(input);
+
+    expect(add).toHaveBeenCalledWith("nirvana");
+  });
+
+  it("hides the suggestions until the input is clicked", async () => {
+    const { user } = renderSearchBar({ suggestions: ["noah kahan"] });
+
+    expect(screen.queryByText("noah kahan")).not.toBeInTheDocument();
+
+    await user.click(screen.getByPlaceholderText(PLACEHOLDER));
+
+    expect(screen.getByText("noah kahan")).toBeInTheDocument();
+  });
+
+  it("shows no panel when the history is empty", async () => {
+    const { user } = renderSearchBar({ suggestions: [] });
+
+    await user.click(screen.getByPlaceholderText(PLACEHOLDER));
+
+    expect(screen.queryByRole("list")).not.toBeInTheDocument();
+  });
+
+  it("searches for the suggestion that was clicked, not what was typed", async () => {
+    const { setSearchParams, user } = renderSearchBar({
+      suggestions: ["noah kahan"],
+    });
+    const input = screen.getByPlaceholderText(PLACEHOLDER);
+
+    await user.click(input);
+    await user.type(input, "nir");
+    await user.click(screen.getByText("noah kahan"));
+
+    expect(setSearchParams).toHaveBeenCalledWith({ q: "noah kahan" });
+    expect(input).toHaveValue("noah kahan");
+  });
+
+  it("stays open long enough for a suggestion click to land", async () => {
+    const { setSearchParams, user } = renderSearchBar({
+      suggestions: ["noah kahan"],
     });
 
-    expect(input.value).toBe("Noah Kahan");
+    await user.click(screen.getByPlaceholderText(PLACEHOLDER));
+    await user.click(screen.getByText("noah kahan"));
+
+    expect(setSearchParams).toHaveBeenCalledTimes(1);
   });
 
-  it("shows a loading message", () => {
-    mockUseQuery.mockReturnValue({
-      data: undefined,
-      error: null,
-      isLoading: true,
-    } as ReturnType<typeof useQuery>);
+  it("closes the suggestions once one is chosen", async () => {
+    const { user } = renderSearchBar({ suggestions: ["noah kahan"] });
 
-    render(<SearchBar setSearchResults={() => {}} />);
+    await user.click(screen.getByPlaceholderText(PLACEHOLDER));
+    await user.click(screen.getByText("noah kahan"));
 
-    expect(screen.getByText("Searching...")).toBeInTheDocument();
+    expect(screen.queryByRole("list")).not.toBeInTheDocument();
   });
 
-  it("shows an error message", () => {
-    mockUseQuery.mockReturnValue({
-      data: undefined,
-      error: new Error("Something went wrong"),
-      isLoading: false,
-    } as ReturnType<typeof useQuery>);
+  it("closes the suggestions when focus leaves the search bar", async () => {
+    const { user } = renderSearchBar({ suggestions: ["noah kahan"] });
 
-    render(<SearchBar setSearchResults={() => {}} />);
+    await user.click(screen.getByPlaceholderText(PLACEHOLDER));
 
-    expect(screen.getByText("Something went wrong")).toBeInTheDocument();
-  });
+    expect(screen.getByText("noah kahan")).toBeInTheDocument();
 
-  it("calls setSearchResults when query data changes", () => {
-    const setSearchResults = vi.fn();
+    await user.tab();
 
-    const songs = [
-      {
-        id: "1",
-        title: "Song",
-        artist: "Artist",
-      },
-    ];
-
-    mockUseQuery.mockReturnValue({
-      data: songs,
-      error: null,
-      isLoading: false,
-    } as ReturnType<typeof useQuery>);
-
-    render(<SearchBar setSearchResults={setSearchResults} />);
-
-    expect(setSearchResults).toHaveBeenCalledWith(songs);
+    expect(screen.queryByText("noah kahan")).not.toBeInTheDocument();
   });
 });
