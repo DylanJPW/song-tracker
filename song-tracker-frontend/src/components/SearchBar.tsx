@@ -35,7 +35,7 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
         <input
           className="h-11 w-full rounded-lg border border-line bg-surface px-4 text-base text-content placeholder:text-muted focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-accent"
           onChange={handleChange}
-          placeholder="Search for songs..."
+          placeholder="Song, album, or artist"
           type="search"
           value={input}
           onClick={() => setShowSuggestions(true)}
