@@ -11,7 +11,7 @@ import { SearchResultsPage } from "./SearchResultsPage";
 
 vi.mock("@/api/songs", () => ({ getSearchResults: vi.fn() }));
 
-vi.mock("@/components/SearchBar", () => ({
+vi.mock("@/components/search/SearchBar", () => ({
   SearchBar: ({ defaultValue }: { defaultValue: string }) => (
     <input defaultValue={defaultValue} placeholder="search bar stub" />
   ),
