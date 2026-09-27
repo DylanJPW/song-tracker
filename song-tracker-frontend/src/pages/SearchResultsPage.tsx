@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getSearchResults } from "@/api/songs";
 import type { Song } from "@/api/schemas/SongSchema";
-import { SearchBar } from "@/components/SearchBar";
+import { SearchBar } from "@/components/search/SearchBar";
 import { Head } from "@/components/Head";
 import { FiAlertCircle, FiSearch } from "react-icons/fi";
 import { SongList } from "@/components/songDisplay/SongList";
