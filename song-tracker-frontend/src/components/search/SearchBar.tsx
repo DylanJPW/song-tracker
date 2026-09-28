@@ -1,7 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { SetURLSearchParams } from "react-router";
 import { add, list } from "@/utils/searchHistory";
 import { FiClock } from "react-icons/fi";
+import { useDebouncedValue } from "@/utils/useDebouncedValue";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { getSearchResults } from "@/api/songs";
+
+const DEBOUNCE_MS = 200;
+const MIN_QUERY_LENGTH = 3;
+const FIVE_MINUTES = 1000 * 60 * 5;
 
 interface SearchBarProps {
   defaultValue: string;
@@ -10,8 +17,30 @@ interface SearchBarProps {
 
 export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   const [input, setInput] = useState(defaultValue);
+
+  const searchHistory = list();
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const suggestions = list();
+  const [suggestions, setSuggestions] = useState(searchHistory);
+
+  const debouncedInput = useDebouncedValue(input.trim(), DEBOUNCE_MS);
+  const isSearchable = debouncedInput.length >= MIN_QUERY_LENGTH;
+
+  const { data: searchPredictions, isFetching } = useQuery({
+    enabled: showSuggestions && isSearchable,
+    placeholderData: keepPreviousData,
+    queryFn: () => getSearchResults(debouncedInput),
+    queryKey: ["songSearch", debouncedInput],
+    staleTime: FIVE_MINUTES,
+  });
+
+  useEffect(() => {
+    if (searchPredictions && searchPredictions?.length > 0) {
+      setSuggestions([
+        ...searchHistory.filter((h) => h.includes(input)),
+        ...searchPredictions.map((p) => p.title),
+      ]);
+    }
+  }, [searchHistory, searchPredictions]);
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
