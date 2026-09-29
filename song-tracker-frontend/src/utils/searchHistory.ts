@@ -1,7 +1,7 @@
 import * as v from "valibot";
 
 const STORAGE_KEY = "songtracker.searchHistory.v1";
-const MAX_ENTRIES = 8;
+const MAX_ENTRIES = 10;
 
 const history = v.array(v.string());
 
