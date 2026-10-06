@@ -13,7 +13,7 @@ export async function getSongs() {
 export async function getSearchResults(query: string, signal?: AbortSignal) {
   const response = await apiClient(
     `/spotify/search?query=${encodeURIComponent(query)}`,
-    { signal: signal === undefined ? null : signal },
+    { signal },
   );
   if (!response.ok) {
     throw new Error("Failed to fetch");

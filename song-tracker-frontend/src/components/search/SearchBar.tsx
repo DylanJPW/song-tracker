@@ -1,87 +1,16 @@
 import { useState } from "react";
-import { Link, type SetURLSearchParams } from "react-router";
+import { type SetURLSearchParams } from "react-router";
 import { add, list } from "@/utils/searchHistory";
-import { FiClock, FiLoader, FiSearch } from "react-icons/fi";
 import { useDebouncedValue } from "@/utils/useDebouncedValue";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getSearchResults } from "@/api/songs";
-import type { SpotifySong } from "@/api/schemas/SongSchema";
-
-interface SearchSuggestionsProps {
-  suggestions: SpotifySong[] | undefined;
-  isFetching: boolean;
-  searchHistory: string[];
-  handleSuggestionClick: (s: string) => void;
-}
-
-function SearchSuggestions({
-  suggestions = [],
-  isFetching,
-  searchHistory,
-  handleSuggestionClick,
-}: SearchSuggestionsProps) {
-  return (
-    <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-lg border border-line bg-raised shadow-lg shadow-black/40">
-      {suggestions && suggestions.length > 0 && (
-        <>
-          <div className="flex flex-row ps-2 pt-1 text-sm text-muted gap-2 text-center">
-            <p>Suggestions</p>
-            {isFetching ? (
-              <FiLoader className="size-4 shrink-0 mt-0.5" />
-            ) : null}
-          </div>
-          <ul className="max-h-72 overflow-y-auto py-1">
-            {suggestions.slice(0, 5).map((s) => (
-              <li
-                key={s.spotifyId}
-                className="flex cursor-pointer items-center gap-x-3 px-4 py-2.5 text-sm hover:bg-surface-hover"
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                <FiSearch
-                  aria-hidden={true}
-                  className="size-4 shrink-0 text-muted"
-                />
-                <Link
-                  className="truncate"
-                  to={`/songs/${s.spotifyId}`}
-                  onClick={() => handleSuggestionClick(s.title)}
-                >
-                  {s.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-      {searchHistory.length > 0 && (
-        <>
-          <p className="ps-2 pt-1 text-sm text-muted">History</p>
-          <ul className="max-h-72 overflow-y-auto py-1">
-            {searchHistory.map((s) => (
-              <li
-                key={s}
-                className="flex cursor-pointer items-center gap-x-3 px-4 py-2.5 text-sm hover:bg-surface-hover"
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => handleSuggestionClick(s)}
-              >
-                <FiClock
-                  aria-hidden={true}
-                  className="size-4 shrink-0 text-muted"
-                />
-                <span className="truncate">{s}</span>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </div>
-  );
-}
-
-const DEBOUNCE_MS = 200;
-const MIN_QUERY_LENGTH = 3;
-const FIVE_MINUTES = 1000 * 60 * 5;
-const MAX_SUGGESTIONS = 5;
+import {
+  DEBOUNCE_MS,
+  FIVE_MINUTES,
+  MAX_SUGGESTIONS,
+  MIN_QUERY_LENGTH,
+} from "@/components/search/consts";
+import { SearchSuggestions } from "@/components/search/SearchSuggestion";
 
 interface SearchBarProps {
   defaultValue: string;
@@ -92,7 +21,7 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   const [input, setInput] = useState(defaultValue);
 
   const searchHistory = list()
-    .filter((s) => s.includes(input))
+    .filter((s) => s.toLowerCase().includes(input.toLowerCase()))
     .slice(0, MAX_SUGGESTIONS);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
