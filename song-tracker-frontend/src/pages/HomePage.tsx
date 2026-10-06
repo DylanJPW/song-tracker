@@ -22,7 +22,7 @@ function SongCatalogue() {
   });
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="mx-auto w-full max-w-2xl p-4">
       <SongList songs={data} />
     </div>
   );

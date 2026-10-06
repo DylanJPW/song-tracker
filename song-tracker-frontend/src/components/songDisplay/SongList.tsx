@@ -7,7 +7,7 @@ interface SongListProps {
 
 export function SongList({ songs }: SongListProps) {
   return (
-    <ul className="flex w-full max-w-2xl flex-col">
+    <ul className="w-full divide-y divide-line border-line border-y">
       {songs.map((song) => (
         <li key={song.spotifyId ?? song.id}>
           <SongItem song={song} />

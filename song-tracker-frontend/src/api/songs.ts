@@ -10,9 +10,10 @@ export async function getSongs() {
   return v.parse(Songs, await response.json());
 }
 
-export async function getSearchResults(query: string) {
+export async function getSearchResults(query: string, signal?: AbortSignal) {
   const response = await apiClient(
     `/spotify/search?query=${encodeURIComponent(query)}`,
+    { signal },
   );
   if (!response.ok) {
     throw new Error("Failed to fetch");
