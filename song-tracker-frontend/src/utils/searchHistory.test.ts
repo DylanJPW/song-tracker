@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { add, clear, list } from "./searchHistory";
+import { add, clear, list, MAX_ENTRIES } from "./searchHistory";
 
 const STORAGE_KEY = "songtracker.searchHistory.v1";
-const MAX_ENTRIES = 8;
 
 type StorageMethod = "getItem" | "setItem" | "removeItem";
 
@@ -102,7 +101,7 @@ describe("searchHistory", () => {
       expect(add("Noah Kahan")).toEqual(["Noah Kahan"]);
     });
 
-    it("keeps at most eight entries, dropping the oldest", () => {
+    it("keeps at most MAX_ENTRIES entries, dropping the oldest", () => {
       const queries = Array.from(
         { length: MAX_ENTRIES + 1 },
         (_, index) => `query ${index + 1}`,
@@ -115,7 +114,7 @@ describe("searchHistory", () => {
       const entries = list();
 
       expect(entries).toHaveLength(MAX_ENTRIES);
-      expect(entries[0]).toBe("query 9");
+      expect(entries[0]).toBe(`query ${MAX_ENTRIES + 1}`);
       expect(entries).not.toContain("query 1");
     });
 

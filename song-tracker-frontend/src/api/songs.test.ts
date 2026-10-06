@@ -80,3 +80,21 @@ describe("getSpotifySong", () => {
     );
   });
 });
+
+describe("getSearchResults abort signal", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("forwards the abort signal to fetch, so React Query can cancel", async () => {
+    const fetchSpy = mockFetch([]);
+    const controller = new AbortController();
+
+    await getSearchResults("noah kahan", controller.signal);
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ signal: controller.signal }),
+    );
+  });
+});
