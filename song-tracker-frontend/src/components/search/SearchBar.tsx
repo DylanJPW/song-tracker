@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type SetURLSearchParams } from "react-router";
 import { add, list } from "@/utils/searchHistory";
 import { useDebouncedValue } from "@/utils/useDebouncedValue";
@@ -11,6 +11,7 @@ import {
   MIN_QUERY_LENGTH,
 } from "@/components/search/consts";
 import { SearchSuggestions } from "@/components/search/SearchSuggestion";
+import type { SpotifySong } from "@/api/schemas/SongSchema";
 
 interface SearchBarProps {
   defaultValue: string;
@@ -23,18 +24,25 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   const searchHistory = list()
     .filter((s) => s.toLowerCase().includes(input.toLowerCase()))
     .slice(0, MAX_SUGGESTIONS);
+  const [suggestions, setSuggestions] = useState<
+    SpotifySong[] | string[] | undefined
+  >([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const debouncedInput = useDebouncedValue(input.trim(), DEBOUNCE_MS);
   const isSearchable = debouncedInput.length >= MIN_QUERY_LENGTH;
 
-  const { data: suggestions, isFetching } = useQuery({
+  const { data: typePredictions, isFetching } = useQuery({
     enabled: showSuggestions && isSearchable,
     placeholderData: keepPreviousData,
     queryFn: ({ signal }) => getSearchResults(debouncedInput, signal),
     queryKey: ["songSearch", debouncedInput],
     staleTime: FIVE_MINUTES,
   });
+
+  useEffect(() => {
+    setSuggestions(input?.length > 0 ? typePredictions : searchHistory);
+  }, [input]);
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -71,10 +79,10 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
       </form>
       {showSuggestions && (
         <SearchSuggestions
+          showHistory={input?.length > 0}
           suggestions={suggestions}
           isFetching={isFetching}
           handleSuggestionClick={handleSuggestionClick}
-          searchHistory={searchHistory}
         />
       )}
     </div>
