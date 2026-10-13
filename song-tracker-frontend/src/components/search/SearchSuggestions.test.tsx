@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import type { SpotifySong } from "@/api/schemas/SongSchema";
 import { MAX_SUGGESTIONS } from "@/components/search/consts";
 import { buildSpotifySong } from "@/test-fixtures";
-import { SearchSuggestions } from "./SearchSuggestion";
+import { SearchSuggestions } from "./SearchSuggestions";
 
 interface RenderOptions {
   isFetching?: boolean;
