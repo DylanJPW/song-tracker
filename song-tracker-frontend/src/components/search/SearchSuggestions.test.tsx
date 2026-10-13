@@ -8,16 +8,16 @@ import { buildSpotifySong } from "@/test-fixtures";
 import { SearchSuggestions } from "./SearchSuggestions";
 
 interface RenderOptions {
-  isFetching?: boolean;
-  searchHistory?: string[];
-  suggestions?: SpotifySong[] | undefined;
+  showHistory?: boolean;
+  history?: string[];
+  predictions?: SpotifySong[] | undefined;
 }
 
-function renderSuggestions({
-  isFetching = false,
-  searchHistory = [],
-  suggestions = [],
-}: RenderOptions = {}) {
+function renderSuggestions(options: RenderOptions = {}) {
+  const { showHistory = false, history = [] } = options;
+
+  const predictions = "predictions" in options ? options.predictions : [];
+
   const handleSuggestionClick = vi.fn();
 
   return {
@@ -27,9 +27,9 @@ function renderSuggestions({
       <MemoryRouter>
         <SearchSuggestions
           handleSuggestionClick={handleSuggestionClick}
-          isFetching={isFetching}
-          searchHistory={searchHistory}
-          suggestions={suggestions}
+          history={history}
+          predictions={predictions}
+          showHistory={showHistory}
         />
       </MemoryRouter>,
     ),
@@ -43,10 +43,10 @@ function buildSongs(count: number): SpotifySong[] {
 }
 
 describe("SearchSuggestions", () => {
-  describe("song suggestions", () => {
+  describe("song predictions (the user is typing)", () => {
     it("links each song to its details page", () => {
       renderSuggestions({
-        suggestions: [
+        predictions: [
           buildSpotifySong({ spotifyId: "spotify-a", title: "Stick Season" }),
         ],
       });
@@ -57,46 +57,48 @@ describe("SearchSuggestions", () => {
     });
 
     it("shows at most MAX_SUGGESTIONS songs", () => {
-      renderSuggestions({ suggestions: buildSongs(MAX_SUGGESTIONS + 3) });
+      renderSuggestions({ predictions: buildSongs(MAX_SUGGESTIONS + 3) });
 
       expect(screen.getAllByRole("link")).toHaveLength(MAX_SUGGESTIONS);
     });
 
-    it("shows the suggestions heading when there are songs", () => {
-      renderSuggestions({ suggestions: buildSongs(1) });
-
-      expect(screen.getByText("Suggestions")).toBeInTheDocument();
-    });
-
-    it("omits the suggestions heading when there are none", () => {
-      renderSuggestions({ searchHistory: ["noah kahan"] });
-
-      expect(screen.queryByText("Suggestions")).not.toBeInTheDocument();
-    });
-
-    it("tolerates suggestions being undefined before the first search", () => {
-      renderSuggestions({
-        searchHistory: ["noah kahan"],
-        suggestions: undefined,
+    it("reports the title of the song that was clicked", async () => {
+      const { handleSuggestionClick, user } = renderSuggestions({
+        predictions: [
+          buildSpotifySong({ spotifyId: "spotify-a", title: "Stick Season" }),
+        ],
       });
 
-      expect(screen.getByText("noah kahan")).toBeInTheDocument();
-      expect(screen.queryByText("Suggestions")).not.toBeInTheDocument();
+      await user.click(screen.getByRole("link", { name: "Stick Season" }));
+
+      expect(handleSuggestionClick).toHaveBeenCalledWith("Stick Season");
+    });
+
+    it("does not show history entries alongside the songs", () => {
+      renderSuggestions({
+        history: ["noah kahan"],
+        predictions: buildSongs(1),
+      });
+
+      expect(screen.queryByText("noah kahan")).not.toBeInTheDocument();
     });
   });
 
-  describe("history suggestions", () => {
-    it("lists the history entries under a heading", () => {
-      renderSuggestions({ searchHistory: ["noah kahan", "nirvana"] });
+  describe("history (the input is empty)", () => {
+    it("lists each history entry", () => {
+      renderSuggestions({
+        history: ["noah kahan", "nirvana"],
+        showHistory: true,
+      });
 
-      expect(screen.getByText("History")).toBeInTheDocument();
       expect(screen.getByText("noah kahan")).toBeInTheDocument();
       expect(screen.getByText("nirvana")).toBeInTheDocument();
     });
 
     it("reports the entry that was clicked", async () => {
       const { handleSuggestionClick, user } = renderSuggestions({
-        searchHistory: ["noah kahan", "nirvana"],
+        history: ["noah kahan", "nirvana"],
+        showHistory: true,
       });
 
       await user.click(screen.getByText("nirvana"));
@@ -104,10 +106,37 @@ describe("SearchSuggestions", () => {
       expect(handleSuggestionClick).toHaveBeenCalledWith("nirvana");
     });
 
-    it("omits the history heading when there are no entries", () => {
-      renderSuggestions({ suggestions: buildSongs(1) });
+    it("does not show song predictions alongside the history", () => {
+      renderSuggestions({
+        history: ["noah kahan"],
+        predictions: buildSongs(1),
+        showHistory: true,
+      });
 
-      expect(screen.queryByText("History")).not.toBeInTheDocument();
+      expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("when there is nothing to show", () => {
+    it("renders nothing when there are no song predictions", () => {
+      const { container } = renderSuggestions({ predictions: [] });
+
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it("renders nothing before the first search has resolved", () => {
+      const { container } = renderSuggestions({ predictions: undefined });
+
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it("renders nothing when there is no history", () => {
+      const { container } = renderSuggestions({
+        history: [],
+        showHistory: true,
+      });
+
+      expect(container).toBeEmptyDOMElement();
     });
   });
 });

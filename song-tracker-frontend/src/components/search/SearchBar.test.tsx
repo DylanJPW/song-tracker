@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getSearchResults } from "@/api/songs";
-import { DEBOUNCE_MS } from "@/components/search/consts";
+import { DEBOUNCE_MS, MAX_SUGGESTIONS } from "@/components/search/consts";
 import { buildSpotifySong } from "@/test-fixtures";
 import { add, list } from "@/utils/searchHistory";
 import { SearchBar } from "./SearchBar";
@@ -107,11 +107,11 @@ describe("SearchBar", () => {
 
       await user.click(getInput());
 
-      expect(screen.getByText("History")).toBeInTheDocument();
+      expect(screen.getByText("noah kahan")).toBeInTheDocument();
 
       submitSearch();
 
-      expect(screen.queryByText("History")).not.toBeInTheDocument();
+      expect(screen.queryByText("noah kahan")).not.toBeInTheDocument();
     });
   });
 
@@ -126,13 +126,12 @@ describe("SearchBar", () => {
       expect(screen.getByText("noah kahan")).toBeInTheDocument();
     });
 
-    it("searches for the row that was clicked, not what was typed", async () => {
+    it("searches for the row that was clicked", async () => {
       const { setSearchParams, user } = renderSearchBar({
         history: ["noah kahan"],
       });
 
       await user.click(getInput());
-      await user.type(getInput(), "noah");
       await user.click(screen.getByText("noah kahan"));
 
       expect(setSearchParams).toHaveBeenCalledWith({ q: "noah kahan" });
@@ -156,16 +155,42 @@ describe("SearchBar", () => {
       await user.click(getInput());
       await user.click(screen.getByText("noah kahan"));
 
-      expect(screen.queryByText("History")).not.toBeInTheDocument();
+      expect(screen.queryByRole("list")).not.toBeInTheDocument();
     });
 
-    it("matches history case-insensitively", async () => {
-      const { user } = renderSearchBar({ history: ["Noah Kahan"] });
+    it("shows at most MAX_SUGGESTIONS rows", async () => {
+      const history = Array.from(
+        { length: MAX_SUGGESTIONS + 3 },
+        (_, index) => `search ${index}`,
+      );
+      const { user } = renderSearchBar({ history });
 
       await user.click(getInput());
+
+      expect(screen.getAllByRole("listitem")).toHaveLength(MAX_SUGGESTIONS);
+    });
+
+    it("is replaced by song suggestions once the user types", async () => {
+      vi.mocked(getSearchResults).mockResolvedValue([
+        buildSpotifySong({ spotifyId: "spotify-a", title: "Stick Season" }),
+      ]);
+
+      const { user } = renderSearchBar({ history: ["nirvana"] });
+
+      await user.click(getInput());
+
+      expect(screen.getByText("nirvana")).toBeInTheDocument();
+
       await user.type(getInput(), "noah");
 
-      expect(screen.getByText("Noah Kahan")).toBeInTheDocument();
+      expect(await screen.findByText("Stick Season")).toBeInTheDocument();
+      expect(screen.queryByText("nirvana")).not.toBeInTheDocument();
+    });
+
+    it("stays closed when the page loads with a query", () => {
+      renderSearchBar({ defaultValue: "noah kahan", history: ["nirvana"] });
+
+      expect(screen.queryByRole("list")).not.toBeInTheDocument();
     });
 
     it("closes the panel when focus leaves the search bar", async () => {
@@ -235,10 +260,11 @@ describe("SearchBar", () => {
       expect(getSearchResults).not.toHaveBeenCalled();
     });
 
-    it("does not search while the panel is closed", async () => {
+    it("does not search once a submit has closed the panel", async () => {
       const { user } = renderSearchBar();
 
-      await user.type(getInput(), "noah", { skipClick: true });
+      await user.type(getInput(), "noah");
+      submitSearch();
       await wait(DEBOUNCE_MS + 100);
 
       expect(getSearchResults).not.toHaveBeenCalled();

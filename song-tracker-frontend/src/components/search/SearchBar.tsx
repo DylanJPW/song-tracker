@@ -1,4 +1,4 @@
-import { type SubmitEvent, type ChangeEvent, useEffect, useState } from "react";
+import { type SubmitEvent, type ChangeEvent, useState } from "react";
 import { type SetURLSearchParams } from "react-router";
 import { add, list } from "@/utils/searchHistory";
 import { useDebouncedValue } from "@/utils/useDebouncedValue";
@@ -19,7 +19,7 @@ interface SearchBarProps {
 
 export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   const [input, setInput] = useState(defaultValue);
-  const [showHistory, setShowHistory] = useState(input.trim().length === 0);
+  const showHistory = input.trim().length === 0;
 
   const history = list()
     .filter((s) => s.toLowerCase().includes(input.toLowerCase()))
@@ -38,11 +38,6 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
     staleTime: FIVE_MINUTES,
   });
 
-  useEffect(() => {
-    setShowHistory(input.trim().length === 0);
-    setShowSuggestions(input.trim().length >= MIN_QUERY_LENGTH);
-  }, [input]);
-
   function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setSearchParams({ q: input.trim() });
@@ -51,7 +46,10 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    setInput(e.target.value);
+    const value = e.target.value;
+
+    setInput(value);
+    setShowSuggestions(showHistory || value.trim().length >= MIN_QUERY_LENGTH);
   }
 
   function handleSuggestionClick(suggestion: string) {

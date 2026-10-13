@@ -73,11 +73,13 @@ export function SearchSuggestions({
   predictions = [],
   handleSuggestionClick,
 }: SearchSuggestionsProps) {
-  if ((showHistory && !history) || (!showHistory && predictions?.length < 0)) {
+  const isEmpty = showHistory
+    ? history.length === 0
+    : predictions.length === 0;
+
+  if (isEmpty) {
     return null;
   }
-
-  console.log("Test predictions:", predictions);
 
   return (
     <div className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-lg border border-line bg-raised shadow-lg shadow-black/40">
