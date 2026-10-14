@@ -13,7 +13,7 @@ function HistorySuggestion({
   handleSuggestionClick,
 }: HistorySuggestionProps) {
   return (
-    <ul className="max-h-72 overflow-y-auto py-1">
+    <ul className="max-h-96 overflow-y-auto py-1">
       {history.map((s) => (
         <li
           key={s}
@@ -39,7 +39,7 @@ function PredictionSuggestion({
   handleSuggestionClick,
 }: PredictionSuggestionProps) {
   return (
-    <ul className="max-h-72 overflow-y-auto py-1">
+    <ul className="max-h-96 overflow-y-auto py-1">
       {predictions.slice(0, MAX_SUGGESTIONS).map((s) => (
         <li
           key={s.spotifyId}
@@ -73,9 +73,10 @@ export function SearchSuggestions({
   predictions = [],
   handleSuggestionClick,
 }: SearchSuggestionsProps) {
-  const isEmpty = showHistory
-    ? history.length === 0
-    : predictions.length === 0;
+  const isEmpty = showHistory ? history.length === 0 : predictions.length === 0;
+
+  console.log("Test showHistory:", showHistory);
+  console.log("Test isEmpty:", isEmpty);
 
   if (isEmpty) {
     return null;

@@ -47,9 +47,10 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
+    const trimmedLength = value.trim().length;
 
     setInput(value);
-    setShowSuggestions(showHistory || value.trim().length >= MIN_QUERY_LENGTH);
+    setShowSuggestions(trimmedLength === 0 || trimmedLength >= MIN_QUERY_LENGTH);
   }
 
   function handleSuggestionClick(suggestion: string) {
