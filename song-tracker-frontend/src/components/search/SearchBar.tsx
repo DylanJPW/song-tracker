@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type SubmitEvent, type ChangeEvent, useState } from "react";
 import { type SetURLSearchParams } from "react-router";
 import { add, list } from "@/utils/searchHistory";
 import { useDebouncedValue } from "@/utils/useDebouncedValue";
@@ -10,7 +10,7 @@ import {
   MAX_SUGGESTIONS,
   MIN_QUERY_LENGTH,
 } from "@/components/search/consts";
-import { SearchSuggestions } from "@/components/search/SearchSuggestion";
+import { SearchSuggestions } from "@/components/search/SearchSuggestions";
 
 interface SearchBarProps {
   defaultValue: string;
@@ -19,16 +19,18 @@ interface SearchBarProps {
 
 export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
   const [input, setInput] = useState(defaultValue);
+  const showHistory = input.trim().length === 0;
 
-  const searchHistory = list()
+  const history = list()
     .filter((s) => s.toLowerCase().includes(input.toLowerCase()))
     .slice(0, MAX_SUGGESTIONS);
+
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const debouncedInput = useDebouncedValue(input.trim(), DEBOUNCE_MS);
   const isSearchable = debouncedInput.length >= MIN_QUERY_LENGTH;
 
-  const { data: suggestions, isFetching } = useQuery({
+  const { data: predictions } = useQuery({
     enabled: showSuggestions && isSearchable,
     placeholderData: keepPreviousData,
     queryFn: ({ signal }) => getSearchResults(debouncedInput, signal),
@@ -36,15 +38,19 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
     staleTime: FIVE_MINUTES,
   });
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setSearchParams({ q: input.trim() });
     add(input);
     setShowSuggestions(false);
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInput(e.target.value);
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    const trimmedLength = value.trim().length;
+
+    setInput(value);
+    setShowSuggestions(trimmedLength === 0 || trimmedLength >= MIN_QUERY_LENGTH);
   }
 
   function handleSuggestionClick(suggestion: string) {
@@ -71,10 +77,10 @@ export function SearchBar({ defaultValue, setSearchParams }: SearchBarProps) {
       </form>
       {showSuggestions && (
         <SearchSuggestions
-          suggestions={suggestions}
-          isFetching={isFetching}
+          showHistory={showHistory}
+          history={history}
+          predictions={predictions}
           handleSuggestionClick={handleSuggestionClick}
-          searchHistory={searchHistory}
         />
       )}
     </div>
