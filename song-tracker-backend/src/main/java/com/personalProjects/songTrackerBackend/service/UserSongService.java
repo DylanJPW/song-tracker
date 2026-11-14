@@ -35,6 +35,24 @@ public class UserSongService {
                 .toList();
     }
 
+    public List<UserSongDTO> getFilteredUserSongs(String username, SongStatus status) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findAllByUserIdAndStatus(user.getId(), status)
+                .stream()
+                .map(UserSong::toDTO)
+                .toList();
+    }
+
+    public DashboardResponse getDashboard(String username) {
+        return new DashboardResponse(
+                getFilteredUserSongs(username, SongStatus.WANT_TO_LEARN),
+                getFilteredUserSongs(username, SongStatus.LEARNING),
+                getFilteredUserSongs(username, SongStatus.LEARNED)
+        );
+    }
+
     @Transactional
     public UserSongDTO updateUserSong(
             Long id,
