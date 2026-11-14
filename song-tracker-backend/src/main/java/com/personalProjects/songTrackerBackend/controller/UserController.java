@@ -1,6 +1,7 @@
 package com.personalProjects.songTrackerBackend.controller;
 
 import com.personalProjects.songTrackerBackend.auth.JWTUtil;
+import com.personalProjects.songTrackerBackend.model.CurrentUserResponse;
 import com.personalProjects.songTrackerBackend.model.User;
 import com.personalProjects.songTrackerBackend.model.UserDTO;
 import com.personalProjects.songTrackerBackend.model.auth.UserDetailsResponse;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.of(userService.getUserById(id));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication authentication) {
+        User user = userService.getUserByUsername(authentication.getName()).stream().findFirst().orElseThrow(null);
+        return ResponseEntity.status(HttpStatus.FOUND).body(user.toResponse());
     }
 
     @DeleteMapping("/{id}")

@@ -36,4 +36,6 @@ public class User {
     public UserDTO toDTO() {
         return new UserDTO(this.username, this.password);
     }
+
+    public CurrentUserResponse toResponse() {return new CurrentUserResponse(this.id, this.username);}
 }
