@@ -1,30 +1,28 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getSongs } from "@/api/songs";
-import { SongList } from "@/components/songDisplay/SongList";
 import { useAuth } from "@/context/AuthContext";
 import { LandingPage } from "@/pages/LandingPage";
+import { currentUser } from "@/api/authentication";
 
 export function HomePage() {
-  const { isLoggedIn, user } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
     return <LandingPage />;
   }
 
-  return <SongCatalogue username={user?.username} />;
+  return <SongCatalogue />;
 }
 
-function SongCatalogue(username: string) {
-  const { data } = useSuspenseQuery({
-    queryFn: getSongs,
-    queryKey: ["songs"],
-    staleTime: Number.POSITIVE_INFINITY,
+function SongCatalogue() {
+  const { data: user } = useSuspenseQuery({
+    queryFn: currentUser,
+    queryKey: ["user"],
+    refetchOnMount: true,
   });
 
   return (
     <div className="mx-auto w-full max-w-2xl p-4">
-      <h1>Welcome back, {username}</h1>
-      <SongList songs={data} />
+      <h1>Welcome back, {user.username}</h1>
     </div>
   );
 }

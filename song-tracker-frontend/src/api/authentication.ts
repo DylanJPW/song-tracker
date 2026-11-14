@@ -7,6 +7,11 @@ const User = v.object({
 });
 export type User = v.InferOutput<typeof User>;
 
+const UserResponse = v.object({
+  id: v.number(),
+  username: v.string(),
+});
+
 const LoginResponse = v.object({
   token: v.string(),
 });
@@ -46,4 +51,12 @@ export async function loginRequest(user: User) {
     throw new Error("Failed to log in");
   }
   return v.parse(LoginResponse, await response.json());
+}
+
+export async function currentUser() {
+  const response = await apiClient("/users/currentUser");
+  if (!response.ok) {
+    throw new Error("Failed to fetch current user");
+  }
+  return v.parse(UserResponse, await response.json());
 }
