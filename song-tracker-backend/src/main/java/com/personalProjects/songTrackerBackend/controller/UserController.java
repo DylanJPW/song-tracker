@@ -39,10 +39,10 @@ public class UserController {
         return ResponseEntity.of(userService.getUserById(id));
     }
 
-    @GetMapping("/me")
+    @GetMapping("/currentUser")
     public ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication authentication) {
         User user = userService.getUserByUsername(authentication.getName()).stream().findFirst().orElseThrow(null);
-        return ResponseEntity.status(HttpStatus.FOUND).body(user.toResponse());
+        return ResponseEntity.status(HttpStatus.OK).body(user.toResponse());
     }
 
     @DeleteMapping("/{id}")
