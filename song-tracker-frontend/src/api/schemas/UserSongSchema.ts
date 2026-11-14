@@ -23,6 +23,12 @@ export type UserSong = v.InferOutput<typeof UserSong>;
 
 export const UserSongs = v.array(UserSong);
 
+export const DashboardUserSongs = v.object({
+  wantToLearn: v.array(UserSong),
+  learning: v.array(UserSong),
+  learned: v.array(UserSong),
+})
+
 export interface UpdateUserSong {
   capo?: number | null;
   difficultyRating?: number | null;

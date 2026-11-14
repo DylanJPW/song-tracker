@@ -1,6 +1,7 @@
 import * as v from "valibot";
 import { apiClient } from "@/api/client";
 import {
+  DashboardUserSongs,
   type UpdateUserSong,
   UserSong,
   UserSongs,
@@ -37,4 +38,12 @@ export async function updateUserSong({ id, ...patch }: UpdateUserSong) {
     throw new Error("Failed to update song");
   }
   return v.parse(UserSong, await response.json());
+}
+
+export async function getDashboardUserSongs() {
+  const response = await apiClient("/user-songs/dashboard");
+  if (!response.ok) {
+    throw new Error("Failed to fetch");
+  }
+  return v.parse(DashboardUserSongs, await response.json());
 }
