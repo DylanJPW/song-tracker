@@ -34,6 +34,6 @@ export interface UpdateUserSong {
   capo?: number | null;
   difficultyRating?: number | null;
   id: number;
-  notes?: string | null;
   status?: SongStatus;
+  lastPractised?: Date | null;
 }
