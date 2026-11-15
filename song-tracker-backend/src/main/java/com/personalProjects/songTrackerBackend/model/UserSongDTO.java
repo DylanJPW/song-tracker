@@ -10,7 +10,8 @@ public record UserSongDTO(
         SongStatus status,
         Integer capo,
         Integer difficultyRating,
-        Instant dateAdded
+        Instant dateAdded,
+        Instant lastPracticed
 ) {
     public static UserSongDTO from(UserSong userSong) {
         return new UserSongDTO(
@@ -19,7 +20,8 @@ public record UserSongDTO(
                 userSong.getStatus(),
                 userSong.getCapo(),
                 userSong.getDifficultyRating(),
-                userSong.getDateAdded()
+                userSong.getDateAdded(),
+                userSong.getLastPractised()
         );
     }
 }

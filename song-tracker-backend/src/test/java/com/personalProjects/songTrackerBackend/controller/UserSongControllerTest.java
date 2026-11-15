@@ -51,13 +51,15 @@ class UserSongControllerTest {
     );
 
     Instant dateAdded = Instant.parse("2000-01-01T00:00:00Z");
+    Instant lastPractised = Instant.parse("2000-01-02T00:00:00Z");
     UserSongDTO userSongDTO = new UserSongDTO(
             1L,
             songDTO,
             SongStatus.WANT_TO_LEARN,
             null,
             null,
-            dateAdded
+            dateAdded,
+            lastPractised
     );
 
     @Test
@@ -140,7 +142,7 @@ class UserSongControllerTest {
     @Test
     void updateSong_returnsUpdatedSong() {
         UserSongDTO dto = new UserSongDTO(
-                1L, songDTO, SongStatus.LEARNING, null, null, dateAdded);
+                1L, songDTO, SongStatus.LEARNING, null, null, dateAdded, lastPractised);
 
         UpdateUserSongRequest request =
                 new UpdateUserSongRequest(SongStatus.LEARNING, null, null);
