@@ -18,6 +18,7 @@ export const UserSong = v.object({
   id: v.number(),
   song: Song,
   status: v.picklist(songStatuses),
+  lastPractised: v.union([apiDate, v.null()]),
 });
 export type UserSong = v.InferOutput<typeof UserSong>;
 
@@ -27,7 +28,7 @@ export const DashboardUserSongs = v.object({
   wantToLearn: v.array(UserSong),
   learning: v.array(UserSong),
   learned: v.array(UserSong),
-})
+});
 
 export interface UpdateUserSong {
   capo?: number | null;
