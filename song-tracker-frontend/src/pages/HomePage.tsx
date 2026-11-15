@@ -28,12 +28,24 @@ function SongCatalogue() {
   });
 
   return (
-    <div className="mx-auto w-full max-w-2xl p-4">
-      <h1>Welcome back, {user.username}</h1>
+    <div className="flex flex-col mx-auto w-full max-w-2xl p-4 gap-y-4">
+      <h1 className="mt-3 font-bold text-3xl">Welcome back, {user.username}</h1>
       <div className="flex flex-col gap-y-4">
-        <Section title="Want to Learn" userSongs={userSongs.wantToLearn} />
-        <Section title="Learning" userSongs={userSongs.learning} />
-        <Section title="Learned" userSongs={userSongs.learned} />
+        <Section
+          title="Learning"
+          subtitle="Continue learning from where you left off"
+          userSongs={userSongs.learning}
+        />
+        <Section
+          title="Learned"
+          subtitle="It's been a while since you practised this"
+          userSongs={userSongs.learned}
+        />
+        <Section
+          title="Want to Learn"
+          subtitle="Try something new"
+          userSongs={userSongs.wantToLearn}
+        />
       </div>
     </div>
   );
