@@ -11,7 +11,7 @@ public record UserSongDTO(
         Integer capo,
         Integer difficultyRating,
         Instant dateAdded,
-        Instant lastPracticed
+        Instant lastPractised
 ) {
     public static UserSongDTO from(UserSong userSong) {
         return new UserSongDTO(
