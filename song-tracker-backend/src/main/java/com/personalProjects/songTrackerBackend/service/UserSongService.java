@@ -72,6 +72,9 @@ public class UserSongService {
         if (request.difficultyRating() != null) {
             userSong.setDifficultyRating(request.difficultyRating());
         }
+        if (request.lastPractised() != null) {
+            userSong.setLastPractised(request.lastPractised());
+        }
 
         return userSongRepository.save(userSong).toDTO();
     }
