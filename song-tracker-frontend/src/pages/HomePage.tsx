@@ -34,12 +34,12 @@ function SongCatalogue() {
         <Section
           title="Learning"
           subtitle="Continue learning from where you left off"
-          userSongs={userSongs.learning}
+          userSongs={[userSongs.mostRecentlyPractised]}
         />
         <Section
           title="Learned"
           subtitle="It's been a while since you practised this"
-          userSongs={userSongs.learned}
+          userSongs={[userSongs.oldestPractised]}
         />
         <Section
           title="Want to Learn"
