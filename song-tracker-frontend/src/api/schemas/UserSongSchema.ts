@@ -30,6 +30,7 @@ export const DashboardUserSongs = v.object({
   learned: v.array(UserSong),
   mostRecentlyPractised: UserSong,
   oldestPractised: UserSong,
+  newlyAdded: UserSong,
 });
 
 export interface UpdateUserSong {

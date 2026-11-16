@@ -44,7 +44,7 @@ function SongCatalogue() {
         <Section
           title="Want to Learn"
           subtitle="Try something new"
-          userSongs={userSongs.wantToLearn}
+          userSongs={[userSongs.newlyAdded]}
         />
       </div>
     </div>
