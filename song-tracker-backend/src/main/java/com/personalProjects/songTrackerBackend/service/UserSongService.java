@@ -35,7 +35,7 @@ public class UserSongService {
                 .toList();
     }
 
-    public List<UserSongDTO> getFilteredUserSongs(String username, SongStatus status) {
+    public List<UserSongDTO> getUserSongsByStatus(String username, SongStatus status) {
         User user = userService.getUserByUsername(username)
                 .orElseThrow();
 
@@ -45,11 +45,29 @@ public class UserSongService {
                 .toList();
     }
 
+    public UserSongDTO getMostRecentlyPractised(String username) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedDesc(user.getUsername())
+                .toDTO();
+    }
+
+    public UserSongDTO getOldestPractised(String username) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(user.getUsername())
+                .toDTO();
+    }
+
     public DashboardResponse getDashboard(String username) {
         return new DashboardResponse(
-                getFilteredUserSongs(username, SongStatus.WANT_TO_LEARN),
-                getFilteredUserSongs(username, SongStatus.LEARNING),
-                getFilteredUserSongs(username, SongStatus.LEARNED)
+                getUserSongsByStatus(username, SongStatus.WANT_TO_LEARN),
+                getUserSongsByStatus(username, SongStatus.LEARNING),
+                getUserSongsByStatus(username, SongStatus.LEARNED),
+                getMostRecentlyPractised(username),
+                getOldestPractised(username)
         );
     }
 
