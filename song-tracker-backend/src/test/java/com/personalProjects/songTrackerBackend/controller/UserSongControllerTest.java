@@ -145,7 +145,7 @@ class UserSongControllerTest {
                 1L, songDTO, SongStatus.LEARNING, null, null, dateAdded, lastPractised);
 
         UpdateUserSongRequest request =
-                new UpdateUserSongRequest(SongStatus.LEARNING, null, null);
+                new UpdateUserSongRequest(SongStatus.LEARNING, null, null, null);
 
         when(authentication.getName()).thenReturn("test");
         when(userSongService.updateUserSong(1L, request, "test")).thenReturn(dto);
