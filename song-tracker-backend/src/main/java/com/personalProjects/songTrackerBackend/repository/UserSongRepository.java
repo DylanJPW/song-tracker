@@ -13,4 +13,5 @@ public interface UserSongRepository extends JpaRepository<UserSong, Long> {
     public List<UserSong> findAllByUserIdAndStatus(Long userId, SongStatus status);
     public UserSong findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedDesc(String username);
     public UserSong findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(String username);
+    public UserSong findFirstByUserUsernameAndStatusOrderByDateAdded(String username, SongStatus status);
 }

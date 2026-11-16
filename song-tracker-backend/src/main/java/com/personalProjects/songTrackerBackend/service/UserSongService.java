@@ -61,13 +61,22 @@ public class UserSongService {
                 .toDTO();
     }
 
+    public UserSongDTO getNewlyAdded(String username) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findFirstByUserUsernameAndStatusOrderByDateAdded(user.getUsername(), SongStatus.WANT_TO_LEARN)
+                .toDTO();
+    }
+
     public DashboardResponse getDashboard(String username) {
         return new DashboardResponse(
                 getUserSongsByStatus(username, SongStatus.WANT_TO_LEARN),
                 getUserSongsByStatus(username, SongStatus.LEARNING),
                 getUserSongsByStatus(username, SongStatus.LEARNED),
                 getMostRecentlyPractised(username),
-                getOldestPractised(username)
+                getOldestPractised(username),
+                getNewlyAdded(username)
         );
     }
 
