@@ -35,6 +35,54 @@ public class UserSongService {
                 .toList();
     }
 
+    public List<UserSongDTO> getUserSongsByStatus(String username, SongStatus status) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findAllByUserIdAndStatus(user.getId(), status)
+                .stream()
+                .map(UserSong::toDTO)
+                .toList();
+    }
+
+    public UserSongDTO getMostRecentlyPractised(String username) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedDesc(user.getUsername())
+                .map(UserSong::toDTO)
+                .orElse(null);
+    }
+
+    public UserSongDTO getOldestPractised(String username) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(user.getUsername())
+                .map(UserSong::toDTO)
+                .orElse(null);
+    }
+
+    public UserSongDTO getNewlyAdded(String username) {
+        User user = userService.getUserByUsername(username)
+                .orElseThrow();
+
+        return userSongRepository.findFirstByUserUsernameAndStatusOrderByDateAddedDesc(user.getUsername(), SongStatus.WANT_TO_LEARN)
+                .map(UserSong::toDTO)
+                .orElse(null);
+    }
+
+    public DashboardResponse getDashboard(String username) {
+        return new DashboardResponse(
+                getUserSongsByStatus(username, SongStatus.WANT_TO_LEARN),
+                getUserSongsByStatus(username, SongStatus.LEARNING),
+                getUserSongsByStatus(username, SongStatus.LEARNED),
+                getMostRecentlyPractised(username),
+                getOldestPractised(username),
+                getNewlyAdded(username)
+        );
+    }
+
     @Transactional
     public UserSongDTO updateUserSong(
             Long id,
@@ -53,6 +101,9 @@ public class UserSongService {
         }
         if (request.difficultyRating() != null) {
             userSong.setDifficultyRating(request.difficultyRating());
+        }
+        if (request.lastPractised() != null) {
+            userSong.setLastPractised(request.lastPractised());
         }
 
         return userSongRepository.save(userSong).toDTO();

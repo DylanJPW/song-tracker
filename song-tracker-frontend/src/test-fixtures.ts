@@ -21,6 +21,7 @@ export function buildUserSong(overrides: Partial<UserSong> = {}): UserSong {
     song: buildSong(),
     status: "WANT_TO_LEARN",
     dateAdded: new Date(),
+    lastPractised: new Date(),
     ...overrides,
   };
 }

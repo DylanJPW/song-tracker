@@ -5,5 +5,10 @@ import lombok.Getter;
 @Getter
 public class UserDetailsResponse {
     private String token;
-    public UserDetailsResponse(String token) { this.token = token; }
+    private String username;
+
+    public UserDetailsResponse(String token, String username) {
+        this.token = token;
+        this.username = username;
+    }
 }

@@ -30,6 +30,11 @@ public class UserSongController {
         return ResponseEntity.ok(songs);
     }
 
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardResponse> getDashboard(Authentication authentication) {
+        return ResponseEntity.ok(userSongService.getDashboard(authentication.getName()));
+    }
+
     @PostMapping
     public ResponseEntity<UserSongDTO> saveSong(
             @RequestBody SaveSongRequest request,

@@ -135,7 +135,7 @@ class UserSongServiceTest {
                 ResponseStatusException.class,
                 () -> userSongService.updateUserSong(
                         1L,
-                        new UpdateUserSongRequest(SongStatus.LEARNED, null, null),
+                        new UpdateUserSongRequest(SongStatus.LEARNED, null, null, null),
                         "attacker"));
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
