@@ -5,51 +5,41 @@ import {
   useMemo,
   useState,
 } from "react";
-
-interface User {
-  username: string;
-}
-
-interface LoginProps {
-  token: string;
-  user: User;
-}
+import { useQueryClient } from "@tanstack/react-query";
 
 export interface AuthContextType {
   isLoggedIn: boolean;
   authToken: string | null;
-  login: (value: LoginProps) => void;
+  login: (value: string) => void;
   logout: () => void;
-  user: User | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
+
   const [authToken, setAuthToken] = useState<string | null>(() =>
     localStorage.getItem("jwt"),
   );
-  const [user, setUser] = useState<User | null>(null);
 
-  const login = useCallback(({ token, user }: LoginProps) => {
+  const login = useCallback((token: string) => {
     localStorage.setItem("jwt", token);
     setAuthToken(token);
-    setUser(user);
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem("jwt");
     setAuthToken(null);
-    setUser(null);
+    queryClient.clear();
   }, []);
 
   const value = useMemo(
-    () => ({
+    (): AuthContextType => ({
       isLoggedIn: Boolean(authToken),
       authToken,
       login,
       logout,
-      user,
     }),
     [authToken, login, logout],
   );

@@ -30,7 +30,7 @@ export function LoginForm({ setIsSignUp }: LoginSignUpProps) {
   const loginMutation = useMutation({
     mutationFn: loginRequest,
     onSuccess: (data, { username }) => {
-      login({ token: data.token, user: { username } });
+      login(data.token);
       navigate("/");
       toast(`Successfully logged in as ${username}`);
     },

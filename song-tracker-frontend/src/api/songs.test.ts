@@ -19,7 +19,7 @@ describe("getSearchResults", () => {
   it("encodes the query, so a slash in a band name does not break the URL", async () => {
     const fetchSpy = mockFetch([]);
 
-    await getSearchResults("AC/DC");
+    await getSearchResults("AC/DC", null);
 
     expect(fetchSpy).toHaveBeenCalledWith(
       "/api/spotify/search?query=AC%2FDC",
@@ -30,7 +30,7 @@ describe("getSearchResults", () => {
   it("encodes ampersands and hashes too", async () => {
     const fetchSpy = mockFetch([]);
 
-    await getSearchResults("Florence + the Machine & co #1");
+    await getSearchResults("Florence + the Machine & co #1", null);
 
     expect(fetchSpy).toHaveBeenCalledWith(
       "/api/spotify/search?query=Florence%20%2B%20the%20Machine%20%26%20co%20%231",
