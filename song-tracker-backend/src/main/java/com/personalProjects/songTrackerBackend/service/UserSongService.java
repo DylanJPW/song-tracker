@@ -50,7 +50,8 @@ public class UserSongService {
                 .orElseThrow();
 
         return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedDesc(user.getUsername())
-                .toDTO();
+                .map(UserSong::toDTO)
+                .orElse(null);
     }
 
     public UserSongDTO getOldestPractised(String username) {
@@ -58,15 +59,17 @@ public class UserSongService {
                 .orElseThrow();
 
         return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(user.getUsername())
-                .toDTO();
+                .map(UserSong::toDTO)
+                .orElse(null);
     }
 
     public UserSongDTO getNewlyAdded(String username) {
         User user = userService.getUserByUsername(username)
                 .orElseThrow();
 
-        return userSongRepository.findFirstByUserUsernameAndStatusOrderByDateAdded(user.getUsername(), SongStatus.WANT_TO_LEARN)
-                .toDTO();
+        return userSongRepository.findFirstByUserUsernameAndStatusOrderByDateAddedDesc(user.getUsername(), SongStatus.WANT_TO_LEARN)
+                .map(UserSong::toDTO)
+                .orElse(null);
     }
 
     public DashboardResponse getDashboard(String username) {
