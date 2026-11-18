@@ -24,7 +24,7 @@ function SongCatalogue() {
 
   const { data: userSongs } = useSuspenseQuery({
     queryFn: getDashboardUserSongs,
-    queryKey: ["userSongs"],
+    queryKey: ["userSongs", "dashboard"],
   });
 
   return (
