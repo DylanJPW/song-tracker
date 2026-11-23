@@ -31,6 +31,7 @@ export const DashboardUserSongs = v.object({
   mostRecentlyPractised: UserSong,
   oldestPractised: UserSong,
   newlyAdded: UserSong,
+  practisedInLast30Days: v.number(),
 });
 
 export interface UpdateUserSong {
