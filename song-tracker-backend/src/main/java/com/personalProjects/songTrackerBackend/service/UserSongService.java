@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -72,6 +74,11 @@ public class UserSongService {
                 .orElse(null);
     }
 
+    public long getPractisedInLast30Days(String username) {
+        Instant since = Instant.now().minus(30, ChronoUnit.DAYS);
+        return userSongRepository.countByUserUsernameAndLastPractisedAfter(username, since);
+    }
+
     public DashboardResponse getDashboard(String username) {
         return new DashboardResponse(
                 getUserSongsByStatus(username, SongStatus.WANT_TO_LEARN),
@@ -79,7 +86,8 @@ public class UserSongService {
                 getUserSongsByStatus(username, SongStatus.LEARNED),
                 getMostRecentlyPractised(username),
                 getOldestPractised(username),
-                getNewlyAdded(username)
+                getNewlyAdded(username),
+                getPractisedInLast30Days(username)
         );
     }
 

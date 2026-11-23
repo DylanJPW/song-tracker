@@ -8,5 +8,6 @@ public record DashboardResponse(
         List<UserSongDTO> learned,
         UserSongDTO mostRecentlyPractised,
         UserSongDTO oldestPractised,
-        UserSongDTO newlyAdded
+        UserSongDTO newlyAdded,
+        long practisedInLast30Days
 ) {}
