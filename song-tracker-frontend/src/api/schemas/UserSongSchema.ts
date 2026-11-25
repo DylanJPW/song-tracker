@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { apiDate } from "@/api/schemas/common";
+import { apiDate, MonthlyPractice } from "@/api/schemas/common";
 import { Song } from "@/api/schemas/SongSchema";
 
 export const songStatuses = ["WANT_TO_LEARN", "LEARNING", "LEARNED"] as const;
@@ -32,6 +32,7 @@ export const DashboardUserSongs = v.object({
   oldestPractised: UserSong,
   newlyAdded: UserSong,
   practisedInLast30Days: v.number(),
+  practisedThisMonth: MonthlyPractice,
 });
 
 export interface UpdateUserSong {
