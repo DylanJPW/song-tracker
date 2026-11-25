@@ -9,5 +9,6 @@ public record DashboardResponse(
         UserSongDTO mostRecentlyPractised,
         UserSongDTO oldestPractised,
         UserSongDTO newlyAdded,
-        long practisedInLast30Days
+        long practisedInLast30Days,
+        MonthlyPractice practisedThisMonth
 ) {}

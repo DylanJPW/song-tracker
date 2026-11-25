@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -79,6 +82,17 @@ public class UserSongService {
         return userSongRepository.countByUserUsernameAndLastPractisedAfter(username, since);
     }
 
+    private static final ZoneId ZONE = ZoneId.of("Europe/Dublin");
+
+    public MonthlyPractice getPractisedThisMonth(String username) {
+        YearMonth thisMonth = YearMonth.now();
+        Instant start = thisMonth.atDay(1).atStartOfDay(ZONE).toInstant();
+        Instant end = thisMonth.plusMonths(1).atDay(1).atStartOfDay(ZONE).toInstant();
+
+        long count = userSongRepository.countPractisedBetween(username, start, end);
+        return new MonthlyPractice(thisMonth, count);
+    }
+
     public DashboardResponse getDashboard(String username) {
         return new DashboardResponse(
                 getUserSongsByStatus(username, SongStatus.WANT_TO_LEARN),
@@ -87,7 +101,8 @@ public class UserSongService {
                 getMostRecentlyPractised(username),
                 getOldestPractised(username),
                 getNewlyAdded(username),
-                getPractisedInLast30Days(username)
+                getPractisedInLast30Days(username),
+                getPractisedThisMonth(username)
         );
     }
 
