@@ -41,8 +41,8 @@ public class UserController {
 
     @GetMapping("/currentUser")
     public ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication authentication) {
-        User user = userService.getUserByUsername(authentication.getName()).stream().findFirst().orElseThrow(null);
-        return ResponseEntity.status(HttpStatus.OK).body(user.toResponse());
+        return ResponseEntity.of(userService.getUserByUsername(authentication.getName())
+                .map(User::toResponse));
     }
 
     @DeleteMapping("/{id}")

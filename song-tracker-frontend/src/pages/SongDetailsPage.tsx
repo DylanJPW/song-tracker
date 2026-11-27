@@ -189,7 +189,7 @@ function SongDetails({ spotifyId }: SongDetailsProps) {
   const userSongsQuery = useQuery({
     enabled: isLoggedIn,
     queryFn: getUserSongs,
-    queryKey: ["userSongs", "dashboard"],
+    queryKey: ["userSongs"],
   });
 
   const userSong = userSongsQuery.data?.find(

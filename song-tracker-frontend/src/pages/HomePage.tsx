@@ -20,19 +20,18 @@ function Dashboard() {
   const { data: user } = useSuspenseQuery({
     queryFn: currentUser,
     queryKey: ["user"],
-    refetchOnMount: true,
   });
 
   const { data: dashboardData } = useSuspenseQuery({
     queryFn: getDashboardUserSongs,
-    queryKey: ["dashboardData", "dashboard"],
+    queryKey: ["userSongs", "dashboardData", "dashboard"],
   });
 
   return (
-    <div className="grid grid-cols-3 mx-auto w-full max-w-2xl p-4 gap-y-4">
-      <section className="col-span-3" aria-labelledby="title">
+    <div className="flex flex-col mx-auto w-full max-w-2xl p-4 gap-y-4">
+      <section aria-labelledby="title">
         <div className="flex flex-col gap-y-2">
-          <h1 className="col-span-3 mt-3 font-bold text-3xl">
+          <h1 id="title" className="col-span-3 mt-3 font-bold text-3xl">
             Welcome back, {user.username}
           </h1>
           <p className="text-muted text-sm">
@@ -40,7 +39,7 @@ function Dashboard() {
           </p>
         </div>
       </section>
-      <section className="col-span-3" aria-labelledby="tiles">
+      <section aria-label="tiles">
         <TileSection
           practisedInLast30Days={dashboardData.practisedInLast30Days}
           practisedThisMonth={dashboardData.practisedThisMonth}
@@ -48,8 +47,8 @@ function Dashboard() {
         />
       </section>
       <section
-        className="col-span-3 flex flex-col sm:grid sm:grid-cols-3 gap-4"
-        aria-labelledby="suggestions"
+        className="flex flex-col sm:grid sm:grid-cols-3 gap-4"
+        aria-label="suggestions"
       >
         <Section
           title="Continue learning from where you left off"

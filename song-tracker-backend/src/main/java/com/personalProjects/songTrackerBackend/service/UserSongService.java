@@ -51,28 +51,19 @@ public class UserSongService {
     }
 
     public UserSongDTO getMostRecentlyPractised(String username) {
-        User user = userService.getUserByUsername(username)
-                .orElseThrow();
-
-        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedDesc(user.getUsername())
+        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedDesc(username)
                 .map(UserSong::toDTO)
                 .orElse(null);
     }
 
     public UserSongDTO getOldestPractised(String username) {
-        User user = userService.getUserByUsername(username)
-                .orElseThrow();
-
-        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(user.getUsername())
+        return userSongRepository.findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(username)
                 .map(UserSong::toDTO)
                 .orElse(null);
     }
 
     public UserSongDTO getNewlyAdded(String username) {
-        User user = userService.getUserByUsername(username)
-                .orElseThrow();
-
-        return userSongRepository.findFirstByUserUsernameAndStatusOrderByDateAddedDesc(user.getUsername(), SongStatus.WANT_TO_LEARN)
+        return userSongRepository.findFirstByUserUsernameAndStatusOrderByDateAddedDesc(username, SongStatus.WANT_TO_LEARN)
                 .map(UserSong::toDTO)
                 .orElse(null);
     }
