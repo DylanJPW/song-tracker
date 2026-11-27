@@ -24,14 +24,14 @@ function Dashboard() {
 
   const { data: dashboardData } = useSuspenseQuery({
     queryFn: getDashboardUserSongs,
-    queryKey: ["userSongs", "dashboardData", "dashboard"],
+    queryKey: ["userSongs", "dashboard"],
   });
 
   return (
     <div className="flex flex-col mx-auto w-full max-w-2xl p-4 gap-y-4">
       <section aria-labelledby="title">
         <div className="flex flex-col gap-y-2">
-          <h1 id="title" className="col-span-3 mt-3 font-bold text-3xl">
+          <h1 id="title" className="mt-3 font-bold text-3xl">
             Welcome back, {user.username}
           </h1>
           <p className="text-muted text-sm">
