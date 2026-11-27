@@ -10,5 +10,6 @@ public record DashboardResponse(
         UserSongDTO oldestPractised,
         UserSongDTO newlyAdded,
         long practisedInLast30Days,
-        MonthlyPractice practisedThisMonth
+        MonthlyPractice practisedThisMonth,
+        long songCount
 ) {}

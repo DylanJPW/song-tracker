@@ -93,6 +93,10 @@ public class UserSongService {
         return new MonthlyPractice(thisMonth, count);
     }
 
+    public long getSongCount(String username) {
+        return userSongRepository.countByUserUsername(username);
+    }
+
     public DashboardResponse getDashboard(String username) {
         return new DashboardResponse(
                 getUserSongsByStatus(username, SongStatus.WANT_TO_LEARN),
@@ -102,7 +106,8 @@ public class UserSongService {
                 getOldestPractised(username),
                 getNewlyAdded(username),
                 getPractisedInLast30Days(username),
-                getPractisedThisMonth(username)
+                getPractisedThisMonth(username),
+                getSongCount(username)
         );
     }
 

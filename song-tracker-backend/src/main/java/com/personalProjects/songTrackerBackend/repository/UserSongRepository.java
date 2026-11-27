@@ -18,6 +18,7 @@ public interface UserSongRepository extends JpaRepository<UserSong, Long> {
     public Optional<UserSong> findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(String username);
     public Optional<UserSong> findFirstByUserUsernameAndStatusOrderByDateAddedDesc(String username, SongStatus status);
     public long countByUserUsernameAndLastPractisedAfter(String username, Instant since);
+    public long countByUserUsername(String username);
 
     @Query("""
         SELECT COUNT(us) FROM UserSong us
