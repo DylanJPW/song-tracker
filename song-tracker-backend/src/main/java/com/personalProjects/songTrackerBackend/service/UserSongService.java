@@ -85,7 +85,7 @@ public class UserSongService {
     private static final ZoneId ZONE = ZoneId.of("Europe/Dublin");
 
     public MonthlyPractice getPractisedThisMonth(String username) {
-        YearMonth thisMonth = YearMonth.now();
+        YearMonth thisMonth = YearMonth.now(ZONE);
         Instant start = thisMonth.atDay(1).atStartOfDay(ZONE).toInstant();
         Instant end = thisMonth.plusMonths(1).atDay(1).atStartOfDay(ZONE).toInstant();
 
@@ -99,9 +99,6 @@ public class UserSongService {
 
     public DashboardResponse getDashboard(String username) {
         return new DashboardResponse(
-                getUserSongsByStatus(username, SongStatus.WANT_TO_LEARN),
-                getUserSongsByStatus(username, SongStatus.LEARNING),
-                getUserSongsByStatus(username, SongStatus.LEARNED),
                 getMostRecentlyPractised(username),
                 getOldestPractised(username),
                 getNewlyAdded(username),

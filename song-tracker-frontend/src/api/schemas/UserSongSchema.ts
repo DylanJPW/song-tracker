@@ -25,12 +25,9 @@ export type UserSong = v.InferOutput<typeof UserSong>;
 export const UserSongs = v.array(UserSong);
 
 export const DashboardUserSongs = v.object({
-  wantToLearn: v.array(UserSong),
-  learning: v.array(UserSong),
-  learned: v.array(UserSong),
-  mostRecentlyPractised: UserSong,
-  oldestPractised: UserSong,
-  newlyAdded: UserSong,
+  mostRecentlyPractised: v.nullable(UserSong),
+  oldestPractised: v.nullable(UserSong),
+  newlyAdded: v.nullable(UserSong),
   practisedInLast30Days: v.number(),
   practisedThisMonth: MonthlyPractice,
   songCount: v.number(),
