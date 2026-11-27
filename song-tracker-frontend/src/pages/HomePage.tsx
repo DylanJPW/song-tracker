@@ -35,6 +35,7 @@ function SongCatalogue() {
         <TileSection
           practisedInLast30Days={dashboardData.practisedInLast30Days}
           practisedThisMonth={dashboardData.practisedThisMonth}
+          songCount={dashboardData.songCount}
         />
       </div>
       <div className="flex flex-col gap-y-4">
