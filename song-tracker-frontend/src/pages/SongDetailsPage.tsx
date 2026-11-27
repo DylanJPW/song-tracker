@@ -206,7 +206,7 @@ function SongDetails({ spotifyId }: SongDetailsProps) {
   });
 
   const userSongMutation = useMutation({
-    mutationFn: updateUserSong,
+    mutationFn: (changes: UpdateUserSong) => updateUserSong(changes),
     onError: () => toast.error("Could not update that song. Try again."),
     onSuccess: async (updated) => {
       await queryClient.invalidateQueries({ queryKey: ["userSongs"] });

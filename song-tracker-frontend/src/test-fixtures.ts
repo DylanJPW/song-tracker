@@ -1,5 +1,8 @@
 import type { Song, SpotifySong } from "@/api/schemas/SongSchema";
-import type { UserSong } from "@/api/schemas/UserSongSchema";
+import type {
+  DashboardUserSongs,
+  UserSong,
+} from "@/api/schemas/UserSongSchema";
 
 export function buildSong(overrides: Partial<Song> = {}): Song {
   return {
@@ -21,7 +24,7 @@ export function buildUserSong(overrides: Partial<UserSong> = {}): UserSong {
     song: buildSong(),
     status: "WANT_TO_LEARN",
     dateAdded: new Date(),
-    lastPractised: new Date(),
+    lastPractised: null,
     ...overrides,
   };
 }
@@ -35,6 +38,20 @@ export function buildSpotifySong(
     imageUrl: "https://test.image/a.jpg",
     spotifyId: "spotify-a",
     title: "Song A",
+    ...overrides,
+  };
+}
+
+export function buildDashboard(
+  overrides: Partial<DashboardUserSongs> = {},
+): DashboardUserSongs {
+  return {
+    mostRecentlyPractised: null,
+    newlyAdded: null,
+    oldestPractised: null,
+    practisedInLast30Days: 0,
+    practisedThisMonth: { count: 0, yearMonth: "November" },
+    songCount: 0,
     ...overrides,
   };
 }

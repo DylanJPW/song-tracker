@@ -32,6 +32,7 @@ export const DashboardUserSongs = v.object({
   practisedThisMonth: MonthlyPractice,
   songCount: v.number(),
 });
+export type DashboardUserSongs = v.InferOutput<typeof DashboardUserSongs>;
 
 export interface UpdateUserSong {
   capo?: number | null;
