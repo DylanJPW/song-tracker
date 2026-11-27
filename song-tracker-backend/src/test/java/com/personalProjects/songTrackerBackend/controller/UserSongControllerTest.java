@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -156,5 +157,26 @@ class UserSongControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(SongStatus.LEARNING, response.getBody().status());
+    }
+
+    @Test
+    void getDashboard_returnsDashboardForLoggedInUser() {
+        DashboardResponse dashboard = new DashboardResponse(
+                userSongDTO,
+                null,
+                null,
+                3L,
+                new MonthlyPractice(YearMonth.of(2026, 11), 2L),
+                5L
+        );
+
+        when(authentication.getName()).thenReturn("test");
+        when(userSongService.getDashboard("test")).thenReturn(dashboard);
+
+        ResponseEntity<DashboardResponse> response = controller.getDashboard(authentication);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(dashboard, response.getBody());
+        verify(userSongService).getDashboard("test");
     }
 }
