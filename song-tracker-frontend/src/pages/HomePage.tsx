@@ -46,10 +46,7 @@ function Dashboard() {
           songCount={dashboardData.songCount}
         />
       </section>
-      <section
-        className="flex flex-col sm:grid sm:grid-cols-3 gap-4"
-        aria-label="suggestions"
-      >
+      <section className="flex flex-col gap-4" aria-label="suggestions">
         <Section
           title="Continue learning from where you left off"
           emptyMessage="You haven't practised anything yet."
