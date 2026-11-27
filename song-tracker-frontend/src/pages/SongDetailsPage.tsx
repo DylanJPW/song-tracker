@@ -5,8 +5,7 @@ import { toast } from "react-toastify";
 import * as v from "valibot";
 import { SpotifySong } from "@/api/schemas/SongSchema";
 import {
-  type SongStatus,
-  songStatusLabels,
+  type UpdateUserSong,
   type UserSong,
 } from "@/api/schemas/UserSongSchema";
 import { getSpotifySong } from "@/api/songs";
@@ -73,6 +72,12 @@ function TrackingDetails({ userSong }: TrackingDetailsProps) {
 
   return (
     <dl className="w-full text-sm">
+      {userSong.lastPractised && (
+        <DetailRow
+          label="Last Practised"
+          value={dateFormatter.format(userSong.lastPractised)}
+        />
+      )}
       <DetailRow
         label="Capo"
         value={userSong.capo === null ? "Not set" : `Fret ${userSong.capo}`}
@@ -93,12 +98,19 @@ function TrackingDetails({ userSong }: TrackingDetailsProps) {
   );
 }
 
+type UserSongChanges = Omit<UpdateUserSong, "id">;
+
+type UserSongChangeHandler = <K extends keyof UserSongChanges>(
+  field: K,
+  value: Required<UserSongChanges>[K],
+) => void;
+
 interface SongActionsProps {
   isLoggedIn: boolean;
   isSaving: boolean;
   isUpdating: boolean;
   onSave: () => void;
-  onStatusChange: (status: SongStatus) => void;
+  onUserSongChange: UserSongChangeHandler;
   userSong: UserSong | undefined;
 }
 
@@ -107,16 +119,26 @@ function SongActions({
   isSaving,
   isUpdating,
   onSave,
-  onStatusChange,
+  onUserSongChange,
   userSong,
 }: SongActionsProps) {
   if (userSong !== undefined) {
     return (
-      <StatusControl
-        isPending={isUpdating}
-        onChange={onStatusChange}
-        status={userSong.status}
-      />
+      <div className="flex flex-row justify-between gap-x-4">
+        <StatusControl
+          isPending={isUpdating}
+          onChange={(status) => onUserSongChange("status", status)}
+          status={userSong.status}
+        />
+        <button
+          className="cursor-pointer rounded-sm bg-blue-500 p-2 text-center hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-slate-600"
+          disabled={isUpdating}
+          onClick={() => onUserSongChange("lastPractised", new Date())}
+          type="button"
+        >
+          {isUpdating ? "Updating..." : "Practised today"}
+        </button>
+      </div>
     );
   }
 
@@ -183,23 +205,25 @@ function SongDetails({ spotifyId }: SongDetailsProps) {
     },
   });
 
-  const statusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: number; status: SongStatus }) =>
-      updateUserSong({ id, status }),
+  const userSongMutation = useMutation({
+    mutationFn: (changes: UpdateUserSong) => updateUserSong(changes),
     onError: () => toast.error("Could not update that song. Try again."),
     onSuccess: async (updated) => {
       await queryClient.invalidateQueries({ queryKey: ["userSongs"] });
-      toast.success(`Moved to ${songStatusLabels[updated.status]}`);
+      toast.success(`Successfully updated ${updated.song.title}`);
     },
   });
 
-  function handleStatusChange(status: SongStatus) {
+  const handleUserSongChange: UserSongChangeHandler = (field, value) => {
     if (userSong === undefined) {
       return;
     }
 
-    statusMutation.mutate({ id: userSong.id, status });
-  }
+    userSongMutation.mutate({
+      id: userSong.id,
+      ...({ [field]: value } as Pick<UserSongChanges, typeof field>),
+    });
+  };
 
   if (songQuery.isPending) {
     return <LoadingOrError />;
@@ -230,9 +254,9 @@ function SongDetails({ spotifyId }: SongDetailsProps) {
         <SongActions
           isLoggedIn={isLoggedIn}
           isSaving={saveMutation.isPending}
-          isUpdating={statusMutation.isPending}
+          isUpdating={userSongMutation.isPending}
           onSave={() => saveMutation.mutate()}
-          onStatusChange={handleStatusChange}
+          onUserSongChange={handleUserSongChange}
           userSong={userSong}
         />
         <TrackingDetails userSong={userSong} />

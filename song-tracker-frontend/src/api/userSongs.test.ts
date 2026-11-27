@@ -1,11 +1,16 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getUserSongs, updateUserSong } from "@/api/userSongs";
+import {
+  getDashboardUserSongs,
+  getUserSongs,
+  updateUserSong,
+} from "@/api/userSongs";
 
 const savedSongResponse = {
   capo: null,
   dateAdded: "2026-08-01T12:00:00.000Z",
   difficultyRating: null,
   id: 10,
+  lastPractised: null,
   notes: null,
   song: {
     album: "Album A",
@@ -39,6 +44,27 @@ describe("getUserSongs", () => {
 
     expect(userSong?.dateAdded).toBeInstanceOf(Date);
     expect(userSong?.dateAdded?.toISOString()).toBe("2026-08-01T12:00:00.000Z");
+  });
+
+  it("turns lastPractised into a Date when the song has been practised", async () => {
+    mockFetch([
+      { ...savedSongResponse, lastPractised: "2026-11-20T09:30:00.000Z" },
+    ]);
+
+    const [userSong] = await getUserSongs();
+
+    expect(userSong?.lastPractised).toBeInstanceOf(Date);
+    expect(userSong?.lastPractised?.toISOString()).toBe(
+      "2026-11-20T09:30:00.000Z",
+    );
+  });
+
+  it("keeps lastPractised as null for a song never practised", async () => {
+    mockFetch([savedSongResponse]);
+
+    const [userSong] = await getUserSongs();
+
+    expect(userSong?.lastPractised).toBeNull();
   });
 
   it("keeps the song identity the details page needs", async () => {
@@ -86,5 +112,72 @@ describe("updateUserSong", () => {
     await expect(
       updateUserSong({ id: 10, status: "LEARNING" }),
     ).rejects.toThrow("Failed to update song");
+  });
+});
+
+describe("getDashboardUserSongs", () => {
+  const dashboardResponse = {
+    mostRecentlyPractised: {
+      ...savedSongResponse,
+      lastPractised: "2026-11-26T18:00:00.000Z",
+      status: "LEARNING",
+    },
+    newlyAdded: savedSongResponse,
+    oldestPractised: null,
+    practisedInLast30Days: 4,
+    practisedThisMonth: { count: 2, yearMonth: "2026-11" },
+    songCount: 12,
+  };
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("fetches the dashboard endpoint", async () => {
+    const fetchSpy = mockFetch(dashboardResponse);
+
+    await getDashboardUserSongs();
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "/api/user-songs/dashboard",
+      expect.anything(),
+    );
+  });
+
+  it("parses the suggested songs, counts and month", async () => {
+    mockFetch(dashboardResponse);
+
+    const dashboard = await getDashboardUserSongs();
+
+    expect(dashboard.mostRecentlyPractised?.status).toBe("LEARNING");
+    expect(dashboard.mostRecentlyPractised?.lastPractised).toBeInstanceOf(Date);
+    expect(dashboard.newlyAdded?.song.title).toBe("Song A");
+    expect(dashboard.practisedInLast30Days).toBe(4);
+    expect(dashboard.practisedThisMonth).toEqual({
+      count: 2,
+      yearMonth: "November",
+    });
+    expect(dashboard.songCount).toBe(12);
+  });
+
+  it("accepts null for each suggested song, as a new user has none", async () => {
+    mockFetch({
+      ...dashboardResponse,
+      mostRecentlyPractised: null,
+      newlyAdded: null,
+      oldestPractised: null,
+    });
+
+    const dashboard = await getDashboardUserSongs();
+
+    expect(dashboard.mostRecentlyPractised).toBeNull();
+    expect(dashboard.oldestPractised).toBeNull();
+    expect(dashboard.newlyAdded).toBeNull();
+  });
+
+  it("throws when the request fails, so the page shows an error", async () => {
+    mockFetch({}, false);
+
+    await expect(getDashboardUserSongs()).rejects.toThrow("Failed to fetch");
   });
 });

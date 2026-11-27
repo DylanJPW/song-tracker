@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,13 +52,15 @@ class UserSongControllerTest {
     );
 
     Instant dateAdded = Instant.parse("2000-01-01T00:00:00Z");
+    Instant lastPractised = Instant.parse("2000-01-02T00:00:00Z");
     UserSongDTO userSongDTO = new UserSongDTO(
             1L,
             songDTO,
             SongStatus.WANT_TO_LEARN,
             null,
             null,
-            dateAdded
+            dateAdded,
+            lastPractised
     );
 
     @Test
@@ -140,10 +143,10 @@ class UserSongControllerTest {
     @Test
     void updateSong_returnsUpdatedSong() {
         UserSongDTO dto = new UserSongDTO(
-                1L, songDTO, SongStatus.LEARNING, null, null, dateAdded);
+                1L, songDTO, SongStatus.LEARNING, null, null, dateAdded, lastPractised);
 
         UpdateUserSongRequest request =
-                new UpdateUserSongRequest(SongStatus.LEARNING, null, null);
+                new UpdateUserSongRequest(SongStatus.LEARNING, null, null, null);
 
         when(authentication.getName()).thenReturn("test");
         when(userSongService.updateUserSong(1L, request, "test")).thenReturn(dto);
@@ -154,5 +157,26 @@ class UserSongControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(SongStatus.LEARNING, response.getBody().status());
+    }
+
+    @Test
+    void getDashboard_returnsDashboardForLoggedInUser() {
+        DashboardResponse dashboard = new DashboardResponse(
+                userSongDTO,
+                null,
+                null,
+                3L,
+                new MonthlyPractice(YearMonth.of(2026, 11), 2L),
+                5L
+        );
+
+        when(authentication.getName()).thenReturn("test");
+        when(userSongService.getDashboard("test")).thenReturn(dashboard);
+
+        ResponseEntity<DashboardResponse> response = controller.getDashboard(authentication);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(dashboard, response.getBody());
+        verify(userSongService).getDashboard("test");
     }
 }

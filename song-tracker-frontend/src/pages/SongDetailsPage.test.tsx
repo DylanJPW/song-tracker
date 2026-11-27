@@ -72,8 +72,6 @@ function renderSongDetailsPage({
 
 describe("SongDetailsPage", () => {
   beforeEach(() => {
-    // clearMocks only clears calls, not implementations - a mockRejectedValue
-    // from one test would otherwise leak into the next.
     vi.resetAllMocks();
     vi.mocked(getSpotifySong).mockResolvedValue(buildSpotifySong());
   });
@@ -251,7 +249,6 @@ describe("SongDetailsPage", () => {
       expect(
         screen.queryByRole("button", { name: "Want to learn", pressed: true }),
       ).not.toBeInTheDocument();
-      // The save affordance is gone: every 'Want to learn' on screen is now a status option.
       expect(screen.getByRole("group", { name: "Status" })).toBeInTheDocument();
     });
 
@@ -322,6 +319,108 @@ describe("SongDetailsPage", () => {
 
       expect(await screen.findByText("Not set")).toBeInTheDocument();
       expect(screen.getByText("Not rated")).toBeInTheDocument();
+    });
+
+    it("shows when the song was last practised", async () => {
+      const lastPractised = new Date("2026-11-20T12:00:00Z");
+
+      renderSongDetailsPage({
+        isLoggedIn: true,
+        state: { song: buildSong() },
+        userSongs: [
+          buildUserSong({
+            dateAdded: new Date("2026-11-01T12:00:00Z"),
+            lastPractised,
+          }),
+        ],
+      });
+
+      const expected = new Intl.DateTimeFormat(undefined, {
+        dateStyle: "medium",
+      }).format(lastPractised);
+
+      expect(await screen.findByText("Last Practised")).toBeInTheDocument();
+      expect(screen.getByText(expected)).toBeInTheDocument();
+    });
+
+    it("leaves out the last practised row for a song never practised", async () => {
+      renderSongDetailsPage({
+        isLoggedIn: true,
+        state: { song: buildSong() },
+        userSongs: [buildUserSong({ lastPractised: null })],
+      });
+
+      await screen.findByText("Capo");
+
+      expect(screen.queryByText("Last Practised")).not.toBeInTheDocument();
+    });
+
+    it("records a practice session for today", async () => {
+      vi.mocked(updateUserSong).mockResolvedValue({
+        ...saved,
+        lastPractised: new Date(),
+      });
+
+      const { user } = renderSongDetailsPage({
+        isLoggedIn: true,
+        state: { song: buildSong() },
+        userSongs: [saved],
+      });
+
+      await user.click(
+        await screen.findByRole("button", { name: "Practised today" }),
+      );
+
+      await waitFor(() => {
+        expect(updateUserSong).toHaveBeenCalledWith({
+          id: 10,
+          lastPractised: expect.any(Date),
+        });
+      });
+      expect(updateUserSong).toHaveBeenCalledTimes(1);
+    });
+
+    it("confirms the update by naming the song", async () => {
+      vi.mocked(updateUserSong).mockResolvedValue({
+        ...saved,
+        lastPractised: new Date(),
+      });
+
+      const { user } = renderSongDetailsPage({
+        isLoggedIn: true,
+        state: { song: buildSong() },
+        userSongs: [saved],
+      });
+
+      await user.click(
+        await screen.findByRole("button", { name: "Practised today" }),
+      );
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          "Successfully updated Song A",
+        );
+      });
+    });
+
+    it("tells the user when recording a practice session fails", async () => {
+      vi.mocked(updateUserSong).mockRejectedValue(new Error("nope"));
+
+      const { user } = renderSongDetailsPage({
+        isLoggedIn: true,
+        state: { song: buildSong() },
+        userSongs: [saved],
+      });
+
+      await user.click(
+        await screen.findByRole("button", { name: "Practised today" }),
+      );
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Could not update that song. Try again.",
+        );
+      });
     });
   });
 });

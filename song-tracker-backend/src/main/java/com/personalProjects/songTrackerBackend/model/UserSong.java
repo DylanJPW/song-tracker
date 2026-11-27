@@ -41,6 +41,9 @@ public class UserSong {
     @CreationTimestamp
     private Instant dateAdded;
 
+    @Column
+    private Instant lastPractised;
+
     public UserSong(User user, Song song, SongStatus status) {
         this.user = user;
         this.song = song;
@@ -48,6 +51,6 @@ public class UserSong {
     }
 
     public UserSongDTO toDTO() {
-        return new UserSongDTO(this.id, this.song.toDTO(), this.status, this.capo, this.difficultyRating, this.dateAdded);
+        return new UserSongDTO(this.id, this.song.toDTO(), this.status, this.capo, this.difficultyRating, this.dateAdded, this.lastPractised);
     }
 }

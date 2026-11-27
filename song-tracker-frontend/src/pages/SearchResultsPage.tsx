@@ -113,7 +113,7 @@ export function SearchResultsPage() {
 
   const { data, isPending, isError, refetch } = useQuery({
     queryKey: ["songSearch", query],
-    queryFn: () => getSearchResults(query),
+    queryFn: ({ signal }) => getSearchResults(query, signal),
     enabled: query.length > 0,
     staleTime: FIVE_MINUTES,
   });

@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { apiDate } from "@/api/schemas/common";
+import { apiDate, MonthlyPractice } from "@/api/schemas/common";
 import { Song } from "@/api/schemas/SongSchema";
 
 export const songStatuses = ["WANT_TO_LEARN", "LEARNING", "LEARNED"] as const;
@@ -18,15 +18,26 @@ export const UserSong = v.object({
   id: v.number(),
   song: Song,
   status: v.picklist(songStatuses),
+  lastPractised: v.union([apiDate, v.null()]),
 });
 export type UserSong = v.InferOutput<typeof UserSong>;
 
 export const UserSongs = v.array(UserSong);
 
+export const DashboardUserSongs = v.object({
+  mostRecentlyPractised: v.nullable(UserSong),
+  oldestPractised: v.nullable(UserSong),
+  newlyAdded: v.nullable(UserSong),
+  practisedInLast30Days: v.number(),
+  practisedThisMonth: MonthlyPractice,
+  songCount: v.number(),
+});
+export type DashboardUserSongs = v.InferOutput<typeof DashboardUserSongs>;
+
 export interface UpdateUserSong {
   capo?: number | null;
   difficultyRating?: number | null;
   id: number;
-  notes?: string | null;
   status?: SongStatus;
+  lastPractised?: Date | null;
 }
