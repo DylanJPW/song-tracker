@@ -30,5 +30,3 @@ export const Song = v.object({
   ),
 });
 export type Song = v.InferOutput<typeof Song>;
-
-export const Songs = v.array(Song);

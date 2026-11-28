@@ -1,14 +1,6 @@
 import * as v from "valibot";
 import { apiClient } from "@/api/client";
-import { Songs, SpotifySong, SpotifySongs } from "@/api/schemas/SongSchema";
-
-export async function getSongs() {
-  const response = await apiClient("/songs");
-  if (!response.ok) {
-    throw new Error("Failed to fetch");
-  }
-  return v.parse(Songs, await response.json());
-}
+import { SpotifySong, SpotifySongs } from "@/api/schemas/SongSchema";
 
 export async function getSearchResults(
   query: string,
