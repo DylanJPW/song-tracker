@@ -3,9 +3,11 @@ package com.personalProjects.songTrackerBackend.controller;
 import com.personalProjects.songTrackerBackend.auth.JWTUtil;
 import com.personalProjects.songTrackerBackend.model.CurrentUserResponse;
 import com.personalProjects.songTrackerBackend.model.User;
-import com.personalProjects.songTrackerBackend.model.UserDTO;
+import com.personalProjects.songTrackerBackend.model.LoginRequest;
+import com.personalProjects.songTrackerBackend.model.RegisterRequest;
 import com.personalProjects.songTrackerBackend.model.auth.UserDetailsResponse;
 import com.personalProjects.songTrackerBackend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,36 +29,18 @@ public class UserController {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @GetMapping()
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        return ResponseEntity.of(userService.getUserById(id));
-    }
-
     @GetMapping("/currentUser")
     public ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication authentication) {
         return ResponseEntity.of(userService.getUserByUsername(authentication.getName())
                 .map(User::toResponse));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userService.deleteUser(id)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<UserDetailsResponse> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDetailsResponse> createUser(@Valid @RequestBody RegisterRequest request) {
         User newUser = userService.createUser(
                 new User(
-                        userDTO.username(),
-                        userDTO.password()
+                        request.username(),
+                        request.password()
                 )
         );
 
@@ -66,23 +48,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new UserDetailsResponse(token, newUser.getUsername()));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<UserDetailsResponse> login(@RequestBody UserDTO UserDTO) {
+    public ResponseEntity<UserDetailsResponse> login(@Valid @RequestBody LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        UserDTO.username(),
-                        UserDTO.password()
+                        request.username(),
+                        request.password()
                 )
         );
 
-        String token = jwtUtil.generateToken(UserDTO.username());
-        return ResponseEntity.ok(new UserDetailsResponse(token, UserDTO.username()));
+        String token = jwtUtil.generateToken(request.username());
+        return ResponseEntity.ok(new UserDetailsResponse(token, request.username()));
     }
 }

@@ -1,6 +1,8 @@
 package com.personalProjects.songTrackerBackend.auth;
 
 import com.personalProjects.songTrackerBackend.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -82,5 +85,75 @@ public class JWTRequestFilterTest {
         assertNotNull(SecurityContextHolder.getContext().getAuthentication());
         assertEquals("testUser", SecurityContextHolder.getContext().getAuthentication().getName());
     }
-}
 
+    @Test
+    void whenTokenExpired_thenChainContinuesUnauthenticated() throws ServletException, IOException {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse res = mock(HttpServletResponse.class);
+        FilterChain chain = mock(FilterChain.class);
+
+        when(req.getHeader("Authorization")).thenReturn("Bearer expired-token");
+        when(jwtUtil.extractUsername("expired-token"))
+                .thenThrow(new ExpiredJwtException(null, null, "JWT expired"));
+
+        filter.doFilterInternal(req, res, chain);
+
+        verify(chain).doFilter(req, res);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        verifyNoInteractions(userService);
+    }
+
+    @Test
+    void whenTokenMalformed_thenChainContinuesUnauthenticated() throws ServletException, IOException {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse res = mock(HttpServletResponse.class);
+        FilterChain chain = mock(FilterChain.class);
+
+        when(req.getHeader("Authorization")).thenReturn("Bearer null");
+        when(jwtUtil.extractUsername("null"))
+                .thenThrow(new MalformedJwtException("Invalid compact JWT string"));
+
+        filter.doFilterInternal(req, res, chain);
+
+        verify(chain).doFilter(req, res);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void whenTokenBelongsToDeletedUser_thenChainContinuesUnauthenticated() throws ServletException, IOException {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse res = mock(HttpServletResponse.class);
+        FilterChain chain = mock(FilterChain.class);
+
+        when(req.getHeader("Authorization")).thenReturn("Bearer token123");
+        when(jwtUtil.extractUsername("token123")).thenReturn("deletedUser");
+        when(userService.loadUserByUsername("deletedUser"))
+                .thenThrow(new UsernameNotFoundException("User not found"));
+
+        filter.doFilterInternal(req, res, chain);
+
+        verify(chain).doFilter(req, res);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void whenTokenFailsValidation_thenNoAuthenticationSet() throws ServletException, IOException {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse res = mock(HttpServletResponse.class);
+        FilterChain chain = mock(FilterChain.class);
+
+        when(req.getHeader("Authorization")).thenReturn("Bearer token123");
+        when(jwtUtil.extractUsername("token123")).thenReturn("testUser");
+        when(userService.loadUserByUsername("testUser")).thenReturn(User.builder()
+                .username("testUser")
+                .password("encoded")
+                .roles()
+                .build());
+        when(jwtUtil.isTokenValid("token123", "testUser")).thenReturn(false);
+
+        filter.doFilterInternal(req, res, chain);
+
+        verify(chain).doFilter(req, res);
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+}

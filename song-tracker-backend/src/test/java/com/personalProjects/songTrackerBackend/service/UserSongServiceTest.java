@@ -70,6 +70,30 @@ class UserSongServiceTest {
     }
 
     @Test
+    void shouldRejectSavingTheSameSongTwice() {
+        User user = new User();
+        user.setId(1L);
+
+        Song song = new Song(
+                "Test Song",
+                "Test Artist",
+                "Test Album",
+                "https://test.image"
+        );
+        song.setId(2L);
+
+        when(userSongRepository.existsByUserIdAndSongId(1L, 2L)).thenReturn(true);
+
+        ResponseStatusException thrown = assertThrows(
+                ResponseStatusException.class,
+                () -> userSongService.saveSong(user, song)
+        );
+
+        assertEquals(HttpStatus.CONFLICT, thrown.getStatusCode());
+        verify(userSongRepository, never()).save(any());
+    }
+
+    @Test
     void shouldReturnUserSongs() {
         User user = new User();
         user.setId(1L);

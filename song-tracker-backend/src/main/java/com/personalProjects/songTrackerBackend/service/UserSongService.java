@@ -30,6 +30,10 @@ public class UserSongService {
     }
 
     public UserSong saveSong(User user, Song song) {
+        if (userSongRepository.existsByUserIdAndSongId(user.getId(), song.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You've already saved this song");
+        }
+
         UserSong userSong = new UserSong(user, song, SongStatus.WANT_TO_LEARN);
         return userSongRepository.save(userSong);
     }

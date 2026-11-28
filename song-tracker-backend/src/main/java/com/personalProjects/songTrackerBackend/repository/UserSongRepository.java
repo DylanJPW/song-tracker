@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface UserSongRepository extends JpaRepository<UserSong, Long> {
     public List<UserSong> findAllByUserId(Long userId);
     public Optional<UserSong> findByIdAndUserUsername(Long id, String username);
+    public boolean existsByUserIdAndSongId(Long userId, Long songId);
     public List<UserSong> findAllByUserIdAndStatus(Long userId, SongStatus status);
     public Optional<UserSong> findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedDesc(String username);
     public Optional<UserSong> findFirstByUserUsernameAndLastPractisedIsNotNullOrderByLastPractisedAsc(String username);
