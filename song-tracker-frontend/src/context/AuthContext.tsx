@@ -2,10 +2,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { SESSION_EXPIRED_EVENT } from "@/api/client";
 
 export interface AuthContextType {
   isLoggedIn: boolean;
@@ -32,7 +35,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("jwt");
     setAuthToken(null);
     queryClient.clear();
-  }, []);
+  }, [queryClient]);
+
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      logout();
+      toast.info("Your session has expired. Please log in again.", {
+        toastId: "session-expired",
+      });
+    };
+
+    window.addEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+    return () =>
+      window.removeEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+  }, [logout]);
 
   const value = useMemo(
     (): AuthContextType => ({
