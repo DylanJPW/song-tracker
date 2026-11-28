@@ -14,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -29,28 +27,10 @@ public class UserController {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @GetMapping()
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        return ResponseEntity.of(userService.getUserById(id));
-    }
-
     @GetMapping("/currentUser")
     public ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication authentication) {
         return ResponseEntity.of(userService.getUserByUsername(authentication.getName())
                 .map(User::toResponse));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userService.deleteUser(id)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping("/register")
@@ -66,23 +46,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new UserDetailsResponse(token, newUser.getUsername()));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<UserDetailsResponse> login(@RequestBody UserDTO UserDTO) {
+    public ResponseEntity<UserDetailsResponse> login(@RequestBody UserDTO userDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        UserDTO.username(),
-                        UserDTO.password()
+                        userDTO.username(),
+                        userDTO.password()
                 )
         );
 
-        String token = jwtUtil.generateToken(UserDTO.username());
-        return ResponseEntity.ok(new UserDetailsResponse(token, UserDTO.username()));
+        String token = jwtUtil.generateToken(userDTO.username());
+        return ResponseEntity.ok(new UserDetailsResponse(token, userDTO.username()));
     }
 }

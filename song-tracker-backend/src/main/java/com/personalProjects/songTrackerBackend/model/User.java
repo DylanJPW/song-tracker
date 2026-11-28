@@ -22,6 +22,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "user")
@@ -31,10 +32,6 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public UserDTO toDTO() {
-        return new UserDTO(this.username, this.password);
     }
 
     public CurrentUserResponse toResponse() {return new CurrentUserResponse(this.id, this.username);}
