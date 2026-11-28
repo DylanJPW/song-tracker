@@ -1,9 +1,5 @@
-import { delay, HttpResponse, http } from "msw";
-import songs from "./data/songs.json" with { type: "json" };
+import type { HttpHandler } from "msw";
 
-export const handlers = [
-  http.get("/songs", async () => {
-    await delay("real");
-    return HttpResponse.json(songs);
-  }),
-];
+// Shared MSW handlers for the test server (mocks/server.ts) and the browser
+// worker (mocks/browser.ts). Empty for now: the tests stub fetch directly.
+export const handlers: HttpHandler[] = [];

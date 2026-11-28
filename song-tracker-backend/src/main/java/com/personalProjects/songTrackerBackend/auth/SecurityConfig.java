@@ -35,8 +35,6 @@ public class SecurityConfig {
                                 "/api/users/login"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET,
-                                "/api/songs",
-                                "/api/songs/*",
                                 "/api/spotify/search",
                                 "/api/spotify/tracks/*"
                         ).permitAll()
