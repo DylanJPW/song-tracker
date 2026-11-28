@@ -3,9 +3,11 @@ package com.personalProjects.songTrackerBackend.controller;
 import com.personalProjects.songTrackerBackend.auth.JWTUtil;
 import com.personalProjects.songTrackerBackend.model.CurrentUserResponse;
 import com.personalProjects.songTrackerBackend.model.User;
-import com.personalProjects.songTrackerBackend.model.UserDTO;
+import com.personalProjects.songTrackerBackend.model.LoginRequest;
+import com.personalProjects.songTrackerBackend.model.RegisterRequest;
 import com.personalProjects.songTrackerBackend.model.auth.UserDetailsResponse;
 import com.personalProjects.songTrackerBackend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +36,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDetailsResponse> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDetailsResponse> createUser(@Valid @RequestBody RegisterRequest request) {
         User newUser = userService.createUser(
                 new User(
-                        userDTO.username(),
-                        userDTO.password()
+                        request.username(),
+                        request.password()
                 )
         );
 
@@ -47,15 +49,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDetailsResponse> login(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDetailsResponse> login(@Valid @RequestBody LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userDTO.username(),
-                        userDTO.password()
+                        request.username(),
+                        request.password()
                 )
         );
 
-        String token = jwtUtil.generateToken(userDTO.username());
-        return ResponseEntity.ok(new UserDetailsResponse(token, userDTO.username()));
+        String token = jwtUtil.generateToken(request.username());
+        return ResponseEntity.ok(new UserDetailsResponse(token, request.username()));
     }
 }

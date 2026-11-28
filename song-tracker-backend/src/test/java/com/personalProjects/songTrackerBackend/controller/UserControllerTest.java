@@ -1,7 +1,8 @@
 package com.personalProjects.songTrackerBackend.controller;
 
 import com.personalProjects.songTrackerBackend.model.User;
-import com.personalProjects.songTrackerBackend.model.UserDTO;
+import com.personalProjects.songTrackerBackend.model.LoginRequest;
+import com.personalProjects.songTrackerBackend.model.RegisterRequest;
 import com.personalProjects.songTrackerBackend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 
 import static org.mockito.ArgumentMatchers.any;
 
 import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,9 +43,9 @@ class UserControllerTest {
 
     @Test
     void createUserReturnsCreatedUser() throws Exception {
-        UserDTO dto = new UserDTO(
+        RegisterRequest dto = new RegisterRequest(
                 "Test User",
-                "test123"
+                "password123"
         );
 
         User created = new User(
@@ -65,9 +68,9 @@ class UserControllerTest {
 
     @Test
     void createUserWhenUsernameExistsReturnsServerError() throws Exception {
-        UserDTO dto = new UserDTO(
+        RegisterRequest dto = new RegisterRequest(
                 "Test User",
-                "test123"
+                "password123"
         );
 
         when(userService.createUser(any(User.class))).thenThrow(new com.personalProjects.songTrackerBackend.exceptions.UsernameAlreadyExistsException("Test User"));
@@ -90,7 +93,7 @@ class UserControllerTest {
         when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
         when(jwtUtil.generateToken(username)).thenReturn(token);
 
-        String body = objectMapper.writeValueAsString(new UserDTO(username, password));
+        String body = objectMapper.writeValueAsString(new LoginRequest(username, password));
 
         mockMvc.perform(post("/api/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -100,5 +103,68 @@ class UserControllerTest {
 
         verify(authenticationManager).authenticate(any());
         verify(jwtUtil).generateToken(username);
+    }
+
+    @Test
+    void createUserWithShortPasswordReturnsBadRequest() throws Exception {
+        RegisterRequest dto = new RegisterRequest("Test User", "short");
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.password").value(containsString("between 8 and 72")));
+
+        verify(userService, never()).createUser(any());
+    }
+
+    @Test
+    void createUserWithBlankUsernameReturnsBadRequest() throws Exception {
+        RegisterRequest dto = new RegisterRequest("   ", "password123");
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.username").exists());
+
+        verify(userService, never()).createUser(any());
+    }
+
+    @Test
+    void createUserWithPasswordLongerThanBcryptAllowsReturnsBadRequest() throws Exception {
+        RegisterRequest dto = new RegisterRequest("Test User", "a".repeat(73));
+
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+
+        verify(userService, never()).createUser(any());
+    }
+
+    @Test
+    void loginWithWrongCredentialsReturnsUnauthorized() throws Exception {
+        when(authenticationManager.authenticate(any()))
+                .thenThrow(new BadCredentialsException("Bad credentials"));
+
+        mockMvc.perform(post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new LoginRequest("testuser", "wrong-password"))))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("Invalid username or password"));
+
+        verify(jwtUtil, never()).generateToken(any());
+    }
+
+    @Test
+    void loginWithBlankPasswordReturnsBadRequestWithoutTryingToAuthenticate() throws Exception {
+        mockMvc.perform(post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new LoginRequest("testuser", ""))))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.password").exists());
+
+        verify(authenticationManager, never()).authenticate(any());
     }
 }
