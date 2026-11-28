@@ -1,5 +1,5 @@
 {
-  "name": "vitamin",
+  "name": "song-tracker-frontend",
   "type": "module",
   "license": "MIT",
   "private": true,
@@ -53,9 +53,6 @@
     "vitest": "4.1.2"
   },
   "pnpm": {
-    "ignoredBuiltDependencies": [
-      "cypress"
-    ],
     "onlyBuiltDependencies": [
       "@biomejs/biome",
       "@tailwindcss/oxide",
@@ -63,10 +60,5 @@
       "msw"
     ]
   },
-  "packageManager": "pnpm@10.11.1",
-  "msw": {
-    "workerDirectory": [
-      "public"
-    ]
-  }
+  "packageManager": "pnpm@10.11.1"
 }

@@ -1,5 +1,6 @@
 {
-	"background_color": "#ffffff",
+	"background_color": "#0f172a",
+	"description": "Track the songs you're learning to play on guitar.",
 	"display": "standalone",
 	"icons": [
 		{
@@ -16,35 +17,9 @@
 	],
 	"id": "/",
 	"lang": "en",
-	"name": "Vitamin",
+	"name": "SongTracker",
 	"scope": "/",
-	"screenshots": [
-		{
-			"form_factor": "narrow",
-			"sizes": "585x1266",
-			"src": "/screenshot-1.webp",
-			"type": "image/png"
-		},
-		{
-			"form_factor": "narrow",
-			"sizes": "585x1266",
-			"src": "/screenshot-2.webp",
-			"type": "image/png"
-		},
-		{
-			"form_factor": "wide",
-			"sizes": "1366x768",
-			"src": "/screenshot-3.webp",
-			"type": "image/png"
-		},
-		{
-			"form_factor": "wide",
-			"sizes": "1366x768",
-			"src": "/screenshot-4.webp",
-			"type": "image/png"
-		}
-	],
-	"short_name": "Vitamin",
+	"short_name": "SongTracker",
 	"start_url": "/",
-	"theme_color": "#BD34FE"
+	"theme_color": "#0f172a"
 }
